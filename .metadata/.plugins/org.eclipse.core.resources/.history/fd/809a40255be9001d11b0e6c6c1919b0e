@@ -1,0 +1,8 @@
+#ifndef SEQUENCE_HEADER
+#define SEQUENCE_HEADER
+
+
+#include <stdint.h>
+#include "stm32f303xc.h"
+
+extern uint8_t seq1;

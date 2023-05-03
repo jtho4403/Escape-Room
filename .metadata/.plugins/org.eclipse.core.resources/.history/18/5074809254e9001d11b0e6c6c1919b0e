@@ -1,0 +1,6 @@
+#include "variables.h"
+
+uint8_t seq1[0] = "W";
+uint8_t seq1[1] = "A";
+uint8_t seq1[2] = "S";
+uint8_t seq1[3] = "D";

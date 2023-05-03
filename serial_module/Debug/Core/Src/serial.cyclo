@@ -1,0 +1,3 @@
+serial.c:54:6:SerialInitialise	7
+serial.c:113:6:SerialOutputChar	2
+serial.c:122:6:SerialOutputString	3
