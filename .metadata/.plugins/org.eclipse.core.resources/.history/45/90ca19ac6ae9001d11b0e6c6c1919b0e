@@ -1,0 +1,45 @@
+#include "sequence.h"
+
+//sequence as extern variable
+char seq1[4] = "WASD";
+char seq2[5] = "WWASD";
+char seq3[6] = "WASDDD";
+char seq4[7] = "WAASSDWS";
+
+void CheckSequence(uint8_t *input, int count, int *flag){
+//	convert input to string
+	char string[7];
+	int i = 0;
+
+	while (i < 7){
+		string[i] = (char)input[i];
+		i++;
+	}
+
+	if (count == 1){
+		if (string == seq1){
+					*flag = 1;
+				}
+	}
+	switch(count){
+	case 2: {
+		if (string == seq2){
+			*flag = 1;
+		}
+	}
+	case 3: {
+		if (string == seq3){
+			*flag = 1;
+		}
+
+	}
+	case 4: {
+		if (string == seq4){
+			*flag = 1;
+		}
+	}
+	default: {
+		*flag = 0;
+	}
+	}
+}

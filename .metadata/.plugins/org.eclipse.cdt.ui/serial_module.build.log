@@ -1,10 +1,10 @@
-12:55:51 **** Incremental Build of configuration Debug for project serial_module ****
+14:28:38 **** Incremental Build of configuration Debug for project serial_module ****
 make -j9 all 
 arm-none-eabi-size   serial_module.elf 
    text	   data	    bss	    dec	    hex	filename
-  11296	     28	   2500	  13824	   3600	serial_module.elf
+  11304	     20	   2500	  13824	   3600	serial_module.elf
 Finished building: default.size.stdout
  
 
-12:55:51 Build Finished. 0 errors, 0 warnings. (took 373ms)
+14:28:39 Build Finished. 0 errors, 0 warnings. (took 587ms)
 

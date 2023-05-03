@@ -1,34 +1,27 @@
 #include "sequence.h"
 
-char seq1[4] = "WASD";
-char seq2[5] = "WWASD";
-char seq3[6] = "WASDDD";
-char seq4[7] = "WAASSDWS";
+//sequence as static variable
+static char seq1[4] = "WASD";
+static char seq2[5] = "WWASD";
+static char seq3[6] = "WASDDD";
+static char seq4[7] = "WAASSDWS";
 
-void CheckSequence(uint8_t *input, uint32_t count, uint32_t *flag){
-//	uint8_t *seq[8];
-//	Sequence(seq, count);
+void CheckSequence(uint8_t *input, int count, int *flag){
+//	convert input to string
+	char string[7];
+	int i = 0;
 
-//	DeclareSequence();
-//
-//	switch(count){
-//	case 1: {
-//		if (input == seq1){
-//			*flag = 1;
-//		}
-//
-//	}
-//	case 2: {
-//		if (input == seq1){
-//			*flag = 1;
-//		}
-//	}
-//	default: {
-//		*flag = 0;
-//	}
-//	}
-	char k = (char) input[0];
-	if (k == x[0]){
-		flag = 1;
+	while (i < 7){
+		string[i] = (char)input[i];
+		i++;
 	}
+
+	int test = 1;
+
+	if (count == 1){
+		if (string == seq1){
+			*flag = 1;
+		}
+	}
+
 }
