@@ -4,24 +4,44 @@
 static char seq1[4] = "WASD";
 static char seq2[5] = "WWASD";
 static char seq3[6] = "WASDDD";
-static char seq4[7] = "WAASSDWS";
+static char seq4[7] = "WAASSDW";
 
-void CheckSequence(uint8_t *input, int count, int *flag){
-//	convert input to string
-	char string[7];
-	int i = 0;
+void CheckSequence(uint8_t *input, uint32_t count){
 
-	while (i < 7){
-		string[i] = (char)input[i];
-		i++;
+	char seq[7];
+	int i;
+	if (count == 1){
+		strcpy(seq, seq1);
+	}
+	else if (count == 2){
+		strcpy(seq, seq2);
+	}
+	else if (count == 3){
+		strcpy(seq, seq3);
+	}
+	else if (count == 4){
+		strcpy(seq, seq4);
 	}
 
-	int test = 1;
 
-	if (count == 1){
-		if (string == seq1){
-			*flag = 1;
+	uint8_t fail_message[32] = "Fail\n";
+	uint8_t pass_message[32] = "Success\n";
+
+	char current_char;
+	int fail = 0;
+	for (i = 0; i < count; i++){
+		current_char = (char)input[i];
+		if (current_char != seq[i]){
+			SerialInitialise(BAUD_115200, &USART1_PORT, 0x00);
+			SerialOutputString(fail_message, &USART1_PORT);
+			fail = 1;
+			break;
 		}
+	}
+
+	if (fail == 0){
+		SerialInitialise(BAUD_115200, &USART1_PORT, 0x00);
+		SerialOutputString(pass_message, &USART1_PORT);
 	}
 
 }

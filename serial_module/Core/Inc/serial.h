@@ -3,7 +3,6 @@
 
 
 #include <stdint.h>
-#include "stm32f303xc.h"
 
 // Defining the serial port struct, the definition is hidden in the
 // c file as no one really needs to know this.
@@ -18,10 +17,6 @@ extern SerialPort USART1_PORT;
 
 // The user might want to select the baud rate
 enum {
-  BAUD_9600,
-  BAUD_19200,
-  BAUD_38400,
-  BAUD_57600,
   BAUD_115200
 };
 
@@ -40,10 +35,6 @@ void SerialOutputChar(uint8_t, SerialPort *serial_port);
 // SerialOutputString - output a NULL TERMINATED string to the serial port
 // Input: pointer to a NULL-TERMINATED string (if not null terminated, there will be problems)
 void SerialOutputString(uint8_t *pt, SerialPort *serial_port);
-
-void Sequence(uint8_t *seq, uint32_t count);
-
-void CheckSequence(uint8_t *input, uint32_t count, uint32_t *flag);
  
  
 #endif

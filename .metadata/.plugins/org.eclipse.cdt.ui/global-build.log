@@ -1,123 +1,196 @@
-14:19:32 **** Incremental Build of configuration Debug for project serial_module ****
+15:41:08 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+arm-none-eabi-gcc "../Core/Src/serial.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/serial.d" -MT"Core/Src/serial.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/serial.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:14:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   14 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:14:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:17:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   17 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:17:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:20:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   20 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:20:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:23:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   23 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:23:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:39:6: warning: unused variable 't' [-Wunused-variable]
+   39 |  int t = i;
+      |      ^
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  11812	    112	   2504	  14428	   385c	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+15:41:13 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-size   serial_module.elf 
+   text	   data	    bss	    dec	    hex	filename
+  11812	    112	   2504	  14428	   385c	serial_module.elf
+Finished building: default.size.stdout
+ 
+15:41:36 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-size   serial_module.elf 
+   text	   data	    bss	    dec	    hex	filename
+  11812	    112	   2504	  14428	   385c	serial_module.elf
+Finished building: default.size.stdout
+ 
+15:42:04 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:14:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   14 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:14:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:17:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   17 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:17:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:20:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   20 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:20:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:23:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   23 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:23:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:39:6: warning: unused variable 't' [-Wunused-variable]
+   39 |  int t = i;
+      |      ^
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  11808	    112	   2504	  14424	   3858	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+15:42:32 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-size   serial_module.elf 
+   text	   data	    bss	    dec	    hex	filename
+  11808	    112	   2504	  14424	   3858	serial_module.elf
+Finished building: default.size.stdout
+ 
+15:44:44 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:14:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   14 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:14:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:17:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   17 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:17:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:20:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   20 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:20:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:23:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   23 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:23:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  11908	    112	   2504	  14524	   38bc	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+15:45:17 **** Incremental Build of configuration Debug for project serial_module ****
 make -j9 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
-../Core/Src/sequence.c:7:16: warning: initializer-string for array of 'char' is too long
-    7 | char seq4[7] = "WAASSDWS";
-      |                ^~~~~~~~~~
-../Core/Src/main.c: In function 'main':
-../Core/Src/main.c:96:30: warning: passing argument 3 of 'CheckSequence' from incompatible pointer type [-Wincompatible-pointer-types]
-   96 |  CheckSequence(input, count, flag);
-      |                              ^~~~
-      |                              |
-      |                              int *
-In file included from ../Core/Src/main.c:24:
-../Core/Inc/serial.h:46:62: note: expected 'uint32_t *' {aka 'long unsigned int *'} but argument is of type 'int *'
-   46 | void CheckSequence(uint8_t *input, uint32_t count, uint32_t *flag);
-      |                                                    ~~~~~~~~~~^~~~
-../Core/Src/main.c:98:18: warning: initialization of 'uint32_t' {aka 'long unsigned int'} from 'int *' makes integer from pointer without a cast [-Wint-conversion]
-   98 |  uint32_t test = flag;
-      |                  ^~~~
-../Core/Src/main.c:98:11: warning: unused variable 'test' [-Wunused-variable]
-   98 |  uint32_t test = flag;
-      |           ^~~~
 arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: serial_module.elf
  
 arm-none-eabi-size   serial_module.elf 
 arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
    text	   data	    bss	    dec	    hex	filename
-  11312	     20	   2500	  13832	   3608	serial_module.elf
+  11908	    112	   2504	  14524	   38bc	serial_module.elf
 Finished building: default.size.stdout
  
 Finished building: serial_module.list
  
-14:19:37 **** Incremental Build of configuration Debug for project serial_module ****
+15:46:02 **** Incremental Build of configuration Debug for project serial_module ****
 make -j9 all 
 arm-none-eabi-size   serial_module.elf 
    text	   data	    bss	    dec	    hex	filename
-  11312	     20	   2500	  13832	   3608	serial_module.elf
+  11908	    112	   2504	  14524	   38bc	serial_module.elf
 Finished building: default.size.stdout
  
-14:20:53 **** Incremental Build of configuration Debug for project serial_module ****
+15:46:52 **** Incremental Build of configuration Debug for project serial_module ****
 make -j9 all 
 arm-none-eabi-size   serial_module.elf 
    text	   data	    bss	    dec	    hex	filename
-  11312	     20	   2500	  13832	   3608	serial_module.elf
+  11908	    112	   2504	  14524	   38bc	serial_module.elf
 Finished building: default.size.stdout
  
-14:22:55 **** Incremental Build of configuration Debug for project serial_module ****
+15:48:21 **** Incremental Build of configuration Debug for project serial_module ****
 make -j9 all 
 arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
-../Core/Src/sequence.c:7:16: warning: initializer-string for array of 'char' is too long
-    7 | char seq4[7] = "WAASSDWS";
-      |                ^~~~~~~~~~
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:14:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   14 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:14:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:17:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   17 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:17:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:20:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   20 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:20:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:23:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   23 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:23:3: note: include '<string.h>' or provide a declaration of 'strcpy'
 arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: serial_module.elf
  
 arm-none-eabi-size   serial_module.elf 
 arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
    text	   data	    bss	    dec	    hex	filename
-  11312	     20	   2500	  13832	   3608	serial_module.elf
+  11912	    112	   2504	  14528	   38c0	serial_module.elf
 Finished building: default.size.stdout
  
 Finished building: serial_module.list
- 
-14:24:29 **** Incremental Build of configuration Debug for project serial_module ****
-make -j9 all 
-arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
-../Core/Src/sequence.c:7:16: warning: initializer-string for array of 'char' is too long
-    7 | char seq4[7] = "WAASSDWS";
-      |                ^~~~~~~~~~
-arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: serial_module.elf
- 
-arm-none-eabi-size   serial_module.elf 
-arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
-   text	   data	    bss	    dec	    hex	filename
-  11312	     20	   2500	  13832	   3608	serial_module.elf
-Finished building: default.size.stdout
- 
-Finished building: serial_module.list
- 
-14:26:28 **** Incremental Build of configuration Debug for project serial_module ****
-make -j9 all 
-arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
-../Core/Src/sequence.c:7:16: warning: initializer-string for array of 'char' is too long
-    7 | char seq4[7] = "WAASSDWS";
-      |                ^~~~~~~~~~
-arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: serial_module.elf
- 
-arm-none-eabi-size   serial_module.elf 
-arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
-   text	   data	    bss	    dec	    hex	filename
-  11304	     20	   2500	  13824	   3600	serial_module.elf
-Finished building: default.size.stdout
- 
-Finished building: serial_module.list
- 
-14:27:34 **** Incremental Build of configuration Debug for project serial_module ****
-make -j9 all 
-arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
-../Core/Src/sequence.c:7:16: warning: initializer-string for array of 'char' is too long
-    7 | char seq4[7] = "WAASSDWS";
-      |                ^~~~~~~~~~
-arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: serial_module.elf
- 
-arm-none-eabi-size   serial_module.elf 
-arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
-   text	   data	    bss	    dec	    hex	filename
-  11304	     20	   2500	  13824	   3600	serial_module.elf
-Finished building: default.size.stdout
- 
-Finished building: serial_module.list
- 
-14:28:38 **** Incremental Build of configuration Debug for project serial_module ****
-make -j9 all 
-arm-none-eabi-size   serial_module.elf 
-   text	   data	    bss	    dec	    hex	filename
-  11304	     20	   2500	  13824	   3600	serial_module.elf
-Finished building: default.size.stdout
  

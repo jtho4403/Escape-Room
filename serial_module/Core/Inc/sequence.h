@@ -4,7 +4,8 @@
 
 #include <stdint.h>
 #include "stm32f303xc.h"
+#include "serial.h"
 
-void CheckSequence(uint8_t *input, int count, int *flag);
+void CheckSequence(uint8_t *input, uint32_t count);
 
 #endif

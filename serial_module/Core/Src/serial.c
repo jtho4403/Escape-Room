@@ -1,4 +1,9 @@
+#ifndef SERIAL_H
+#define SERIAL_H
+
 #include "serial.h"
+
+#include "stm32f303xc.h"
 
 // NOTE: these are stored as pointers because they
 //       are const values so we can't store them directly
@@ -7,7 +12,9 @@ struct _SerialPort {
 	volatile uint32_t *BaudRate;
 	volatile uint32_t *ControlRegister1;
 	volatile uint32_t *StatusRegister;
+	volatile uint32_t *RequestRegister;
 	volatile uint16_t *DataOutputRegister;
+	volatile uint16_t *DataInputRegister;
 	volatile uint32_t *TimerEnableRegister;
 	volatile uint32_t TimerEnableMask;
 	volatile uint32_t SerialPortGPIO;
@@ -37,7 +44,9 @@ enum {
 SerialPort USART1_PORT = {&(USART1->BRR),
 		&(USART1->CR1),
 		&(USART1->ISR),
+		&(USART1->RQR),
 		&(USART1->TDR),
+		&(USART1->RDR),
 		&(RCC->APB2ENR),
 		RCC_APB2ENR_USART1EN,
 		SERIAL_GPIO_C,
@@ -83,24 +92,8 @@ void SerialInitialise(uint32_t baudRate, SerialPort *serial_port, void (*complet
 
 	// Baud rate calculation from datasheet
 	switch(baudRate){
-	case BAUD_9600:
-		// NEED TO FIX THIS !
-		*baud_rate_config = 0x46;  // 115200 at 8MHz
-		break;
-	case BAUD_19200:
-		// NEED TO FIX THIS !
-		*baud_rate_config = 0x46;  // 115200 at 8MHz
-		break;
-	case BAUD_38400:
-		// NEED TO FIX THIS !
-		*baud_rate_config = 0x46;  // 115200 at 8MHz
-		break;
-	case BAUD_57600:
-		// NEED TO FIX THIS !
-		*baud_rate_config = 0x46;  // 115200 at 8MHz
-		break;
 	case BAUD_115200:
-		*baud_rate_config = 0x46 * 0x06;  // 115200 at 8MHz
+		*baud_rate_config = 0x46;  // 115200 at 8MHz
 		break;
 	}
 
@@ -117,8 +110,6 @@ void SerialOutputChar(uint8_t data, SerialPort *serial_port) {
 	*(serial_port->DataOutputRegister) = data;
 }
 
-
-
 void SerialOutputString(uint8_t *pt, SerialPort *serial_port) {
 
 	uint32_t counter = 0;
@@ -132,3 +123,26 @@ void SerialOutputString(uint8_t *pt, SerialPort *serial_port) {
 		serial_port->completion_function(counter);
 }
 
+
+
+void SerialInputString(uint8_t *pt, SerialPort *serial_port) {
+	uint32_t counter = 0;
+	while (counter < 32) {
+		//wait for new input
+		while((*(serial_port->StatusRegister) & USART_ISR_RXNE) == 0){
+		}
+
+		//exit if new line detected
+		if (*(serial_port->DataInputRegister) == 10) {
+							break;
+				}
+
+		//insert new byte/char
+		pt[counter]= *(serial_port->DataInputRegister);
+		counter++;
+	}
+
+	serial_port->completion_function(counter);
+}
+
+#endif

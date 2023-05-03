@@ -87,15 +87,12 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 	uint8_t input[8] = "WASD";
-	int *flag = 0;
-	int count = 1;
+	uint32_t count = 1;
 
 	enable_clocks();
 	initialise_board();
 
-	CheckSequence(input, count, flag);
-
-	uint32_t test = flag;
+	CheckSequence(input, count);
 
   /* USER CODE END 1 */
 
