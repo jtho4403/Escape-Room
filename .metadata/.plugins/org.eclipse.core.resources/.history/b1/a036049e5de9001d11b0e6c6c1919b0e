@@ -1,0 +1,53 @@
+#include "sequence.h"
+
+//void DeclareSequence(){
+//	uint8_t seq1 = "WASD";
+//}
+
+char x[4] = "WASD";
+
+//void Sequence(uint8_t *seq, uint32_t count){
+//	uint8_t sequence[8];
+//	switch(count){
+//	case 0: {
+//		sequence = "WASD";
+//
+//	}
+//	case 1: {
+//		sequence = "WWASD";
+//	}
+//	}
+//
+//	for (i = 0; len(sequence); ++i){
+//		*seq[i] = sequence[i];
+//	}
+//}
+
+void CheckSequence(uint8_t *input, uint32_t count, uint32_t *flag){
+//	uint8_t *seq[8];
+//	Sequence(seq, count);
+
+//	DeclareSequence();
+//
+//	switch(count){
+//	case 1: {
+//		if (input == seq1){
+//			*flag = 1;
+//		}
+//
+//	}
+//	case 2: {
+//		if (input == seq1){
+//			*flag = 1;
+//		}
+//	}
+//	default: {
+//		*flag = 0;
+//	}
+//	}
+
+	int k = 0;
+	if (k == x[0]){
+		flag = 1;
+	}
+}

@@ -1,0 +1,4 @@
+#include "variables.h"
+
+uint8_t seq1 = "WASD";
+

@@ -1,0 +1,4 @@
+serial.c:63:6:SerialInitialise	3
+serial.c:106:6:SerialOutputChar	2
+serial.c:113:6:SerialOutputString	3
+serial.c:128:6:SerialInputString	4

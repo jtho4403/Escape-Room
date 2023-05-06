@@ -1,0 +1,3 @@
+#include "variables.h"
+
+char seq1 = "WASD";
