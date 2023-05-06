@@ -13,8 +13,8 @@
 #define laser_wr  0xc4
 #define laser_rd  0xc5
 
-#define gyro_wr 0xD2
-#define gyro_rd 0xD3
+#define gyro_wr 0xD2	// Address of gyro write to PTU?
+#define gyro_rd 0xD3	// Address of gyrp read to
 
 #define accel_wr 0xA6    //
 #define accel_rd 0xA7    //

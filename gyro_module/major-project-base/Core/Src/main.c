@@ -104,6 +104,8 @@ uint16_t diff = 0;
 uint16_t rise_time = 0;
 uint16_t last_period = 0;
 
+int32_t x = 0;
+
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
 	uint8_t buffer[32];
@@ -166,17 +168,18 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  // Initialize I2C communications as I2C1
   MX_I2C1_Init();
   MX_SPI1_Init();
   MX_USB_PCD_Init();
-  MX_TIM2_Init();
+  //MX_TIM2_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 
-	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
+	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1); // PAN
+	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2); // TILT
 
-	HAL_TIM_IC_Start_IT(&htim1, TIM_CHANNEL_1);
+	HAL_TIM_IC_Start_IT(&htim1, TIM_CHANNEL_1); // LIDAR
 
 	// TIM 2 is setup with a prescaler that makes 1 count = 1 microsecond
 	// Even with HAL, you can still set the values yourself
@@ -187,6 +190,9 @@ int main(void)
 	// you can get unexpected results. To remove this, set ARPE so that the
 	// ARR settings are not activated until the next cycle.
 
+	// literallty set the PTU registers using I2C
+	// Stews code to initalise HAL_TYPE_STRUCT used for I2C communications
+	// he is exrecting a certain stream of infromation and sets it up like so
 	initialise_ptu_i2c(&hi2c1);
 
   /* USER CODE END 2 */
@@ -226,6 +232,7 @@ int main(void)
 
 		TIM2->CCR1 = vertical_PWM;
 		TIM2->CCR2 = horizontal_PWM;
+
 
 		uint8_t xMSB = 0x00;
 		HAL_I2C_Mem_Read(&hi2c1,gyro_rd, 0x29, 1, &xMSB, 1, 10);
@@ -295,7 +302,18 @@ int main(void)
 		if (lidar_distance > 4000)
 			lidar_distance = 5500;
 
-		sprintf(string_to_send, "%hu,%hu,%hd,%hd,%hd\r\n", last_period, lidar_distance*10, roll_rate, pitch_rate, yaw_rate);
+		// Read acceleration values from ADXL345 registers
+		uint8_t buffer[6];
+		HAL_I2C_Mem_Read(&hi2c1, accel_rd, 0x32, 1, buffer, 6, 10);
+		int16_t x_acceleration = ((buffer[1] << 8) | buffer[0]);
+		int16_t y_acceleration = ((buffer[3] << 8) | buffer[2]);
+		int16_t z_acceleration = ((buffer[5] << 8) | buffer[4]);
+
+		int32_t input = y_acceleration*y_acceleration + z_acceleration*z_acceleration;
+
+		int32_t ax = (int32_t)(x_acceleration/sqrt(input));
+		x = (x + (roll_rate-57)/10000);
+		sprintf(string_to_send, "%hu,%hu,%hd,%hd,%hd,%hd,%hd,%hd,%hd,%hd\r\n", last_period, lidar_distance*10, roll_rate, pitch_rate, yaw_rate, x_acceleration, y_acceleration, z_acceleration, x, ax);
 
 		SerialOutputString(string_to_send, &USART1_PORT);
 

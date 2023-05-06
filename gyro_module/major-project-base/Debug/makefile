@@ -60,8 +60,8 @@ all: main-build
 main-build: major-project-base.elf secondary-outputs
 
 # Tool invocations
-major-project-base.elf major-project-base.map: $(OBJS) $(USER_OBJS) C:\Users\David\Documents\GitHub\MTRX2700-2023\major-project-base\STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "major-project-base.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\David\Documents\GitHub\MTRX2700-2023\major-project-base\STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="major-project-base.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+major-project-base.elf major-project-base.map: $(OBJS) $(USER_OBJS) C:\Users\David\Documents\GitHub\Escape-Room\gyro_module\major-project-base\STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "major-project-base.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\David\Documents\GitHub\Escape-Room\gyro_module\major-project-base\STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="major-project-base.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

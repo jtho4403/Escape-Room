@@ -36,16 +36,19 @@ void initialise_ptu_i2c(I2C_HandleTypeDef *i2c) {
 	  i2cBuf[1]=0x38;
 	  HAL_I2C_Master_Transmit(&hi2c1, gyro_wr, i2cBuf, 2, 10);
 	*/
+	  // bit0 = X bit1 = Y bit2 = Z bit 3 = PD = power down
 	  uint8_t reg_1 = 0b00001111;
 	  // Enable x, y, z and turn off power down:
 	  HAL_I2C_Mem_Write(i2c, gyro_wr, L3G4200D_CTRL_REG1, 1, &reg_1, 1, 10);
 
 
 	  uint8_t reg_2 = 0b00000000;
+	  // HPF = high_pass filter
 	  // If you'd like to adjust/use the HPF, you can edit the line below to configure CTRL_REG2:
 	  HAL_I2C_Mem_Write(i2c, gyro_wr, L3G4200D_CTRL_REG2, 1, &reg_2, 1, 10);
 
 
+	  // interrupt enabled everyhting else in reg 3 disabled
 	  // Configure CTRL_REG3 to generate data ready interrupt on INT2
 	  // No interrupts used on INT1, if you'd like to configure INT1
 	  // or INT2 otherwise, consult the datasheet:
@@ -164,4 +167,23 @@ void initialise_ptu_i2c(I2C_HandleTypeDef *i2c) {
 
 
 
+	// Turn on measurements in power register
+	uint8_t areg_1 = 0b00001000;
+	// Enable x, y, z and turn off power down:
+	HAL_I2C_Mem_Write(i2c, accel_wr, ADXL345_POWER_CTL, 1, &areg_1, 1, 10);
+
+	// set the data register to full resolution i.e read every 4mg/LSB?
+	uint8_t areg_2 = 0b00001010;
+	HAL_I2C_Mem_Write(i2c, accel_wr, ADXL345_DATA_FORMAT, 1, &areg_2, 1, 10);
+
+	// offset found to be 250 -8 18 note: the use of 2 compliment to send a -ve 8
+	//
+	uint8_t acc_offset_calibration[3] = {0x01, 0x02, 0x3C};
+
+	// Left here in case I want to start setting the data offset registers
+	HAL_I2C_Mem_Write(i2c, accel_wr, ADXL345_OFSX, 1, acc_offset_calibration, 3, 10);
+	//HAL_I2C_Mem_Write(i2c, accel_wr, ADXL345_OFSY, 1, acc_offset_calibration[1], 1, 10);
+	//HAL_I2C_Mem_Write(i2c, accel_wr, ADXL345_OFSZ, 1, acc_offset_calibration[2], 1, 10);
 }
+
+
