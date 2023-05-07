@@ -64,7 +64,6 @@ static void MX_USB_PCD_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 // enable the clocks for desired peripherals (GPIOA, C and E)
-
 void enable_clocks() {
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
 }
@@ -76,7 +75,6 @@ void initialise_board() {
 	uint16_t *led_output_registers = ((uint16_t *)&(GPIOE->MODER)) + 1;
 	*led_output_registers = 0x5555;
 }
-
 /* USER CODE END 0 */
 
 /**
@@ -86,13 +84,16 @@ void initialise_board() {
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	uint8_t input[8] = "WASD";
-	uint32_t count = 1;
+//	uint8_t input[8] = "WASD";
+	count = 1;
+
+//	CheckSequence(input);
 
 	enable_clocks();
 	initialise_board();
 
-	CheckSequence(input, count);
+	SerialInitialise(BAUD_115200, &USART1_PORT);
+
 
   /* USER CODE END 1 */
 
@@ -352,7 +353,10 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void USART1_EXTI25_IRQHandler(void)
+{
+	SerialInputString(&USART1_PORT);
+}
 /* USER CODE END 4 */
 
 /**

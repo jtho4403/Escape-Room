@@ -3,9 +3,10 @@
 
 
 #include <stdint.h>
-#include "stm32f303xc.h"
 #include "serial.h"
 
-void CheckSequence(uint8_t *input, uint32_t count);
+extern int count;
+
+void CheckSequence(uint8_t *input);
 
 #endif

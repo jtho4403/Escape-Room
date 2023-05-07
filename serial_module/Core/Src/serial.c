@@ -2,8 +2,14 @@
 #define SERIAL_H
 
 #include "serial.h"
-
 #include "stm32f303xc.h"
+
+#define BUFFER_SIZE 64                   // Define buffer size
+#define CARRIAGE_RETURN '\r'			 // new line for Mac OS
+#define LINE_FEED '\n'					 // new line for UNIX
+
+volatile uint8_t rx_buffer[BUFFER_SIZE]; // Buffer for receiving data
+volatile uint8_t rx_index = 0;           // Buffer index for receiving data
 
 // NOTE: these are stored as pointers because they
 //       are const values so we can't store them directly
@@ -60,9 +66,7 @@ SerialPort USART1_PORT = {&(USART1->BRR),
 
 // InitialiseSerial - Initialise the serial port
 // Input: baudRate is from an enumerated set
-void SerialInitialise(uint32_t baudRate, SerialPort *serial_port, void (*completion_function)(uint32_t)) {
-
-	serial_port->completion_function = completion_function;
+void SerialInitialise(uint32_t baudRate, SerialPort *serial_port) {
 
 	// enable clock power, system configuration clock and GPIOC
 	// common to all UARTs
@@ -99,9 +103,10 @@ void SerialInitialise(uint32_t baudRate, SerialPort *serial_port, void (*complet
 
 
 	// enable serial port for tx and rx
-	*(serial_port->ControlRegister1) |= USART_CR1_TE | USART_CR1_RE | USART_CR1_UE;
-}
+	*(serial_port->ControlRegister1) |= USART_CR1_TE | USART_CR1_RE | USART_CR1_UE | USART_CR1_RXNEIE;
 
+	NVIC_EnableIRQ(USART1_IRQn);
+}
 
 void SerialOutputChar(uint8_t data, SerialPort *serial_port) {
 	while((*(serial_port->StatusRegister) & USART_ISR_TXE) == 0){
@@ -123,26 +128,25 @@ void SerialOutputString(uint8_t *pt, SerialPort *serial_port) {
 		serial_port->completion_function(counter);
 }
 
-
-
-void SerialInputString(uint8_t *pt, SerialPort *serial_port) {
-	uint32_t counter = 0;
-	while (counter < 32) {
-		//wait for new input
+void SerialInputString(SerialPort *serial_port) {
+	while (rx_index < 7) {
+		// wait for data to be received
 		while((*(serial_port->StatusRegister) & USART_ISR_RXNE) == 0){
 		}
 
-		//exit if new line detected
-		if (*(serial_port->DataInputRegister) == 10) {
-							break;
-				}
+		uint8_t rx_data = *(serial_port->DataInputRegister);
 
-		//insert new byte/char
-		pt[counter]= *(serial_port->DataInputRegister);
-		counter++;
+		// exit if new line (\n) is detected
+		if (rx_data == CARRIAGE_RETURN || rx_data == LINE_FEED) {
+			break;
+		}
+
+		// store byte/ character in string buffer
+		rx_buffer[rx_index]= rx_data;
+		rx_index++;
 	}
 
-	serial_port->completion_function(counter);
+	CheckSequence(rx_buffer);
 }
 
 #endif

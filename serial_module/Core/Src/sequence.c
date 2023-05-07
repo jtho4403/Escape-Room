@@ -5,8 +5,9 @@ static char seq1[4] = "WASD";
 static char seq2[5] = "WWASD";
 static char seq3[6] = "WASDDD";
 static char seq4[7] = "WAASSDW";
+int count;
 
-void CheckSequence(uint8_t *input, uint32_t count){
+void CheckSequence(uint8_t *input){
 
 	char seq[7];
 	int i;
@@ -23,16 +24,15 @@ void CheckSequence(uint8_t *input, uint32_t count){
 		strcpy(seq, seq4);
 	}
 
-
 	uint8_t fail_message[32] = "Fail\n";
 	uint8_t pass_message[32] = "Success\n";
 
 	char current_char;
 	int fail = 0;
-	for (i = 0; i < count; i++){
+	for (i = 0; i < count+3; i++){
 		current_char = (char)input[i];
 		if (current_char != seq[i]){
-			SerialInitialise(BAUD_115200, &USART1_PORT, 0x00);
+			SerialInitialise(BAUD_115200, &USART1_PORT);
 			SerialOutputString(fail_message, &USART1_PORT);
 			fail = 1;
 			break;
@@ -40,7 +40,7 @@ void CheckSequence(uint8_t *input, uint32_t count){
 	}
 
 	if (fail == 0){
-		SerialInitialise(BAUD_115200, &USART1_PORT, 0x00);
+		SerialInitialise(BAUD_115200, &USART1_PORT);
 		SerialOutputString(pass_message, &USART1_PORT);
 	}
 

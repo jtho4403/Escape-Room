@@ -23,7 +23,7 @@ enum {
  
 // SerialInitialise - initialise the serial port
 // Input: baud rate as defined in the enum
-void SerialInitialise(uint32_t baudRate, SerialPort *serial_port, void (*completion_function)(uint32_t) );
+void SerialInitialise(uint32_t baudRate, SerialPort *serial_port);
  
 
 // SerialOutputChar - output a char to the serial port
@@ -35,6 +35,9 @@ void SerialOutputChar(uint8_t, SerialPort *serial_port);
 // SerialOutputString - output a NULL TERMINATED string to the serial port
 // Input: pointer to a NULL-TERMINATED string (if not null terminated, there will be problems)
 void SerialOutputString(uint8_t *pt, SerialPort *serial_port);
- 
- 
+
+void SerialInputString(SerialPort *serial_port);
+
+void USART1_EXTI25_IRQHandler(void);
+
 #endif

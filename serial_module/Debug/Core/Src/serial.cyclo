@@ -1,4 +1,5 @@
-serial.c:63:6:SerialInitialise	3
-serial.c:106:6:SerialOutputChar	2
-serial.c:113:6:SerialOutputString	3
-serial.c:128:6:SerialInputString	4
+core_cm4.h:1688:22:__NVIC_EnableIRQ	2
+serial.c:69:6:SerialInitialise	3
+serial.c:111:6:SerialOutputChar	2
+serial.c:118:6:SerialOutputString	3
+serial.c:131:6:SerialInputString	5
