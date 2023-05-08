@@ -20,3 +20,4 @@ Continue working on last week's assigned parts.
 Researched and worked on methods to imlplement a joystick with the STM32 microcontroller to move the PTU. We decided to use a breadboard to make use of the joystick. We are also working on a version that implements directional input through serial communication to control the movement of the PTU.
 
 **PTU sensing module:**
+Reseraching and implmenting how to get the gyro values into acutal coordiante values
