@@ -1,25 +1,30 @@
-21:56:12 **** Incremental Build of configuration Debug for project test-interrupt ****
+11:07:28 **** Incremental Build of configuration Debug for project test-interrupt ****
 make -j9 all 
 arm-none-eabi-gcc "../Src/serial.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32F303VCTx -DSTM32 -DSTM32F3 -DSTM32F3DISCOVERY -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/serial.d" -MT"Src/serial.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/serial.o"
 ../Src/serial.c: In function 'SerialInputString':
-../Src/serial.c:151:2: warning: implicit declaration of function 'CheckSequence' [-Wimplicit-function-declaration]
-  151 |  CheckSequence(rx_buffer);
-      |  ^~~~~~~~~~~~~
+../Src/serial.c:139:4: warning: implicit declaration of function 'CheckSequence' [-Wimplicit-function-declaration]
+  139 |    CheckSequence(rx_buffer);
+      |    ^~~~~~~~~~~~~
+../Src/serial.c:143:4: warning: implicit declaration of function 'memset' [-Wimplicit-function-declaration]
+  143 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |    ^~~~~~
+../Src/serial.c:143:4: warning: incompatible implicit declaration of built-in function 'memset'
+../Src/serial.c:6:1: note: include '<string.h>' or provide a declaration of 'memset'
+    5 | #include "stm32f303xc.h"
+  +++ |+#include <string.h>
+    6 | 
+../Src/serial.c:143:11: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  143 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |           ^~~~~~~~~
+../Src/serial.c:143:11: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
 arm-none-eabi-gcc -o "test-interrupt.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/test-interrupt/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="test-interrupt.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: test-interrupt.elf
  
 arm-none-eabi-size   test-interrupt.elf 
 arm-none-eabi-objdump -h -S  test-interrupt.elf  > "test-interrupt.list"
    text	   data	    bss	    dec	    hex	filename
-   1672	    100	   1636	   3408	    d50	test-interrupt.elf
+   1716	    100	   1636	   3452	    d7c	test-interrupt.elf
 Finished building: default.size.stdout
  
 Finished building: test-interrupt.list
- 
-21:56:16 **** Incremental Build of configuration Debug for project test-interrupt ****
-make -j9 all 
-arm-none-eabi-size   test-interrupt.elf 
-   text	   data	    bss	    dec	    hex	filename
-   1672	    100	   1636	   3408	    d50	test-interrupt.elf
-Finished building: default.size.stdout
  

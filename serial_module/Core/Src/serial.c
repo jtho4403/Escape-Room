@@ -105,7 +105,9 @@ void SerialInitialise(uint32_t baudRate, SerialPort *serial_port) {
 	// enable serial port for tx and rx
 	*(serial_port->ControlRegister1) |= USART_CR1_TE | USART_CR1_RE | USART_CR1_UE | USART_CR1_RXNEIE;
 
+	__disable_irq();
 	NVIC_EnableIRQ(USART1_IRQn);
+	__enable_irq();
 }
 
 void SerialOutputChar(uint8_t data, SerialPort *serial_port) {
@@ -129,24 +131,44 @@ void SerialOutputString(uint8_t *pt, SerialPort *serial_port) {
 }
 
 void SerialInputString(SerialPort *serial_port) {
-	while (rx_index < 7) {
-		// wait for data to be received
-		while((*(serial_port->StatusRegister) & USART_ISR_RXNE) == 0){
-		}
-
+	if (rx_index < 7) {
 		uint8_t rx_data = *(serial_port->DataInputRegister);
 
-		// exit if new line (\n) is detected
+		// exit if new line is detected
 		if (rx_data == CARRIAGE_RETURN || rx_data == LINE_FEED) {
-			break;
+			// disable receive interrupt
+			*(serial_port->ControlRegister1) &= ~USART_CR1_RXNEIE;
+
+			CheckSequence(rx_buffer);
+
+			// reset index & buffer
+			rx_index = 0;
+			memset(rx_buffer, 0, sizeof(rx_buffer));
 		}
 
-		// store byte/ character in string buffer
-		rx_buffer[rx_index]= rx_data;
-		rx_index++;
+		else{
+			// store byte/ character in string buffer
+			rx_buffer[rx_index]= rx_data;
+			rx_index++;
+		}
 	}
 
-	CheckSequence(rx_buffer);
+	else{
+		// disable receive interrupt
+		*(serial_port->ControlRegister1) &= ~USART_CR1_RXNEIE;
+
+		CheckSequence(rx_buffer);
+
+		// reset index & buffer
+		rx_index = 0;
+		memset(rx_buffer, 0, sizeof(rx_buffer));
+	}
+}
+
+void USART1_EXTI25_IRQHandler(void)
+{
+	// disable timer
+	SerialInputString(&USART1_PORT);
 }
 
 #endif
