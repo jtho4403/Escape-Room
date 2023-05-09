@@ -10,7 +10,7 @@
 Continue working on last week's assigned parts.
 
 ## Progress uptdate
-**Lidar sensing module:** 
+**Lidar sensing module:** working
 
 **LED and timer module:** at planning stage
 
