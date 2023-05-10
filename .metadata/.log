@@ -396,3 +396,33 @@ java.lang.Exception: File: /Users/jiaxuchee/Documents/GitHub/Escape-Room/test-in
 	at com.st.stm32cube.ide.mcu.stackanalyzer.ui.StackAnalyzerView.inputChanged(StackAnalyzerView.java:954)
 	at com.st.stm32cube.ide.mcu.stackanalyzer.ui.StackAnalyzerView.lambda$15(StackAnalyzerView.java:1307)
 	at java.base/java.lang.Thread.run(Thread.java:829)
+
+!ENTRY org.eclipse.cdt.core 1 0 2023-05-10 12:57:25.959
+!MESSAGE Indexed 'major-project-base-serialise' (29 sources, 125 headers) in 4.18 sec: 12,721 declarations; 75,877 references; 2 unresolved inclusions; 42 syntax errors; 147 unresolved names (0.17%)
+
+!ENTRY org.eclipse.cdt.dsf 4 10001 2023-05-10 13:47:48.265
+!MESSAGE Target not available.
+
+!ENTRY org.eclipse.cdt.dsf 4 10001 2023-05-10 13:48:21.730
+!MESSAGE Target not available.
+
+!ENTRY org.eclipse.cdt.dsf 4 10001 2023-05-10 13:50:19.815
+!MESSAGE Target not available.
+
+!ENTRY org.eclipse.cdt.core 1 0 2023-05-10 13:51:46.293
+!MESSAGE Indexed 'test-interrupt' (5 sources, 63 headers) in 1.28 sec: 3,154 declarations; 5,411 references; 0 unresolved inclusions; 2 syntax errors; 2 unresolved names (0.023%)
+
+!ENTRY org.eclipse.cdt.dsf.ui 2 0 2023-05-10 13:55:11.387
+!MESSAGE Unable to locate file: /Users/jiaxuchee/Documents/GitHub/Escape-Room/test-interrupt/Debug/../Src/main.c
+
+!ENTRY org.eclipse.cdt.dsf.ui 2 0 2023-05-10 13:57:20.160
+!MESSAGE Unable to locate file: /Users/jiaxuchee/Documents/GitHub/Escape-Room/test-interrupt/Debug/../Inc/cmsis_gcc.h
+
+!ENTRY org.eclipse.cdt.dsf 4 10001 2023-05-10 13:58:48.433
+!MESSAGE Target not available.
+
+!ENTRY org.eclipse.cdt.dsf 4 10001 2023-05-10 14:13:09.962
+!MESSAGE Target not available.
+
+!ENTRY org.eclipse.cdt.dsf 4 10001 2023-05-10 14:15:31.128
+!MESSAGE Target not available.

@@ -1,10 +1,33 @@
-21:43:44 **** Incremental Build of configuration Debug for project serial_module ****
+14:15:23 **** Incremental Build of configuration Debug for project serial_module ****
 make -j9 all 
+arm-none-eabi-gcc "../Core/Src/serial.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/serial.d" -MT"Core/Src/serial.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/serial.o"
+../Core/Src/serial.c: In function 'USART1_EXTI25_IRQHandler':
+../Core/Src/serial.c:160:2: warning: implicit declaration of function 'CheckSequence' [-Wimplicit-function-declaration]
+  160 |  CheckSequence(rx_buffer);
+      |  ^~~~~~~~~~~~~
+../Core/Src/serial.c:163:2: warning: implicit declaration of function 'memset' [-Wimplicit-function-declaration]
+  163 |  memset(rx_buffer, 0, sizeof(rx_buffer));
+      |  ^~~~~~
+../Core/Src/serial.c:163:2: warning: incompatible implicit declaration of built-in function 'memset'
+../Core/Src/serial.c:6:1: note: include '<string.h>' or provide a declaration of 'memset'
+    5 | #include "stm32f303xc.h"
+  +++ |+#include <string.h>
+    6 | 
+../Core/Src/serial.c:163:9: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  163 |  memset(rx_buffer, 0, sizeof(rx_buffer));
+      |         ^~~~~~~~~
+../Core/Src/serial.c:163:9: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
 arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
    text	   data	    bss	    dec	    hex	filename
   11424	     84	   2508	  14016	   36c0	serial_module.elf
 Finished building: default.size.stdout
  
+Finished building: serial_module.list
+ 
 
-21:43:45 Build Finished. 0 errors, 0 warnings. (took 400ms)
+14:15:24 Build Finished. 0 errors, 4 warnings. (took 976ms)
 

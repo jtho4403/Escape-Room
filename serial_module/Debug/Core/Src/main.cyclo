@@ -6,5 +6,4 @@ main.c:189:13:MX_I2C1_Init	4
 main.c:237:13:MX_SPI1_Init	2
 main.c:277:13:MX_USB_PCD_Init	2
 main.c:308:13:MX_GPIO_Init	1
-main.c:356:6:USART1_EXTI25_IRQHandler	1
-main.c:366:6:Error_Handler	1
+main.c:363:6:Error_Handler	1
