@@ -5,9 +5,11 @@ static char seq1[4] = "WASD";
 static char seq2[5] = "WWASD";
 static char seq3[6] = "WASDDD";
 static char seq4[7] = "WAASSDW";
-int count;
+volatile uint8_t pass_state;
+volatile uint8_t count;
 
 void CheckSequence(uint8_t *input){
+	pass_state = 0;
 
 	char seq[7];
 	int i;
@@ -35,6 +37,7 @@ void CheckSequence(uint8_t *input){
 			SerialInitialise(BAUD_115200, &USART1_PORT);
 			SerialOutputString(fail_message, &USART1_PORT);
 			fail = 1;
+
 			break;
 		}
 	}

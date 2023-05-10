@@ -1,6 +1,6 @@
 ../Drivers/CMSIS/Include/core_cm4.h:1688:22:__NVIC_EnableIRQ	16	static
-../Core/Src/serial.c:69:6:SerialInitialise	24	static
+../Core/Src/serial.c:70:6:SerialInitialise	24	static,ignoring_inline_asm
 ../Core/Src/serial.c:113:6:SerialOutputChar	16	static
 ../Core/Src/serial.c:120:6:SerialOutputString	24	static
 ../Core/Src/serial.c:133:6:SerialInputString	24	static
-../Core/Src/serial.c:156:6:USART1_EXTI25_IRQHandler	8	static
+../Core/Src/serial.c:169:6:USART1_IRQHandler	8	static

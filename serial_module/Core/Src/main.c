@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "serial.h"
 #include "sequence.h"
+#include "stm32f303xc.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -84,16 +85,6 @@ void initialise_board() {
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-//	uint8_t input[8] = "WASD";
-	count = 1;
-
-//	CheckSequence(input);
-
-	enable_clocks();
-	initialise_board();
-
-	SerialInitialise(BAUD_115200, &USART1_PORT);
-
 
   /* USER CODE END 1 */
 
@@ -118,8 +109,14 @@ int main(void)
   MX_I2C1_Init();
   MX_SPI1_Init();
   MX_USB_PCD_Init();
-  /* USER CODE BEGIN 2 */
 
+  /* USER CODE BEGIN 2 */
+  count = 1;
+
+  enable_clocks();
+  initialise_board();
+
+  SerialInitialise(BAUD_115200, &USART1_PORT);
   /* USER CODE END 2 */
 
   /* Infinite loop */
