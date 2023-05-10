@@ -1,54 +1,41 @@
-15:07:19 **** Incremental Build of configuration Debug for project serial_module ****
+21:50:41 **** Incremental Build of configuration Debug for project serial_module ****
 make -j9 all 
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
 arm-none-eabi-gcc "../Core/Src/serial.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/serial.d" -MT"Core/Src/serial.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/serial.o"
 ../Core/Src/serial.c: In function 'SerialInputString':
-../Core/Src/serial.c:139:5: warning: implicit declaration of function 'CheckSequence' [-Wimplicit-function-declaration]
-  139 |     CheckSequence(rx_buffer);
+../Core/Src/serial.c:162:5: warning: implicit declaration of function 'CheckSequence' [-Wimplicit-function-declaration]
+  162 |     CheckSequence(rx_buffer);
       |     ^~~~~~~~~~~~~
-../Core/Src/serial.c:143:5: warning: implicit declaration of function 'memset' [-Wimplicit-function-declaration]
-  143 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+../Core/Src/serial.c:166:5: warning: implicit declaration of function 'memset' [-Wimplicit-function-declaration]
+  166 |     memset(rx_buffer, 0, sizeof(rx_buffer));
       |     ^~~~~~
-../Core/Src/serial.c:143:5: warning: incompatible implicit declaration of built-in function 'memset'
+../Core/Src/serial.c:166:5: warning: incompatible implicit declaration of built-in function 'memset'
 ../Core/Src/serial.c:6:1: note: include '<string.h>' or provide a declaration of 'memset'
     5 | #include "stm32f303xc.h"
   +++ |+#include <string.h>
     6 | 
-../Core/Src/serial.c:143:12: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
-  143 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+../Core/Src/serial.c:166:12: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  166 |     memset(rx_buffer, 0, sizeof(rx_buffer));
       |            ^~~~~~~~~
-../Core/Src/serial.c:143:12: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
-../Core/Src/serial.c:165:4: warning: incompatible implicit declaration of built-in function 'memset'
-  165 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+../Core/Src/serial.c:166:12: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+../Core/Src/serial.c:184:4: warning: incompatible implicit declaration of built-in function 'memset'
+  184 |    memset(rx_buffer, 0, sizeof(rx_buffer));
       |    ^~~~~~
-../Core/Src/serial.c:165:4: note: include '<string.h>' or provide a declaration of 'memset'
-../Core/Src/serial.c:165:11: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
-  165 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+../Core/Src/serial.c:184:4: note: include '<string.h>' or provide a declaration of 'memset'
+../Core/Src/serial.c:184:11: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  184 |    memset(rx_buffer, 0, sizeof(rx_buffer));
       |           ^~~~~~~~~
-../Core/Src/serial.c:165:11: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
-../Core/Src/main.c:304:13: warning: 'MX_GPIO_Init' defined but not used [-Wunused-function]
-  304 | static void MX_GPIO_Init(void)
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:273:13: warning: 'MX_USB_PCD_Init' defined but not used [-Wunused-function]
-  273 | static void MX_USB_PCD_Init(void)
-      |             ^~~~~~~~~~~~~~~
-../Core/Src/main.c:233:13: warning: 'MX_SPI1_Init' defined but not used [-Wunused-function]
-  233 | static void MX_SPI1_Init(void)
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:185:13: warning: 'MX_I2C1_Init' defined but not used [-Wunused-function]
-  185 | static void MX_I2C1_Init(void)
-      |             ^~~~~~~~~~~~
+../Core/Src/serial.c:184:11: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
 arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: serial_module.elf
  
 arm-none-eabi-size   serial_module.elf 
 arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
    text	   data	    bss	    dec	    hex	filename
-   1852	    104	   1640	   3596	    e0c	serial_module.elf
+  12460	    112	   2576	  15148	   3b2c	serial_module.elf
 Finished building: default.size.stdout
  
 Finished building: serial_module.list
  
 
-15:07:20 Build Finished. 0 errors, 10 warnings. (took 1s.0ms)
+21:50:42 Build Finished. 0 errors, 6 warnings. (took 1s.86ms)
 

@@ -1,6 +1,7 @@
 core_cm4.h:1688:22:__NVIC_EnableIRQ	2
 serial.c:70:6:SerialInitialise	3
-serial.c:113:6:SerialOutputChar	2
-serial.c:120:6:SerialOutputString	3
-serial.c:133:6:SerialInputString	4
-serial.c:169:6:USART1_IRQHandler	1
+serial.c:115:6:EnableSerialInterrupt	1
+serial.c:133:6:SerialOutputChar	2
+serial.c:140:6:SerialOutputString	3
+serial.c:153:6:SerialInputString	4
+serial.c:188:6:USART1_IRQHandler	1

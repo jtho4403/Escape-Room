@@ -98,16 +98,36 @@ void SerialInitialise(uint32_t baudRate, SerialPort *serial_port) {
 	// Baud rate calculation from datasheet
 	switch(baudRate){
 	case BAUD_115200:
-		*baud_rate_config = 0x46;  // 115200 at 8MHz
+		*baud_rate_config = 0x46*0x06;  // 115200 at 8MHz
 		break;
 	}
 
 	// enable serial port for tx and rx
 	*(serial_port->ControlRegister1) |= USART_CR1_TE | USART_CR1_RE | USART_CR1_UE | USART_CR1_RXNEIE;
+}
+//void EnableSerialInterrupt(){
+//	__disable_irq();
+//	NVIC_EnableIRQ(USART1_IRQn);
+//	__enable_irq();
+//}
+// Enable interrupts for USART1 rx functionality.
 
-	__disable_irq();
-	NVIC_EnableIRQ(USART1_IRQn);
-	__enable_irq();
+void EnableSerialInterrupt() {
+	__disable_irq(); // Disable the interrupts while editing settings.
+
+    // Enable the system configuration controller (SYSCFG in RCC).
+    RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
+
+    // Configure EXTI line for USART1.
+    SYSCFG->EXTICR[1] &= ~SYSCFG_EXTICR2_EXTI5_Msk; // Clear EXTI5, remove previous settings.
+    SYSCFG->EXTICR[1] |= SYSCFG_EXTICR2_EXTI5_PA; // Set EXTI5 bits to PA for  (USART1)
+
+    // Enable EXTI5 interrupt (corresponding to USART1).
+    EXTI->IMR |= EXTI_IMR_MR5; // Enable interrupt on EXTI line 5 (corresponding to PA5/USART1).
+
+    NVIC_EnableIRQ(USART1_IRQn);
+
+    __enable_irq(); // Re-enable all interrupts now that we are finished editing settings.
 }
 
 void SerialOutputChar(uint8_t data, SerialPort *serial_port) {
@@ -131,20 +151,19 @@ void SerialOutputString(uint8_t *pt, SerialPort *serial_port) {
 }
 
 void SerialInputString(SerialPort *serial_port) {
-		if (rx_index < 7) {
+		if (rx_index < 32) {
 			uint8_t rx_data = *(serial_port->DataInputRegister);
 
 			// exit if new line is detected
 			if (rx_data == CARRIAGE_RETURN || rx_data == LINE_FEED) {
+				// disable receive interrupt
+				*(serial_port->ControlRegister1) &= ~USART_CR1_RXNEIE;
+
 				CheckSequence(rx_buffer);
 
 				// reset index & buffer
 				rx_index = 0;
 				memset(rx_buffer, 0, sizeof(rx_buffer));
-
-				// disable receive interrupt
-				*(serial_port->ControlRegister1) &= ~USART_CR1_RXNEIE;
-
 			}
 
 			else{

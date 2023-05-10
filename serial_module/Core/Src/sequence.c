@@ -2,15 +2,13 @@
 
 //sequence as static variable
 static char seq1[4] = "WASD";
-static char seq2[5] = "WWASD";
-static char seq3[6] = "WASDDD";
-static char seq4[7] = "WAASSDW";
-volatile uint8_t pass_state;
-volatile uint8_t count;
+static char seq2[5] = "WASDW";
+static char seq3[6] = "WASDWA";
+static char seq4[7] = "WASDWAS";
+volatile int substage_state; //0 for fail, 1 for pass
+volatile int count;
 
 void CheckSequence(uint8_t *input){
-	pass_state = 0;
-
 	char seq[7];
 	int i;
 	if (count == 1){
@@ -30,21 +28,74 @@ void CheckSequence(uint8_t *input){
 	uint8_t pass_message[32] = "Success\n";
 
 	char current_char;
-	int fail = 0;
 	for (i = 0; i < count+3; i++){
 		current_char = (char)input[i];
 		if (current_char != seq[i]){
-			SerialInitialise(BAUD_115200, &USART1_PORT);
 			SerialOutputString(fail_message, &USART1_PORT);
-			fail = 1;
-
+			substage_state = 0;
 			break;
 		}
 	}
 
-	if (fail == 0){
-		SerialInitialise(BAUD_115200, &USART1_PORT);
+	if (substage_state == 1){
 		SerialOutputString(pass_message, &USART1_PORT);
+		count ++;
+	}
+}
+
+//void CheckStage2(int state){
+//	if (state == 1){
+//		uint8_t progress_message[32] = "You've passed Stage 2\r\n";
+//		SerialInitialise(BAUD_115200, &USART1_PORT);
+//		SerialOutputString(progress_message, &USART1_PORT);
+//		//call next stage
+//	}
+//	else if (state == 0){
+//		uint8_t restart_message[32] = "Restarting Stage 2\r\n";
+//		SerialInitialise(BAUD_115200, &USART1_PORT);
+//		SerialOutputString(restart_message, &USART1_PORT);
+//
+//		Stage2();
+//	}
+//	else{
+//		uint8_t error_message[32] = "Error\n";
+//		SerialOutputString(error_message, &USART1_PORT);
+//	}
+//
+//}
+
+void Stage2(){
+	count = 1;
+	substage_state = 1;
+	int cnt;
+	int message_sent = 0;
+
+	while (count < 5){
+		cnt = count;
+
+		//put LED function here
+
+		//enable timer polling here
+
+		//enable serial receive interrupt
+		SerialInitialise(BAUD_115200, &USART1_PORT);
+		EnableSerialInterrupt();
+
+		//add timer polling condition when integrating
+		while(count == cnt && substage_state == 1){
+		}
+
+		if(substage_state == 0){
+			uint8_t restart_message[32] = "Restarting Stage 2\r\n";
+			SerialOutputString(restart_message, &USART1_PORT);
+
+			Stage2();
+			break;
+		}
 	}
 
+	uint8_t progress_message[32] = "You've passed Stage 2\r\n";
+	SerialOutputString(progress_message, &USART1_PORT);
+	message_sent = 1;
+	//call next stage
 }

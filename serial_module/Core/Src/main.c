@@ -111,12 +111,13 @@ int main(void)
   MX_USB_PCD_Init();
 
   /* USER CODE BEGIN 2 */
-  count = 1;
-
   enable_clocks();
   initialise_board();
 
-  SerialInitialise(BAUD_115200, &USART1_PORT);
+//  SerialInitialise(BAUD_115200, &USART1_PORT);
+//  EnableSerialInterrupt();
+
+  Stage2();
   /* USER CODE END 2 */
 
   /* Infinite loop */
