@@ -3683,3 +3683,949 @@ Finished building: default.size.stdout
  
 Finished building: serial_module.list
  
+15:10:53 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-size   serial_module.elf 
+   text	   data	    bss	    dec	    hex	filename
+  12460	    112	   2576	  15148	   3b2c	serial_module.elf
+Finished building: default.size.stdout
+ 
+15:12:04 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-size   serial_module.elf 
+   text	   data	    bss	    dec	    hex	filename
+  12460	    112	   2576	  15148	   3b2c	serial_module.elf
+Finished building: default.size.stdout
+ 
+15:12:21 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-size   serial_module.elf 
+   text	   data	    bss	    dec	    hex	filename
+  12460	    112	   2576	  15148	   3b2c	serial_module.elf
+Finished building: default.size.stdout
+ 
+15:18:54 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+arm-none-eabi-gcc "../Core/Src/serial.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/serial.d" -MT"Core/Src/serial.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/serial.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:15:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   15 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:15:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:18:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   18 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:18:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:21:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   21 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:21:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:24:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   24 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:24:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/serial.c: In function 'SerialInputString':
+../Core/Src/serial.c:164:5: warning: implicit declaration of function 'CheckSequence' [-Wimplicit-function-declaration]
+  164 |     CheckSequence(rx_buffer);
+      |     ^~~~~~~~~~~~~
+../Core/Src/serial.c:168:5: warning: implicit declaration of function 'memset' [-Wimplicit-function-declaration]
+  168 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |     ^~~~~~
+../Core/Src/serial.c:168:5: warning: incompatible implicit declaration of built-in function 'memset'
+../Core/Src/serial.c:6:1: note: include '<string.h>' or provide a declaration of 'memset'
+    5 | #include "stm32f303xc.h"
+  +++ |+#include <string.h>
+    6 | 
+../Core/Src/serial.c:168:12: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  168 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |            ^~~~~~~~~
+../Core/Src/serial.c:168:12: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+../Core/Src/serial.c:186:4: warning: incompatible implicit declaration of built-in function 'memset'
+  186 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |    ^~~~~~
+../Core/Src/serial.c:186:4: note: include '<string.h>' or provide a declaration of 'memset'
+../Core/Src/serial.c:186:11: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  186 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |           ^~~~~~~~~
+../Core/Src/serial.c:186:11: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+../Core/Src/sequence.c: In function 'Stage2':
+../Core/Src/sequence.c:82:3: warning: implicit declaration of function 'EnableSerialInterrupt' [-Wimplicit-function-declaration]
+   82 |   EnableSerialInterrupt(&USART1_PORT);
+      |   ^~~~~~~~~~~~~~~~~~~~~
+../Core/Src/sequence.c:71:6: warning: variable 'message_sent' set but not used [-Wunused-but-set-variable]
+   71 |  int message_sent = 0;
+      |      ^~~~~~~~~~~~
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12484	    112	   2576	  15172	   3b44	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+15:19:10 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-size   serial_module.elf 
+   text	   data	    bss	    dec	    hex	filename
+  12484	    112	   2576	  15172	   3b44	serial_module.elf
+Finished building: default.size.stdout
+ 
+15:22:17 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-size   serial_module.elf 
+   text	   data	    bss	    dec	    hex	filename
+  12484	    112	   2576	  15172	   3b44	serial_module.elf
+Finished building: default.size.stdout
+ 
+15:27:24 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-size   serial_module.elf 
+   text	   data	    bss	    dec	    hex	filename
+  12484	    112	   2576	  15172	   3b44	serial_module.elf
+Finished building: default.size.stdout
+ 
+15:28:36 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:15:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   15 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:15:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:18:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   18 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:18:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:21:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   21 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:21:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:24:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   24 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:24:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c: In function 'Stage2':
+../Core/Src/sequence.c:82:3: warning: implicit declaration of function 'EnableSerialInterrupt' [-Wimplicit-function-declaration]
+   82 |   EnableSerialInterrupt(&USART1_PORT);
+      |   ^~~~~~~~~~~~~~~~~~~~~
+../Core/Src/sequence.c:71:6: warning: variable 'message_sent' set but not used [-Wunused-but-set-variable]
+   71 |  int message_sent = 0;
+      |      ^~~~~~~~~~~~
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12504	    112	   2576	  15192	   3b58	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+15:30:10 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:15:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   15 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:15:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:18:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   18 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:18:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:21:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   21 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:21:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:24:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   24 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:24:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c: In function 'Stage2':
+../Core/Src/sequence.c:82:3: warning: implicit declaration of function 'EnableSerialInterrupt' [-Wimplicit-function-declaration]
+   82 |   EnableSerialInterrupt(&USART1_PORT);
+      |   ^~~~~~~~~~~~~~~~~~~~~
+../Core/Src/sequence.c:71:6: warning: variable 'message_sent' set but not used [-Wunused-but-set-variable]
+   71 |  int message_sent = 0;
+      |      ^~~~~~~~~~~~
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12484	    112	   2576	  15172	   3b44	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+15:37:48 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+arm-none-eabi-gcc "../Core/Src/serial.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/serial.d" -MT"Core/Src/serial.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/serial.o"
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:15:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   15 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:15:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:18:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   18 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:18:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:21:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   21 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:21:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:24:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   24 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:24:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/serial.c: In function 'SerialInputString':
+../Core/Src/serial.c:164:5: warning: implicit declaration of function 'CheckSequence' [-Wimplicit-function-declaration]
+  164 |     CheckSequence(rx_buffer);
+      |     ^~~~~~~~~~~~~
+../Core/Src/serial.c:168:5: warning: implicit declaration of function 'memset' [-Wimplicit-function-declaration]
+  168 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |     ^~~~~~
+../Core/Src/serial.c:168:5: warning: incompatible implicit declaration of built-in function 'memset'
+../Core/Src/serial.c:6:1: note: include '<string.h>' or provide a declaration of 'memset'
+    5 | #include "stm32f303xc.h"
+  +++ |+#include <string.h>
+    6 | 
+../Core/Src/serial.c:168:12: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  168 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |            ^~~~~~~~~
+../Core/Src/serial.c:168:12: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+../Core/Src/serial.c:186:4: warning: incompatible implicit declaration of built-in function 'memset'
+  186 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |    ^~~~~~
+../Core/Src/serial.c:186:4: note: include '<string.h>' or provide a declaration of 'memset'
+../Core/Src/serial.c:186:11: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  186 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |           ^~~~~~~~~
+../Core/Src/serial.c:186:11: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+../Core/Src/sequence.c: In function 'Stage2':
+../Core/Src/sequence.c:87:3: warning: implicit declaration of function 'EnableSerialInterrupt' [-Wimplicit-function-declaration]
+   87 |   EnableSerialInterrupt(&USART1_PORT);
+      |   ^~~~~~~~~~~~~~~~~~~~~
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12512	    112	   2576	  15200	   3b60	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+15:38:17 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-size   serial_module.elf 
+   text	   data	    bss	    dec	    hex	filename
+  12512	    112	   2576	  15200	   3b60	serial_module.elf
+Finished building: default.size.stdout
+ 
+15:42:38 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:15:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   15 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:15:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:18:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   18 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:18:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:21:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   21 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:21:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:24:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   24 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:24:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c: In function 'Stage2':
+../Core/Src/sequence.c:85:3: warning: implicit declaration of function 'EnableSerialInterrupt' [-Wimplicit-function-declaration]
+   85 |   EnableSerialInterrupt(&USART1_PORT);
+      |   ^~~~~~~~~~~~~~~~~~~~~
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12492	    112	   2576	  15180	   3b4c	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+15:44:09 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+arm-none-eabi-gcc "../Core/Src/serial.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/serial.d" -MT"Core/Src/serial.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/serial.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:15:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   15 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:15:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:18:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   18 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:18:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:21:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   21 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:21:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:24:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   24 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:24:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/serial.c: In function 'SerialInputString':
+../Core/Src/serial.c:164:5: warning: implicit declaration of function 'CheckSequence' [-Wimplicit-function-declaration]
+  164 |     CheckSequence(rx_buffer);
+      |     ^~~~~~~~~~~~~
+../Core/Src/serial.c:168:5: warning: implicit declaration of function 'memset' [-Wimplicit-function-declaration]
+  168 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |     ^~~~~~
+../Core/Src/serial.c:168:5: warning: incompatible implicit declaration of built-in function 'memset'
+../Core/Src/serial.c:6:1: note: include '<string.h>' or provide a declaration of 'memset'
+    5 | #include "stm32f303xc.h"
+  +++ |+#include <string.h>
+    6 | 
+../Core/Src/serial.c:168:12: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  168 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |            ^~~~~~~~~
+../Core/Src/serial.c:168:12: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+../Core/Src/serial.c:186:4: warning: incompatible implicit declaration of built-in function 'memset'
+  186 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |    ^~~~~~
+../Core/Src/serial.c:186:4: note: include '<string.h>' or provide a declaration of 'memset'
+../Core/Src/serial.c:186:11: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  186 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |           ^~~~~~~~~
+../Core/Src/serial.c:186:11: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12432	    112	   2576	  15120	   3b10	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+15:44:43 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:15:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+   15 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:15:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:18:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   18 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:18:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:21:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   21 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:21:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:24:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   24 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:24:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12436	    112	   2576	  15124	   3b14	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+15:56:02 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+arm-none-eabi-gcc "../Core/Src/serial.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/serial.d" -MT"Core/Src/serial.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/serial.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:16:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   16 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:16:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:19:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   19 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:19:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:22:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   22 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:22:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:25:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   25 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:25:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c: In function 'Stage2':
+../Core/Src/sequence.c:88:18: error: 'cnt' undeclared (first use in this function); did you mean 'int'?
+   88 |   while(count == cnt && substage_state == 1){
+      |                  ^~~
+      |                  int
+../Core/Src/sequence.c:88:18: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/serial.c: In function 'SerialInputString':
+../Core/Src/serial.c:164:5: warning: implicit declaration of function 'CheckSequence' [-Wimplicit-function-declaration]
+  164 |     CheckSequence(rx_buffer);
+      |     ^~~~~~~~~~~~~
+../Core/Src/serial.c:168:5: warning: implicit declaration of function 'memset' [-Wimplicit-function-declaration]
+  168 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |     ^~~~~~
+../Core/Src/serial.c:168:5: warning: incompatible implicit declaration of built-in function 'memset'
+../Core/Src/serial.c:6:1: note: include '<string.h>' or provide a declaration of 'memset'
+    5 | #include "stm32f303xc.h"
+  +++ |+#include <string.h>
+    6 | 
+../Core/Src/serial.c:168:12: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  168 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |            ^~~~~~~~~
+../Core/Src/serial.c:168:12: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+../Core/Src/serial.c:186:4: warning: incompatible implicit declaration of built-in function 'memset'
+  186 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |    ^~~~~~
+../Core/Src/serial.c:186:4: note: include '<string.h>' or provide a declaration of 'memset'
+../Core/Src/serial.c:186:11: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  186 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |           ^~~~~~~~~
+../Core/Src/serial.c:186:11: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+make: *** [Core/Src/subdir.mk:40: Core/Src/sequence.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j9 all" terminated with exit code 2. Build might be incomplete.
+15:57:07 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:16:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   16 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:16:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:19:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   19 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:19:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:22:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   22 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:22:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:25:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   25 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:25:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12440	    112	   2584	  15136	   3b20	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+16:04:03 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+arm-none-eabi-gcc "../Core/Src/serial.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/serial.d" -MT"Core/Src/serial.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/serial.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:16:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   16 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:16:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:19:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   19 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:19:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:22:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   22 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:22:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:25:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   25 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:25:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/serial.c: In function 'SerialInputString':
+../Core/Src/serial.c:168:5: warning: implicit declaration of function 'CheckSequence' [-Wimplicit-function-declaration]
+  168 |     CheckSequence(rx_buffer);
+      |     ^~~~~~~~~~~~~
+../Core/Src/serial.c:172:5: warning: implicit declaration of function 'memset' [-Wimplicit-function-declaration]
+  172 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |     ^~~~~~
+../Core/Src/serial.c:172:5: warning: incompatible implicit declaration of built-in function 'memset'
+../Core/Src/serial.c:6:1: note: include '<string.h>' or provide a declaration of 'memset'
+    5 | #include "stm32f303xc.h"
+  +++ |+#include <string.h>
+    6 | 
+../Core/Src/serial.c:172:12: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  172 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |            ^~~~~~~~~
+../Core/Src/serial.c:172:12: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+../Core/Src/serial.c:190:4: warning: incompatible implicit declaration of built-in function 'memset'
+  190 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |    ^~~~~~
+../Core/Src/serial.c:190:4: note: include '<string.h>' or provide a declaration of 'memset'
+../Core/Src/serial.c:190:11: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  190 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |           ^~~~~~~~~
+../Core/Src/serial.c:190:11: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12444	    112	   2584	  15140	   3b24	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+16:07:33 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/serial.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/serial.d" -MT"Core/Src/serial.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/serial.o"
+../Core/Src/serial.c: In function 'SerialInputString':
+../Core/Src/serial.c:168:5: warning: implicit declaration of function 'CheckSequence' [-Wimplicit-function-declaration]
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+  168 |     CheckSequence(rx_buffer);
+      |     ^~~~~~~~~~~~~
+../Core/Src/serial.c:172:5: warning: implicit declaration of function 'memset' [-Wimplicit-function-declaration]
+  172 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |     ^~~~~~
+../Core/Src/serial.c:172:5: warning: incompatible implicit declaration of built-in function 'memset'
+../Core/Src/serial.c:6:1: note: include '<string.h>' or provide a declaration of 'memset'
+    5 | #include "stm32f303xc.h"
+  +++ |+#include <string.h>
+    6 | 
+../Core/Src/serial.c:172:12: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  172 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |            ^~~~~~~~~
+../Core/Src/serial.c:172:12: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+../Core/Src/serial.c:190:4: warning: incompatible implicit declaration of built-in function 'memset'
+  190 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |    ^~~~~~
+../Core/Src/serial.c:190:4: note: include '<string.h>' or provide a declaration of 'memset'
+../Core/Src/serial.c:190:11: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  190 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |           ^~~~~~~~~
+../Core/Src/serial.c:190:11: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12436	    112	   2584	  15132	   3b1c	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+16:09:48 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:16:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   16 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:16:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:19:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   19 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:19:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:22:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   22 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:22:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:25:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   25 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:25:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12428	    112	   2584	  15124	   3b14	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+16:10:37 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:16:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   16 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:16:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:19:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   19 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:19:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:22:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   22 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:22:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:25:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   25 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:25:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12436	    112	   2584	  15132	   3b1c	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+16:11:14 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+../Core/Src/sequence.c:16:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   16 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:16:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:19:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   19 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:19:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:22:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   22 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:22:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:25:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   25 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:25:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12436	    112	   2584	  15132	   3b1c	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+16:12:17 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:16:3: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   16 |   strcpy(seq, seq1);
+      |   ^~~~~~
+../Core/Src/sequence.c:16:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+../Core/Src/sequence.c:19:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   19 |   strcpy(seq, seq2);
+      |   ^~~~~~
+../Core/Src/sequence.c:19:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:22:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   22 |   strcpy(seq, seq3);
+      |   ^~~~~~
+../Core/Src/sequence.c:22:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+../Core/Src/sequence.c:25:3: warning: incompatible implicit declaration of built-in function 'strcpy'
+   25 |   strcpy(seq, seq4);
+      |   ^~~~~~
+../Core/Src/sequence.c:25:3: note: include '<string.h>' or provide a declaration of 'strcpy'
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12436	    112	   2584	  15132	   3b1c	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+16:22:25 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:15:2: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   15 |  strcpy(seq, seq4);
+      |  ^~~~~~
+../Core/Src/sequence.c:15:2: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+At top level:
+../Core/Src/sequence.c:6:13: warning: 'seq3' defined but not used [-Wunused-variable]
+    6 | static char seq3[6] = "WASDWA";
+      |             ^~~~
+../Core/Src/sequence.c:5:13: warning: 'seq2' defined but not used [-Wunused-variable]
+    5 | static char seq2[5] = "WASDW";
+      |             ^~~~
+../Core/Src/sequence.c:4:13: warning: 'seq1' defined but not used [-Wunused-variable]
+    4 | static char seq1[4] = "WASD";
+      |             ^~~~
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12352	     92	   2580	  15024	   3ab0	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+16:24:34 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+In file included from ../Core/Src/sequence.c:1:
+../Core/Inc/sequence.h:6:2: error: invalid preprocessing directive #inclde; did you mean #include?
+    6 | #inclde <string.h>
+      |  ^~~~~~
+      |  include
+../Core/Src/sequence.c: In function 'CheckSequence':
+../Core/Src/sequence.c:15:2: warning: implicit declaration of function 'strcpy' [-Wimplicit-function-declaration]
+   15 |  strcpy(seq, seq4);
+      |  ^~~~~~
+../Core/Src/sequence.c:15:2: warning: incompatible implicit declaration of built-in function 'strcpy'
+../Core/Src/sequence.c:2:1: note: include '<string.h>' or provide a declaration of 'strcpy'
+    1 | #include "sequence.h"
+  +++ |+#include <string.h>
+    2 | 
+At top level:
+../Core/Src/sequence.c:6:13: warning: 'seq3' defined but not used [-Wunused-variable]
+    6 | static char seq3[6] = "WASDWA";
+      |             ^~~~
+../Core/Src/sequence.c:5:13: warning: 'seq2' defined but not used [-Wunused-variable]
+    5 | static char seq2[5] = "WASDW";
+      |             ^~~~
+../Core/Src/sequence.c:4:13: warning: 'seq1' defined but not used [-Wunused-variable]
+    4 | static char seq1[4] = "WASD";
+      |             ^~~~
+In file included from ../Core/Src/main.c:25:
+../Core/Inc/sequence.h:6:2: error: invalid preprocessing directive #inclde; did you mean #include?
+    6 | #inclde <string.h>
+      |  ^~~~~~
+      |  include
+make: *** [Core/Src/subdir.mk:40: Core/Src/sequence.o] Error 1
+make: *** Waiting for unfinished jobs....
+make: *** [Core/Src/subdir.mk:40: Core/Src/main.o] Error 1
+"make -j9 all" terminated with exit code 2. Build might be incomplete.
+16:24:42 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+../Core/Src/sequence.c:6:13: warning: 'seq3' defined but not used [-Wunused-variable]
+    6 | static char seq3[6] = "WASDWA";
+      |             ^~~~
+../Core/Src/sequence.c:5:13: warning: 'seq2' defined but not used [-Wunused-variable]
+    5 | static char seq2[5] = "WASDW";
+      |             ^~~~
+../Core/Src/sequence.c:4:13: warning: 'seq1' defined but not used [-Wunused-variable]
+    4 | static char seq1[4] = "WASD";
+      |             ^~~~
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12352	     92	   2580	  15024	   3ab0	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+16:27:32 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+../Core/Src/sequence.c:6:13: warning: 'seq3' defined but not used [-Wunused-variable]
+    6 | static char seq3[6] = "WASDWA";
+      |             ^~~~
+../Core/Src/sequence.c:5:13: warning: 'seq2' defined but not used [-Wunused-variable]
+    5 | static char seq2[5] = "WASDW";
+      |             ^~~~
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+../Core/Src/sequence.c:4:13: warning: 'seq1' defined but not used [-Wunused-variable]
+    4 | static char seq1[4] = "WASD";
+      |             ^~~~
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12320	     92	   2580	  14992	   3a90	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+16:29:29 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+arm-none-eabi-gcc "../Core/Src/serial.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/serial.d" -MT"Core/Src/serial.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/serial.o"
+../Core/Src/serial.c: In function 'SerialInputString':
+../Core/Src/serial.c:164:5: warning: implicit declaration of function 'CheckSequence' [-Wimplicit-function-declaration]
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+  164 |     CheckSequence(rx_buffer);
+      |     ^~~~~~~~~~~~~
+../Core/Src/serial.c:168:5: warning: implicit declaration of function 'memset' [-Wimplicit-function-declaration]
+  168 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |     ^~~~~~
+../Core/Src/serial.c:168:5: warning: incompatible implicit declaration of built-in function 'memset'
+../Core/Src/serial.c:6:1: note: include '<string.h>' or provide a declaration of 'memset'
+    5 | #include "stm32f303xc.h"
+  +++ |+#include <string.h>
+    6 | 
+../Core/Src/serial.c:168:12: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  168 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |            ^~~~~~~~~
+../Core/Src/serial.c:168:12: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+../Core/Src/serial.c:186:4: warning: incompatible implicit declaration of built-in function 'memset'
+  186 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |    ^~~~~~
+../Core/Src/serial.c:186:4: note: include '<string.h>' or provide a declaration of 'memset'
+../Core/Src/serial.c:186:11: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  186 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |           ^~~~~~~~~
+../Core/Src/serial.c:186:11: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12492	    112	   2584	  15188	   3b54	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+16:33:34 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12492	    112	   2584	  15188	   3b54	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+16:36:50 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+arm-none-eabi-gcc "../Core/Src/serial.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/serial.d" -MT"Core/Src/serial.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/serial.o"
+../Core/Src/serial.c: In function 'SerialInputString':
+../Core/Src/serial.c:164:5: warning: implicit declaration of function 'CheckSequence' [-Wimplicit-function-declaration]
+  164 |     CheckSequence(rx_buffer);
+      |     ^~~~~~~~~~~~~
+../Core/Src/serial.c:168:5: warning: implicit declaration of function 'memset' [-Wimplicit-function-declaration]
+  168 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |     ^~~~~~
+../Core/Src/serial.c:168:5: warning: incompatible implicit declaration of built-in function 'memset'
+../Core/Src/serial.c:6:1: note: include '<string.h>' or provide a declaration of 'memset'
+    5 | #include "stm32f303xc.h"
+  +++ |+#include <string.h>
+    6 | 
+../Core/Src/serial.c:168:12: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  168 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |            ^~~~~~~~~
+../Core/Src/serial.c:168:12: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+../Core/Src/serial.c:189:4: warning: incompatible implicit declaration of built-in function 'memset'
+  189 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |    ^~~~~~
+../Core/Src/serial.c:189:4: note: include '<string.h>' or provide a declaration of 'memset'
+../Core/Src/serial.c:189:11: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  189 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |           ^~~~~~~~~
+../Core/Src/serial.c:189:11: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
+arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
+   text	   data	    bss	    dec	    hex	filename
+  12496	    112	   2584	  15192	   3b58	serial_module.elf
+Finished building: default.size.stdout
+ 
+Finished building: serial_module.list
+ 
+16:37:24 **** Incremental Build of configuration Debug for project serial_module ****
+make -j9 all 
+arm-none-eabi-size   serial_module.elf 
+   text	   data	    bss	    dec	    hex	filename
+  12496	    112	   2584	  15192	   3b58	serial_module.elf
+Finished building: default.size.stdout
+ 

@@ -24,6 +24,8 @@ enum {
 // SerialInitialise - initialise the serial port
 // Input: baud rate as defined in the enum
 void SerialInitialise(uint32_t baudRate, SerialPort *serial_port);
+
+void EnableSerialInterrupt(SerialPort *serial_port);
  
 
 // SerialOutputChar - output a char to the serial port

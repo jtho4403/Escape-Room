@@ -656,3 +656,18 @@ Contains: Stack data not available
 !MESSAGE Stack data not available
 !SUBENTRY 2 org.eclipse.cdt.dsf 4 10002 2023-05-10 21:50:48.287
 !MESSAGE Stack data not available
+
+!ENTRY org.eclipse.cdt.dsf 4 10001 2023-05-14 15:22:22.904
+!MESSAGE Target not available.
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2023-05-14 15:44:15.849
+!MESSAGE Error - No active DSF-Session. tmpSessionId = 14 (contextManager row 121)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2023-05-14 15:44:15.852
+!MESSAGE Existing sessions are:
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2023-05-14 15:44:15.853
+!MESSAGE Error - No active DSF-Session. tmpSessionId = 14 (contextManager row 121)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2023-05-14 15:44:15.854
+!MESSAGE Existing sessions are:

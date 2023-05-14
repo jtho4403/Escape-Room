@@ -7,6 +7,7 @@ static char seq3[6] = "WASDWA";
 static char seq4[7] = "WASDWAS";
 volatile int substage_state; //0 for fail, 1 for pass
 volatile int count;
+volatile int next_stage;
 
 void CheckSequence(uint8_t *input){
 	char seq[7];
@@ -40,6 +41,7 @@ void CheckSequence(uint8_t *input){
 	if (substage_state == 1){
 		SerialOutputString(pass_message, &USART1_PORT);
 		count ++;
+		next_stage = 1;
 	}
 }
 
@@ -65,13 +67,12 @@ void CheckSequence(uint8_t *input){
 //}
 
 void Stage2(){
-	count = 1;
 	substage_state = 1;
-	int cnt;
-	int message_sent = 0;
+	count = 1;
+	int nest = 0;
 
 	while (count < 5){
-		cnt = count;
+		next_stage = 0;
 
 		//put LED function here
 
@@ -79,23 +80,25 @@ void Stage2(){
 
 		//enable serial receive interrupt
 		SerialInitialise(BAUD_115200, &USART1_PORT);
-		EnableSerialInterrupt();
+		EnableSerialInterrupt(&USART1_PORT);
 
 		//add timer polling condition when integrating
-		while(count == cnt && substage_state == 1){
+		while(next_stage == 0 && substage_state == 1){
 		}
 
 		if(substage_state == 0){
-			uint8_t restart_message[32] = "Restarting Stage 2\r\n";
+			uint8_t restart_message[32] = "Restarting Stage 2\n";
 			SerialOutputString(restart_message, &USART1_PORT);
 
+			nest ++;
 			Stage2();
 			break;
 		}
 	}
 
-	uint8_t progress_message[32] = "You've passed Stage 2\r\n";
-	SerialOutputString(progress_message, &USART1_PORT);
-	message_sent = 1;
-	//call next stage
+	if (nest == 0){
+		uint8_t progress_message[32] = "You've passed Stage 2\n";
+		SerialOutputString(progress_message, &USART1_PORT);
+		//call next stage
+	}
 }

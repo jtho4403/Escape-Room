@@ -1,2 +1,2 @@
-../Core/Src/sequence.c:11:6:CheckSequence	96	static
-../Core/Src/sequence.c:67:6:Stage2	88	static
+../Core/Src/sequence.c:12:6:CheckSequence	96	static
+../Core/Src/sequence.c:69:6:Stage2	56	static
