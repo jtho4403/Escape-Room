@@ -2,9 +2,9 @@
 *see 06 Apr minutes for flowchart*
 
 ## LIDAR sensing module
-completed functions:
+completed functions: Visualization of LiDAR detection distance.
 
-in progress functions:
+in progress functions: Optimization algorithm for detection distance
 
 ## LED and timer module
 completed functions:
