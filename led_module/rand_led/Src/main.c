@@ -18,6 +18,8 @@
 
 #include <stdint.h>
 #include "stm32f303xc.h"
+#include <time.h>
+#include <stdlib.h>
 
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
@@ -26,6 +28,9 @@
 // enable the clocks for desired peripherals (GPIOA, C and E)
 void enable_clocks() {
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
+
+	// store a 1 in bit for the TIM2 enable flag
+	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
 }
 
 void initialise_led() {
@@ -33,32 +38,93 @@ void initialise_led() {
     *led_output_registers = 0x5555;
 }
 
-void toggle_led() {
-	uint8_t *led_register = ((uint8_t*)&(GPIOE->ODR)) + 1;
+void delay_ms(uint32_t milliseconds) {
+    // Function to introduce a delay in milliseconds
+    // This implementation assumes a 1 ms delay for each iteration
+    // Adjust it based on the system clock frequency and desired accuracy
+    for (volatile uint32_t i = 0; i < (milliseconds * 8000); ++i) {
+        // Do nothing
+    }
+}
 
-	int random_num = rand() % 4; // generate random number between 0 and 3
-	    switch (random_num) {
-	        case 0:
-	            *led_register = 0b00000010; // set bit for LED 1
-	            break;
-	        case 1:
-	            *led_register = 0b00001000; // set bit for LED 2
-	            break;
-	        case 2:
-	            *led_register = 0b00100000; // set bit for LED 3
-	            break;
-	        case 3:
-	            *led_register = 0b10000000; // set bit for LED 4
-	            break;
-	        default:
-	            break;
-	    }
+
+void toggle_led() {
+    static uint8_t current_led = 0; // Keep track of the current LED being displayed
+    static uint8_t iteration = 0;  // Keep track of the number of iterations
+    uint8_t *led_register = ((uint8_t*)&(GPIOE->ODR)) + 1;
+
+    // Character-to-binary mappings for LEDs
+    const uint8_t LED_CHARACTERS[] = {
+        0b00000010, // 'w'
+        0b00100000, // 's'
+        0b00001000, // 'd'
+        0b10000000  // 'a'
+    };
+
+    // Check if all LEDs have been displayed once
+    if (iteration >= 1) {
+        // Turn off all LEDs
+        *led_register &= ~(0xFF);
+        iteration = 0;
+        start_timer();
+        return;  // Exit the function
+    }
+
+    // Turn off all LEDs
+    *led_register &= ~(0xFF);
+
+    // Turn on the current LED
+    *led_register |= LED_CHARACTERS[current_led];
+
+    // Delay for 1 second (1000 milliseconds)
+    delay_ms(100);
+
+    // Move to the next LED in the sequence
+    current_led = (current_led + 1) % 4;
+
+    // Check if the last LED in the sequence has been displayed
+    if (current_led == 0) {
+        iteration++;  // Increment the iteration counter
+        //start_timer();//start_timer();
+    }
+}
+
+void init_timer(){
+	__disable_irq();
+
+    TIM2->PSC = 8; // 1 ms per tick
+    TIM2->ARR = 5000000; // 30 seconds
+    TIM2->DIER |= TIM_DIER_UIE;
+    NVIC_EnableIRQ(TIM2_IRQn);
+    //TIM2->CR1 |= TIM_CR1_CEN;
+
+    // Re-enable all interrupts (now that we are finished)
+    __enable_irq();
+}
+
+void start_timer() {
+    TIM2->CNT = 0; // Reset the timer counter
+    TIM2->CR1 |= TIM_CR1_CEN; // start timer
+}
+
+
+void TIM2_IRQHandler() {
+    if ((TIM2->SR & TIM_SR_UIF) != 0) {
+        TIM2->SR &= ~TIM_SR_UIF;
+        //toggle_led();
+    }
 }
 
 
 int main(void) {
     enable_clocks();
     initialise_led();
-    toggle_led();
+    init_timer();
 
+    while (1) {
+    	toggle_led();
+        // Delay or perform other operations as needed
+    }
 }
+
+
