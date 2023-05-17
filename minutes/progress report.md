@@ -22,6 +22,10 @@ completed functions: arduino joystick module
 in progress functions: taking joystick from arduino into stm32. using joystick input to control the PTU
 
 ## PTU sensing module
-completed functions:
+- got transmission via interrupts to work to get data out
+- got magnotemter reading via I2C line 2
+- got accleromemeter to work via I2C
 
-in progress functions:
+completed functions: PTU raw data readings
+
+in progress functions: calibration and covnersion to x y coordinates using data
