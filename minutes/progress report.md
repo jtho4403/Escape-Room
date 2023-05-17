@@ -7,9 +7,9 @@ completed functions: Visualization of LiDAR detection distance.
 in progress functions: Optimization algorithm for detection distance
 
 ## LED and timer module
-completed functions:
+completed functions: LED sequence display, timer module partially complete
 
-in progress functions:
+in progress functions: timer module, modularisation of both functions
 
 ## serial module
 completed functions: serial output, receiving sequence with interrupt, checking sequence, stage 2 framework 
