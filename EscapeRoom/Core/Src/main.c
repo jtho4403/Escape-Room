@@ -80,6 +80,44 @@ void initialise_led() {
     uint16_t *led_output_registers = ((uint16_t *)&(GPIOE->MODER)) + 1;
     *led_output_registers = 0x5555;
 }
+
+typedef union {
+	uint8_t all_leds;
+	struct {
+		uint8_t led_pair_1 : 2;
+		uint8_t led_pair_2 : 2;
+		uint8_t led_set_of_4 : 4;
+	} led_groups;
+} LedRegister;
+
+
+
+uint16_t last_capture = 0;
+uint16_t diff = 0;
+
+uint16_t rise_time = 0;
+uint16_t last_period = 0;
+
+
+typedef struct {
+	uint8_t var1;
+	uint32_t var2;
+	uint8_t var3;
+	uint32_t var4;
+	uint8_t var5;
+	uint8_t var6;
+} struct_1;
+
+
+typedef struct {
+	uint32_t var2;
+	uint32_t var4;
+	uint8_t var1;
+	uint8_t var3;
+	uint8_t var5;
+	uint8_t var6;
+} struct_2;
+
 /* USER CODE END 0 */
 
 /**
@@ -91,10 +129,12 @@ int main(void)
   /* USER CODE BEGIN 1 */
 	enable_clocks();
 	initialise_led();
-	init_timer();
+
+
+	Stage2();
+
 
 	while (1) {
-		toggle_led();
 	        // Delay or perform other operations as needed
 		}
   /* USER CODE END 1 */
@@ -122,8 +162,6 @@ int main(void)
   MX_USB_PCD_Init();
 
   /* USER CODE BEGIN 2 */
-  enable_clocks();
-  initialise_board();
 
   /* USER CODE END 2 */
 

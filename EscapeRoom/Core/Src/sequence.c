@@ -75,8 +75,9 @@ void Stage2(){
 		next_stage = 0;
 
 		//put LED function here
+		toggle_led();
 
-		//enable timer polling here
+		//enable 30s timer here
 
 		//enable serial receive interrupt
 		SerialInitialise(BAUD_115200, &USART1_PORT);
@@ -101,4 +102,36 @@ void Stage2(){
 		SerialOutputString(progress_message, &USART1_PORT);
 		//call next stage
 	}
+}
+
+void Current_LED(uint8_t current){
+	// turn on NWSE LED based on WASD
+
+}
+
+void Display_LED(){
+	char seq[7];
+		int i;
+		if (count == 1){
+			strcpy(seq, seq1);
+		}
+		else if (count == 2){
+			strcpy(seq, seq2);
+		}
+		else if (count == 3){
+			strcpy(seq, seq3);
+		}
+		else if (count == 4){
+			strcpy(seq, seq4);
+		}
+
+		uint8_t fail_message[32] = "Fail\n";
+		uint8_t pass_message[32] = "Success\n";
+
+		char current_char;
+		for (i = 0; i < count+3; i++){
+			uint8_t current =  seq[i];
+			Current_LED(current);
+			// 1s timer delay
+		}
 }
