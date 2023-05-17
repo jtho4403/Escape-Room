@@ -63,6 +63,22 @@ SerialPort USART1_PORT = {&(USART1->BRR),
 		((uint8_t*)&(GPIOC->AFR[0])) + 2,
 		0x77};
 
+SerialPort USART3_PORT = {&(USART3->BRR),
+		&(USART3->CR1),
+		&(USART3->ISR),
+		&(USART3->RQR),
+		&(USART3->TDR),
+		&(USART3->RDR),
+		&(RCC->APB1ENR),
+		RCC_APB1ENR_USART2EN,
+		SERIAL_GPIO_C,
+		&(GPIOC->MODER),
+		0xA00000,
+		&(GPIOC->OSPEEDR),
+		0xF00000,
+		((uint8_t*)&(GPIOC->AFR[0])) + 4,
+		0x77};
+
 
 
 // InitialiseSerial - Initialise the serial port
@@ -105,12 +121,6 @@ void SerialInitialise(uint32_t baudRate, SerialPort *serial_port) {
 	// enable serial port for tx and rx
 	*(serial_port->ControlRegister1) |= USART_CR1_TE | USART_CR1_RE | USART_CR1_UE;
 }
-//void EnableSerialInterrupt(){
-//	__disable_irq();
-//	NVIC_EnableIRQ(USART1_IRQn);
-//	__enable_irq();
-//}
-// Enable interrupts for USART1 rx functionality.
 
 void EnableSerialInterrupt(SerialPort *serial_port) {
 	__disable_irq(); // Disable the interrupts while editing settings.
@@ -152,7 +162,7 @@ void SerialOutputString(uint8_t *pt, SerialPort *serial_port) {
 		serial_port->completion_function(counter);
 }
 
-void SerialInputString(SerialPort *serial_port) {
+void SerialInputSequence(SerialPort *serial_port) {
 		if (rx_index < 32) {
 			uint8_t rx_data = *(serial_port->DataInputRegister);
 
@@ -193,7 +203,7 @@ void SerialInputString(SerialPort *serial_port) {
 void USART1_IRQHandler(void)
 {
 	// disable timer
-	SerialInputString(&USART1_PORT);
+	SerialInputSequence(&USART1_PORT);
 }
 
 #endif

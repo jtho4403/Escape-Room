@@ -29,23 +29,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  12 .ARM.attributes 00000030  00000000  00000000  00020068  2**0
                   CONTENTS, READONLY
- 13 .debug_info   0000e27b  00000000  00000000  00020098  2**0
+ 13 .debug_info   0000e28d  00000000  00000000  00020098  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_abbrev 000021a0  00000000  00000000  0002e313  2**0
+ 14 .debug_abbrev 000021a0  00000000  00000000  0002e325  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_aranges 00000ba0  00000000  00000000  000304b8  2**3
+ 15 .debug_aranges 00000ba0  00000000  00000000  000304c8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_ranges 00000ab0  00000000  00000000  00031058  2**3
+ 16 .debug_ranges 00000ab0  00000000  00000000  00031068  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_macro  0002ffee  00000000  00000000  00031b08  2**0
+ 17 .debug_macro  0002ffee  00000000  00000000  00031b18  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   0000f62b  00000000  00000000  00061af6  2**0
+ 18 .debug_line   0000f62f  00000000  00000000  00061b06  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000ae230  00000000  00000000  00071121  2**0
+ 19 .debug_str    000ae23e  00000000  00000000  00071135  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .comment      00000050  00000000  00000000  0011f351  2**0
+ 20 .comment      00000050  00000000  00000000  0011f373  2**0
                   CONTENTS, READONLY
- 21 .debug_frame  00002fb4  00000000  00000000  0011f3a4  2**2
+ 21 .debug_frame  00002fb4  00000000  00000000  0011f3c4  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1202,10 +1202,6 @@ void SerialInitialise(uint32_t baudRate, SerialPort *serial_port) {
  8000834:	40021000 	.word	0x40021000
 
 08000838 <EnableSerialInterrupt>:
-//	NVIC_EnableIRQ(USART1_IRQn);
-//	__enable_irq();
-//}
-// Enable interrupts for USART1 rx functionality.
 
 void EnableSerialInterrupt(SerialPort *serial_port) {
  8000838:	b580      	push	{r7, lr}
@@ -1359,19 +1355,19 @@ void SerialOutputString(uint8_t *pt, SerialPort *serial_port) {
  8000918:	bd80      	pop	{r7, pc}
 	...
 
-0800091c <SerialInputString>:
+0800091c <SerialInputSequence>:
 
-void SerialInputString(SerialPort *serial_port) {
+void SerialInputSequence(SerialPort *serial_port) {
  800091c:	b580      	push	{r7, lr}
  800091e:	b084      	sub	sp, #16
  8000920:	af00      	add	r7, sp, #0
  8000922:	6078      	str	r0, [r7, #4]
 		if (rx_index < 32) {
- 8000924:	4b24      	ldr	r3, [pc, #144]	; (80009b8 <SerialInputString+0x9c>)
+ 8000924:	4b24      	ldr	r3, [pc, #144]	; (80009b8 <SerialInputSequence+0x9c>)
  8000926:	781b      	ldrb	r3, [r3, #0]
  8000928:	b2db      	uxtb	r3, r3
  800092a:	2b1f      	cmp	r3, #31
- 800092c:	d82d      	bhi.n	800098a <SerialInputString+0x6e>
+ 800092c:	d82d      	bhi.n	800098a <SerialInputSequence+0x6e>
 			uint8_t rx_data = *(serial_port->DataInputRegister);
  800092e:	687b      	ldr	r3, [r7, #4]
  8000930:	695b      	ldr	r3, [r3, #20]
@@ -1383,7 +1379,7 @@ void SerialInputString(SerialPort *serial_port) {
 			if (rx_data == CARRIAGE_RETURN) {
  8000938:	7bfb      	ldrb	r3, [r7, #15]
  800093a:	2b0d      	cmp	r3, #13
- 800093c:	d113      	bne.n	8000966 <SerialInputString+0x4a>
+ 800093c:	d113      	bne.n	8000966 <SerialInputSequence+0x4a>
 				// disable receive interrupt
 				*(serial_port->ControlRegister1) &= ~USART_CR1_RXNEIE;
  800093e:	687b      	ldr	r3, [r7, #4]
@@ -1395,18 +1391,18 @@ void SerialInputString(SerialPort *serial_port) {
  800094c:	601a      	str	r2, [r3, #0]
 
 				CheckSequence(rx_buffer);
- 800094e:	481b      	ldr	r0, [pc, #108]	; (80009bc <SerialInputString+0xa0>)
+ 800094e:	481b      	ldr	r0, [pc, #108]	; (80009bc <SerialInputSequence+0xa0>)
  8000950:	f7ff fdf8 	bl	8000544 <CheckSequence>
 
 				// reset index & buffer
 				rx_index = 0;
- 8000954:	4b18      	ldr	r3, [pc, #96]	; (80009b8 <SerialInputString+0x9c>)
+ 8000954:	4b18      	ldr	r3, [pc, #96]	; (80009b8 <SerialInputSequence+0x9c>)
  8000956:	2200      	movs	r2, #0
  8000958:	701a      	strb	r2, [r3, #0]
 				memset(rx_buffer, 0, sizeof(rx_buffer));
  800095a:	2240      	movs	r2, #64	; 0x40
  800095c:	2100      	movs	r1, #0
- 800095e:	4817      	ldr	r0, [pc, #92]	; (80009bc <SerialInputString+0xa0>)
+ 800095e:	4817      	ldr	r0, [pc, #92]	; (80009bc <SerialInputSequence+0xa0>)
  8000960:	f002 fb42 	bl	8002fe8 <memset>
 
 			// reset index & buffer
@@ -1414,29 +1410,29 @@ void SerialInputString(SerialPort *serial_port) {
 			memset(rx_buffer, 0, sizeof(rx_buffer));
 		}
 }
- 8000964:	e024      	b.n	80009b0 <SerialInputString+0x94>
+ 8000964:	e024      	b.n	80009b0 <SerialInputSequence+0x94>
 			else if (rx_data == LINE_FEED){
  8000966:	7bfb      	ldrb	r3, [r7, #15]
  8000968:	2b0a      	cmp	r3, #10
- 800096a:	d021      	beq.n	80009b0 <SerialInputString+0x94>
+ 800096a:	d021      	beq.n	80009b0 <SerialInputSequence+0x94>
 				rx_buffer[rx_index]= rx_data;
- 800096c:	4b12      	ldr	r3, [pc, #72]	; (80009b8 <SerialInputString+0x9c>)
+ 800096c:	4b12      	ldr	r3, [pc, #72]	; (80009b8 <SerialInputSequence+0x9c>)
  800096e:	781b      	ldrb	r3, [r3, #0]
  8000970:	b2db      	uxtb	r3, r3
  8000972:	4619      	mov	r1, r3
- 8000974:	4a11      	ldr	r2, [pc, #68]	; (80009bc <SerialInputString+0xa0>)
+ 8000974:	4a11      	ldr	r2, [pc, #68]	; (80009bc <SerialInputSequence+0xa0>)
  8000976:	7bfb      	ldrb	r3, [r7, #15]
  8000978:	5453      	strb	r3, [r2, r1]
 				rx_index++;
- 800097a:	4b0f      	ldr	r3, [pc, #60]	; (80009b8 <SerialInputString+0x9c>)
+ 800097a:	4b0f      	ldr	r3, [pc, #60]	; (80009b8 <SerialInputSequence+0x9c>)
  800097c:	781b      	ldrb	r3, [r3, #0]
  800097e:	b2db      	uxtb	r3, r3
  8000980:	3301      	adds	r3, #1
  8000982:	b2da      	uxtb	r2, r3
- 8000984:	4b0c      	ldr	r3, [pc, #48]	; (80009b8 <SerialInputString+0x9c>)
+ 8000984:	4b0c      	ldr	r3, [pc, #48]	; (80009b8 <SerialInputSequence+0x9c>)
  8000986:	701a      	strb	r2, [r3, #0]
 }
- 8000988:	e012      	b.n	80009b0 <SerialInputString+0x94>
+ 8000988:	e012      	b.n	80009b0 <SerialInputSequence+0x94>
 			*(serial_port->ControlRegister1) &= ~USART_CR1_RXNEIE;
  800098a:	687b      	ldr	r3, [r7, #4]
  800098c:	685b      	ldr	r3, [r3, #4]
@@ -1446,16 +1442,16 @@ void SerialInputString(SerialPort *serial_port) {
  8000994:	f022 0220 	bic.w	r2, r2, #32
  8000998:	601a      	str	r2, [r3, #0]
 			CheckSequence(rx_buffer);
- 800099a:	4808      	ldr	r0, [pc, #32]	; (80009bc <SerialInputString+0xa0>)
+ 800099a:	4808      	ldr	r0, [pc, #32]	; (80009bc <SerialInputSequence+0xa0>)
  800099c:	f7ff fdd2 	bl	8000544 <CheckSequence>
 			rx_index = 0;
- 80009a0:	4b05      	ldr	r3, [pc, #20]	; (80009b8 <SerialInputString+0x9c>)
+ 80009a0:	4b05      	ldr	r3, [pc, #20]	; (80009b8 <SerialInputSequence+0x9c>)
  80009a2:	2200      	movs	r2, #0
  80009a4:	701a      	strb	r2, [r3, #0]
 			memset(rx_buffer, 0, sizeof(rx_buffer));
  80009a6:	2240      	movs	r2, #64	; 0x40
  80009a8:	2100      	movs	r1, #0
- 80009aa:	4804      	ldr	r0, [pc, #16]	; (80009bc <SerialInputString+0xa0>)
+ 80009aa:	4804      	ldr	r0, [pc, #16]	; (80009bc <SerialInputSequence+0xa0>)
  80009ac:	f002 fb1c 	bl	8002fe8 <memset>
 }
  80009b0:	bf00      	nop
@@ -1472,9 +1468,9 @@ void USART1_IRQHandler(void)
  80009c0:	b580      	push	{r7, lr}
  80009c2:	af00      	add	r7, sp, #0
 	// disable timer
-	SerialInputString(&USART1_PORT);
+	SerialInputSequence(&USART1_PORT);
  80009c4:	4802      	ldr	r0, [pc, #8]	; (80009d0 <USART1_IRQHandler+0x10>)
- 80009c6:	f7ff ffa9 	bl	800091c <SerialInputString>
+ 80009c6:	f7ff ffa9 	bl	800091c <SerialInputSequence>
 }
  80009ca:	bf00      	nop
  80009cc:	bd80      	pop	{r7, pc}

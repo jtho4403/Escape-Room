@@ -1,10 +1,43 @@
-16:37:24 **** Incremental Build of configuration Debug for project serial_module ****
+16:56:05 **** Incremental Build of configuration Debug for project serial_module ****
 make -j9 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/sequence.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sequence.d" -MT"Core/Src/sequence.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sequence.o"
+arm-none-eabi-gcc "../Core/Src/serial.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303xC -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/serial.d" -MT"Core/Src/serial.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/serial.o"
+../Core/Src/serial.c: In function 'SerialInputSequence':
+../Core/Src/serial.c:174:5: warning: implicit declaration of function 'CheckSequence' [-Wimplicit-function-declaration]
+  174 |     CheckSequence(rx_buffer);
+      |     ^~~~~~~~~~~~~
+../Core/Src/serial.c:178:5: warning: implicit declaration of function 'memset' [-Wimplicit-function-declaration]
+  178 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |     ^~~~~~
+../Core/Src/serial.c:178:5: warning: incompatible implicit declaration of built-in function 'memset'
+../Core/Src/serial.c:6:1: note: include '<string.h>' or provide a declaration of 'memset'
+    5 | #include "stm32f303xc.h"
+  +++ |+#include <string.h>
+    6 | 
+../Core/Src/serial.c:178:12: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  178 |     memset(rx_buffer, 0, sizeof(rx_buffer));
+      |            ^~~~~~~~~
+../Core/Src/serial.c:178:12: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+../Core/Src/serial.c:199:4: warning: incompatible implicit declaration of built-in function 'memset'
+  199 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |    ^~~~~~
+../Core/Src/serial.c:199:4: note: include '<string.h>' or provide a declaration of 'memset'
+../Core/Src/serial.c:199:11: warning: passing argument 1 of 'memset' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  199 |    memset(rx_buffer, 0, sizeof(rx_buffer));
+      |           ^~~~~~~~~
+../Core/Src/serial.c:199:11: note: expected 'void *' but argument is of type 'volatile uint8_t *' {aka 'volatile unsigned char *'}
+arm-none-eabi-gcc -o "serial_module.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: serial_module.elf
+ 
 arm-none-eabi-size   serial_module.elf 
+arm-none-eabi-objdump -h -S  serial_module.elf  > "serial_module.list"
    text	   data	    bss	    dec	    hex	filename
   12496	    112	   2584	  15192	   3b58	serial_module.elf
 Finished building: default.size.stdout
  
+Finished building: serial_module.list
+ 
 
-16:37:24 Build Finished. 0 errors, 0 warnings. (took 401ms)
+16:56:06 Build Finished. 0 errors, 6 warnings. (took 815ms)
 

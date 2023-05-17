@@ -1,6 +1,0 @@
-#ifndef __VARIABLES_H
-#define __VARIABLES_H
-
-extern uint8_t seq1;
-
-#endif

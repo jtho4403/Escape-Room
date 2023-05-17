@@ -671,3 +671,28 @@ Contains: Stack data not available
 
 !ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2023-05-14 15:44:15.854
 !MESSAGE Existing sessions are:
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2023-05-14 16:56:13.098
+!MESSAGE Error - No active DSF-Session. tmpSessionId = 32 (contextManager row 121)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2023-05-14 16:56:13.099
+!MESSAGE Existing sessions are:
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2023-05-14 16:56:13.101
+!MESSAGE Error - No active DSF-Session. tmpSessionId = 32 (contextManager row 121)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2023-05-14 16:56:13.101
+!MESSAGE Existing sessions are:
+!SESSION 2023-05-17 14:11:44.939 -----------------------------------------------
+eclipse.buildId=Version 1.12.0
+java.version=11.0.17
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_AU
+Framework arguments:  -keyring /Users/jiaxuchee/.eclipse_keyring
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -keyring /Users/jiaxuchee/.eclipse_keyring
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2023-05-17 14:12:37.433
+!MESSAGE Log4j2 initialized with config file /Users/jiaxuchee/Documents/GitHub/Escape-Room/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2023-05-17 14:12:46.116
+!MESSAGE Started RMI Server, listening on port 41337
