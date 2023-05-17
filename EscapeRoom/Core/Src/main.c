@@ -129,6 +129,7 @@ int main(void)
   /* USER CODE BEGIN 1 */
 	enable_clocks();
 	initialise_led();
+	uint8_t string_to_send[64];
 
 
 	Stage2();
@@ -163,6 +164,22 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
 
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
+
+   HAL_TIM_IC_Start_IT(&htim1, TIM_CHANNEL_1);
+
+   // TIM 2 is setup with a prescaler that makes 1 count = 1 microsecond
+   // Even with HAL, you can still set the values yourself
+   TIM2->ARR = 20000; // 20000 = 20ms, which is the desired clock period for servos
+   TIM2->CR1 |= TIM_CR1_ARPE; // this makes the timing not change until the next pulse is finished
+
+   // note: for PWM if you continually change the clock period
+   // you can get unexpected results. To remove this, set ARPE so that the
+   // ARR settings are not activated until the next cycle.
+
+   initialise_ptu_i2c(&hi2c1);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -170,10 +187,86 @@ int main(void)
   /* USER CODE BEGIN 3 */
 
   //Stage 1: LIDAR
-  while (1)
-  {
 
-  }
+   // reset lidar board
+   uint8_t reset_value = 0x00;
+   return_value = HAL_I2C_Mem_Write(&hi2c1, LIDAR_WR, 0x00, 1, &reset_value, 1, 10);
+
+   uint8_t PWM_direction_clockwise = 1;
+
+   // delay for initialisation of the lidar
+   HAL_Delay(100);
+
+   int count=0;
+   int distance=0;
+   int flag=0;
+   int actuality=0;
+
+   while (flag != 1)
+   {
+
+	   uint8_t lidar_value = 0x03;
+	   return_value = HAL_I2C_Mem_Write(&hi2c1, LIDAR_WR, 0x00, 1, &lidar_value, 1, 100);
+
+	   lidar_value = 0xff;
+
+	   uint8_t lidar_MSBa = 0x00;
+	   uint8_t lidar_LSBa = 0x00;
+
+	   volatile uint16_t lidar_distance = 0xff;
+
+	   uint16_t timeout;
+
+	   while ((lidar_value & 0x01) != 0x00) {
+		   return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x01, 1, &lidar_value, 1, 100);
+
+		   return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x0f, 1, &lidar_MSBa, 1, 100);
+		   return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x10, 1, &lidar_LSBa, 1, 100);
+
+		   lidar_distance = ((lidar_MSBa << 8) | lidar_LSBa);
+		   timeout += 1;
+		   if (timeout > 0xff)
+			   break;
+	   }
+
+	   if (last_period > 4000)
+		   last_period = 5000;
+	   if (lidar_distance > 4000)
+		   lidar_distance = 5500;
+	   for (int i = 0; i < 10; i++)
+	   {
+		   HAL_Delay(1);
+	   }
+
+	   distance = distance + lidar_distance;
+	   if (count==10)
+	   {
+		   actuality= distance / 10;
+		   sprintf(string_to_send, "%hu\r\n", actuality);
+		   SerialOutputString(string_to_send, &USART1_PORT);
+		   if(actuality >= 30 && actuality <= 50)
+		   {
+			   sprintf(string_to_send, "A\r\n");
+			   SerialOutputString(string_to_send, &USART1_PORT);
+			   flag=1;
+
+		   }
+		   else if(actuality < 30)
+		   {
+			   sprintf(string_to_send, "B\r\n");
+			   SerialOutputString(string_to_send, &USART1_PORT);
+		   }
+		   else if(actuality > 50)
+		   {
+			   sprintf(string_to_send, "C\r\n");
+			   SerialOutputString(string_to_send, &USART1_PORT);
+		   }
+		   count=0;
+		   actuality=0;
+		   distance=0;
+	   }
+	   count++;
+   }
 
   //Stage 2: LED
   Stage2();
