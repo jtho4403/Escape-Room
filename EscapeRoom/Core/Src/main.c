@@ -18,12 +18,16 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "serial.h"
 #include "sequence.h"
+#include "led.h"
+#include "timer.h"
 #include "stm32f303xc.h"
+#include <stdint.h>
+#include <time.h>
+#include <stdlib.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -67,14 +71,14 @@ static void MX_USB_PCD_Init(void);
 // enable the clocks for desired peripherals (GPIOA, C and E)
 void enable_clocks() {
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
+
+	// store a 1 in bit for the TIM2 enable flag
+	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
 }
 
-
-// initialise the discovery board I/O (just outputs: inputs are selected by default)
-void initialise_board() {
-	// get a pointer to the second half word of the MODER register (for outputs pe8-15)
-	uint16_t *led_output_registers = ((uint16_t *)&(GPIOE->MODER)) + 1;
-	*led_output_registers = 0x5555;
+void initialise_led() {
+    uint16_t *led_output_registers = ((uint16_t *)&(GPIOE->MODER)) + 1;
+    *led_output_registers = 0x5555;
 }
 /* USER CODE END 0 */
 
@@ -85,7 +89,14 @@ void initialise_board() {
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+	enable_clocks();
+	initialise_led();
+	init_timer();
 
+	while (1) {
+		toggle_led();
+	        // Delay or perform other operations as needed
+		}
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
