@@ -219,6 +219,46 @@ void SerialInputSequence(SerialPort *serial_port) {
 		}
 }
 
+void read_joystick_x(SerialPort *serial_port){
+	rx_index = 0;
+	memset(rx_buffer, 0, sizeof(rx_buffer));
+
+	uint8_t rx_data ;
+
+	//wait for input in serial
+	while ((*(serial_port->StatusRegister) & USART_ISR_RXNE) == 0){
+		rx_data = *(serial_port->DataInputRegister);
+
+		//terminate when receive \n
+		if (rx_data == LINE_FEED){
+			break;
+		}
+
+		rx_buffer[rx_index]= rx_data;
+		rx_index++;
+	}
+}
+
+void read_joystick_y(SerialPort *serial_port){
+	rx_index = 0;
+	memset(rx_buffer, 0, sizeof(rx_buffer));
+
+	uint8_t rx_data ;
+
+	//wait for input in serial
+	while ((*(serial_port->StatusRegister) & USART_ISR_RXNE) == 0){
+		rx_data = *(serial_port->DataInputRegister);
+
+		//terminate when receive \n
+		if (rx_data == LINE_FEED){
+			break;
+		}
+
+		rx_buffer[rx_index]= rx_data;
+		rx_index++;
+	}
+}
+
 void USART1_IRQHandler(void)
 {
 	// disable timer
