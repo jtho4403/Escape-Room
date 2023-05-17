@@ -63,6 +63,24 @@ SerialPort USART1_PORT = {&(USART1->BRR),
 		((uint8_t*)&(GPIOC->AFR[0])) + 2,
 		0x77};
 
+//PB3 and PB4 for TX and RX
+SerialPort USART2_PORT = {&(USART2->BRR),
+		&(USART2->CR1),
+		&(USART2->ISR),
+		&(USART2->RQR),
+		&(USART2->TDR),
+		&(USART2->RDR),
+		&(RCC->APB1ENR),
+		RCC_APB1ENR_USART3EN,
+		SERIAL_GPIO_B,
+		&(GPIOB->MODER),
+		0xA000,
+		&(GPIOC->OSPEEDR),
+		0xF000,
+		((uint8_t*)&(GPIOC->AFR[0])) + 3,
+		0x77};
+
+//PC 10 and PC11 for TX and RX
 SerialPort USART3_PORT = {&(USART3->BRR),
 		&(USART3->CR1),
 		&(USART3->ISR),
@@ -162,6 +180,8 @@ void SerialOutputString(uint8_t *pt, SerialPort *serial_port) {
 		serial_port->completion_function(counter);
 }
 
+
+
 void SerialInputSequence(SerialPort *serial_port) {
 		if (rx_index < 32) {
 			uint8_t rx_data = *(serial_port->DataInputRegister);
@@ -178,7 +198,6 @@ void SerialInputSequence(SerialPort *serial_port) {
 				memset(rx_buffer, 0, sizeof(rx_buffer));
 			}
 			else if (rx_data == LINE_FEED){
-
 			}
 
 			else{
