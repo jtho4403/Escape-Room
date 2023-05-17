@@ -21,7 +21,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "serial.h"
+#include "sequence.h"
+#include "stm32f303xc.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -62,7 +64,18 @@ static void MX_USB_PCD_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+// enable the clocks for desired peripherals (GPIOA, C and E)
+void enable_clocks() {
+	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
+}
 
+
+// initialise the discovery board I/O (just outputs: inputs are selected by default)
+void initialise_board() {
+	// get a pointer to the second half word of the MODER register (for outputs pe8-15)
+	uint16_t *led_output_registers = ((uint16_t *)&(GPIOE->MODER)) + 1;
+	*led_output_registers = 0x5555;
+}
 /* USER CODE END 0 */
 
 /**
@@ -96,18 +109,31 @@ int main(void)
   MX_I2C1_Init();
   MX_SPI1_Init();
   MX_USB_PCD_Init();
+
   /* USER CODE BEGIN 2 */
+  enable_clocks();
+  initialise_board();
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
+
+  /* USER CODE BEGIN 3 */
+
+  //Stage 1: LIDAR
   while (1)
   {
-    /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
   }
+
+  //Stage 2: LED
+  Stage2();
+
+  //Stage 3: PTU
+  while (1)
+    {
+
+    }
   /* USER CODE END 3 */
 }
 
