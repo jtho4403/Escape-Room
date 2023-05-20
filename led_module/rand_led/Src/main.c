@@ -61,15 +61,8 @@ void toggle_led() {
         0b10000000  // 'a'
     };
 
-    // Check if all LEDs have been displayed once
-    if (iteration >= 1) {
-        // Turn off all LEDs
-        *led_register &= ~(0xFF);
-        iteration = 0;
-        start_timer();
-        return;  // Exit the function
-    }
 
+    while (current_led < 4){
     // Turn off all LEDs
     *led_register &= ~(0xFF);
 
@@ -84,45 +77,56 @@ void toggle_led() {
 
     // Check if the last LED in the sequence has been displayed
     if (current_led == 0) {
-        iteration++;  // Increment the iteration counter
-        //start_timer();//start_timer();
+    	iteration++;  // Increment the iteration counter
+           //start_timer();//start_timer();
+      	  }
+    // Check if all LEDs have been displayed once
+    if (iteration >= 1) {
+            // Turn off all LEDs
+       *led_register &= ~(0xFF);
+       iteration = 0;
+       //start_timer();
+       return;  // Exit the function
+        }
     }
 }
 
 void init_timer(){
-	__disable_irq();
+
 
     TIM2->PSC = 8; // 1 ms per tick
-    TIM2->ARR = 5000000; // 30 seconds
+    TIM2->ARR = 20000000; // 30 seconds
     TIM2->DIER |= TIM_DIER_UIE;
     NVIC_EnableIRQ(TIM2_IRQn);
-    //TIM2->CR1 |= TIM_CR1_CEN;
-
+    TIM2->CR1 |= TIM_CR1_CEN;
     // Re-enable all interrupts (now that we are finished)
-    __enable_irq();
+
 }
 
-void start_timer() {
-    TIM2->CNT = 0; // Reset the timer counter
-    TIM2->CR1 |= TIM_CR1_CEN; // start timer
-}
+//void start_timer() {
+//    TIM2->CNT = 0; // Reset the timer counter
+//    TIM2->CR1 |= TIM_CR1_CEN; // start timer
+//}
 
 
 void TIM2_IRQHandler() {
     if ((TIM2->SR & TIM_SR_UIF) != 0) {
+        toggle_led();
         TIM2->SR &= ~TIM_SR_UIF;
-        //toggle_led();
     }
 }
 
 
 int main(void) {
+	__disable_irq();
     enable_clocks();
     initialise_led();
     init_timer();
+    __enable_irq();
+    toggle_led();
 
     while (1) {
-    	toggle_led();
+    	//toggle_led();
         // Delay or perform other operations as needed
     }
 }
