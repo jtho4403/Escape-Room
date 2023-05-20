@@ -1,2 +1,7 @@
-sequence.c:12:6:CheckSequence	8
-sequence.c:69:6:Stage2	6
+core_cm4.h:1688:22:__NVIC_EnableIRQ	2
+sequence.c:13:6:CheckSequence	8
+sequence.c:49:6:Stage2	6
+sequence.c:90:6:Current_LED	5
+sequence.c:118:6:Display_LED	7
+sequence.c:149:6:init_timer	1
+sequence.c:161:6:TIM2_IRQHandler	2

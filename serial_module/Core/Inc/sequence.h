@@ -11,6 +11,10 @@ void CheckSequence(uint8_t *input);
 
 void Stage2();
 
-//void CheckStage2(int state);
+void Current_LED(uint8_t current);
+
+void Display_LED();
+
+void init_timer();
 
 #endif

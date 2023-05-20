@@ -8,6 +8,7 @@ static char seq4[7] = "WASDWAS";
 volatile int substage_state; //0 for fail, 1 for pass
 volatile int count;
 volatile int next_stage;
+volatile int nest = 0;
 
 void CheckSequence(uint8_t *input){
 	char seq[7];
@@ -45,39 +46,18 @@ void CheckSequence(uint8_t *input){
 	}
 }
 
-//void CheckStage2(int state){
-//	if (state == 1){
-//		uint8_t progress_message[32] = "You've passed Stage 2\r\n";
-//		SerialInitialise(BAUD_115200, &USART1_PORT);
-//		SerialOutputString(progress_message, &USART1_PORT);
-//		//call next stage
-//	}
-//	else if (state == 0){
-//		uint8_t restart_message[32] = "Restarting Stage 2\r\n";
-//		SerialInitialise(BAUD_115200, &USART1_PORT);
-//		SerialOutputString(restart_message, &USART1_PORT);
-//
-//		Stage2();
-//	}
-//	else{
-//		uint8_t error_message[32] = "Error\n";
-//		SerialOutputString(error_message, &USART1_PORT);
-//	}
-//
-//}
-
 void Stage2(){
 	substage_state = 1;
 	count = 1;
-	int nest = 0;
 
 	while (count < 5){
 		next_stage = 0;
 
 		//put LED function here
-		toggle_led();
+		Display_LED();
 
-		//enable 30s timer here
+		//enable timer polling here
+		init_timer();
 
 		//enable serial receive interrupt
 		SerialInitialise(BAUD_115200, &USART1_PORT);
@@ -102,10 +82,36 @@ void Stage2(){
 		SerialOutputString(progress_message, &USART1_PORT);
 		//call next stage
 	}
+	else{
+		nest --;
+	}
 }
 
 void Current_LED(uint8_t current){
 	// turn on NWSE LED based on WASD
+	// Function to control LEDs based on the input direction (current)
+	// This implementation assumes there are four LEDs (N, W, S, E)
+	// Replace the following code with the appropriate hardware-specific calls or API functions
+
+	uint8_t *led_register = ((uint8_t*)&(GPIOE->ODR)) + 1;
+
+	if (current == 'W') {
+		// Turn on North LED
+		*led_register = 0b00000010; // Set the bit for the desired LED
+	}
+	else if (current == 'A') {
+		// Turn on West LED
+		// Example: SetWestLEDState(LED_ON);
+		*led_register = 0b10000000; // Set the bit for the desired LED
+	}
+	else if (current == 'S') {
+		// Turn on South LED
+		*led_register = 0b00100000; // Set the bit for the desired LED
+	}
+	else if (current == 'D') {
+		// Turn on East LED
+		*led_register = 0b00001000; // Set the bit for the desired LED
+	}
 
 }
 
@@ -125,13 +131,39 @@ void Display_LED(){
 			strcpy(seq, seq4);
 		}
 
-		uint8_t fail_message[32] = "Fail\n";
-		uint8_t pass_message[32] = "Success\n";
-
-		char current_char;
+		uint8_t current_char;
 		for (i = 0; i < count+3; i++){
-			uint8_t current =  seq[i];
-			Current_LED(current);
-			// 1s timer delay
+			current_char =  seq[i];
+			Current_LED(current_char);
+			for (int i = 0; i < 8000000; ++i) {
+			        // Do nothing
+			    }
 		}
+
+		//turn off LED
+		uint8_t *led_register = ((uint8_t*)&(GPIOE->ODR)) + 1;
+		*led_register = 0b00000000;
+
+}
+
+void init_timer(){
+	__disable_irq();
+    TIM2->PSC = 8; // 1 ms per tick
+    TIM2->ARR = 20000000; // 30 seconds
+    TIM2->DIER |= TIM_DIER_UIE;
+    NVIC_EnableIRQ(TIM2_IRQn);
+    TIM2->CR1 |= TIM_CR1_CEN;
+    // Re-enable all interrupts (now that we are finished)
+    __enable_irq();
+
+}
+
+void TIM2_IRQHandler() {
+    if ((TIM2->SR & TIM_SR_UIF) != 0) {
+        TIM2->SR &= ~TIM_SR_UIF; 	//put down overflow flag
+        TIM2->CR1 &= ~TIM_CR1_CEN;	//disable timer
+        TIM2->CNT &= ~TIM_CNT_CNT_Msk;//reset timer
+        uint8_t message[32] = "Time's up, restarting stage 2\n";
+        SerialOutputString(message, &USART1_PORT);
+    }
 }

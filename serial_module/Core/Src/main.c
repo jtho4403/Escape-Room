@@ -119,9 +119,8 @@ int main(void)
   SerialInitialise(BAUD_115200, &USART2_PORT);
   uint8_t message[32] = "Test\n";
   SerialOutputString(message, &USART2_PORT);
-//  EnableSerialInterrupt();
 
-//  Stage2();
+  Stage2();
   /* USER CODE END 2 */
 
   /* Infinite loop */
