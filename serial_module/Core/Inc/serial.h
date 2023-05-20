@@ -13,6 +13,8 @@ typedef struct _SerialPort SerialPort;
 // make any number of instances of the serial port (they are extern because
 //   they are fixed, unique values)
 extern SerialPort USART1_PORT;
+extern SerialPort USART2_PORT;
+extern SerialPort USART3_PORT;
 
 
 // The user might want to select the baud rate

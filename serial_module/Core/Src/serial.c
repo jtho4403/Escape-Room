@@ -63,7 +63,7 @@ SerialPort USART1_PORT = {&(USART1->BRR),
 		((uint8_t*)&(GPIOC->AFR[0])) + 2,
 		0x77};
 
-//PB3 and PB4 for TX and RX
+//PD5 and PD6 for TX and RX
 SerialPort USART2_PORT = {&(USART2->BRR),
 		&(USART2->CR1),
 		&(USART2->ISR),
@@ -71,13 +71,13 @@ SerialPort USART2_PORT = {&(USART2->BRR),
 		&(USART2->TDR),
 		&(USART2->RDR),
 		&(RCC->APB1ENR),
-		RCC_APB1ENR_USART3EN,
-		SERIAL_GPIO_B,
-		&(GPIOB->MODER),
-		0xA000,
+		RCC_APB1ENR_USART2EN,
+		SERIAL_GPIO_D,
+		&(GPIOD->MODER),
+		0x2800,
 		&(GPIOC->OSPEEDR),
-		0xF000,
-		((uint8_t*)&(GPIOC->AFR[0])) + 3,
+		0x3C00,
+		((uint8_t*)&(GPIOC->AFR[0])) + 1,
 		0x77};
 
 //PC 10 and PC11 for TX and RX
@@ -88,14 +88,15 @@ SerialPort USART3_PORT = {&(USART3->BRR),
 		&(USART3->TDR),
 		&(USART3->RDR),
 		&(RCC->APB1ENR),
-		RCC_APB1ENR_USART2EN,
+		RCC_APB1ENR_USART3EN,
 		SERIAL_GPIO_C,
 		&(GPIOC->MODER),
 		0xA00000,
 		&(GPIOC->OSPEEDR),
 		0xF00000,
-		((uint8_t*)&(GPIOC->AFR[0])) + 4,
+		((uint8_t*)&(GPIOC->AFR[1])) + 4,
 		0x77};
+
 
 
 
