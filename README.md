@@ -12,6 +12,8 @@ Prithik Saini - PTU actuating module
 The code contains 3 self-containing stages that works separately. There's one stages each before and after the 3 stages that require coding.
 
 ## Stage 1 - LIDAR
+Done by Jiapeng Liu. 
+
 The work of detecting distance with LIDAR mainly focuses on two aspects:
 - Optimization of detection distance algorithm
 - Visualization of detection distance
