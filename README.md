@@ -21,7 +21,8 @@ LiDAR may make errors when detecting distance due to external environmental inte
 
 2. Visualization of detection distance
 Arduino connects a 1.3-inch OLED screen to display the detection distance type (ok, too far, too close). The communication between STM32F3 Discover Board and Arduino uses a logic level detection method.
-![image](https://github.com/jtho4403/Escape-Room/blob/main/image/LIDAR%20Circuit%20connection%20diagram.png)  
+
+![image](https://github.com/jtho4403/Escape-Room/blob/main/image/LIDAR%20Circuit%20connection%20diagram.png) 
 ### High level explanation
 ![image](https://github.com/jtho4403/Escape-Room/blob/main/image/Logic%20diagram%20of%20laser%20detection%20LIDAR.png)  
 ### Testing
