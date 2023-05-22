@@ -117,42 +117,48 @@ void Current_LED(uint8_t current){
 
 void Display_LED(){
 	char seq[7];
-		int i;
-		if (count == 1){
-			strcpy(seq, seq1);
-		}
-		else if (count == 2){
-			strcpy(seq, seq2);
-		}
-		else if (count == 3){
-			strcpy(seq, seq3);
-		}
-		else if (count == 4){
-			strcpy(seq, seq4);
-		}
+	int i;
+	if (count == 1){
+		strcpy(seq, seq1);
+	}
+	else if (count == 2){
+		strcpy(seq, seq2);
+	}
+	else if (count == 3){
+		strcpy(seq, seq3);
+	}
+	else if (count == 4){
+		strcpy(seq, seq4);
+	}
 
-		uint8_t current_char;
-		for (i = 0; i < count+3; i++){
-			current_char =  seq[i];
-			Current_LED(current_char);
-			for (int i = 0; i < 8000000; ++i) {
-			        // Do nothing
-			    }
+	uint8_t current_char;
+	for (i = 0; i < count+3; i++){
+		current_char =  seq[i];
+		Current_LED(current_char);
+
+		//delay
+		for (int i = 0; i < 800000; ++i) {
+			// Do nothing
 		}
+	}
 
-		//turn off LED
-		uint8_t *led_register = ((uint8_t*)&(GPIOE->ODR)) + 1;
-		*led_register = 0b00000000;
-
+	//turn off LED
+	uint8_t *led_register = ((uint8_t*)&(GPIOE->ODR)) + 1;
+	*led_register = 0b00000000;
 }
 
 void init_timer(){
 	__disable_irq();
     TIM2->PSC = 8; // 1 ms per tick
-    TIM2->ARR = 20000000; // 30 seconds
+    TIM2->ARR = 20000; // 30 seconds
+
+    TIM2->SR &= ~TIM_SR_UIF;
+    TIM2->CR1 |= TIM_CR1_ARPE;
+
     TIM2->DIER |= TIM_DIER_UIE;
-    NVIC_EnableIRQ(TIM2_IRQn);
     TIM2->CR1 |= TIM_CR1_CEN;
+    NVIC_EnableIRQ(TIM2_IRQn);
+
     // Re-enable all interrupts (now that we are finished)
     __enable_irq();
 

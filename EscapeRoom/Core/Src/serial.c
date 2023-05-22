@@ -47,6 +47,7 @@ enum {
 
 // instantiate the serial port parameters
 //   note: the complexity is hidden in the c file
+//PC4 and PC5 for TX and RX
 SerialPort USART1_PORT = {&(USART1->BRR),
 		&(USART1->CR1),
 		&(USART1->ISR),
@@ -96,6 +97,7 @@ SerialPort USART3_PORT = {&(USART3->BRR),
 		0xF00000,
 		((uint8_t*)&(GPIOC->AFR[1])) + 4,
 		0x77};
+
 
 
 
@@ -261,7 +263,9 @@ void read_joystick_y(SerialPort *serial_port){
 
 void USART1_IRQHandler(void)
 {
-	// disable timer
+	 TIM2->SR &= ~TIM_SR_UIF; 	//put down overflow flag
+	 TIM2->CR1 &= ~TIM_CR1_CEN;	//disable timer
+
 	SerialInputSequence(&USART1_PORT);
 }
 
