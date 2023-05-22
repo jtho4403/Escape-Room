@@ -5,7 +5,7 @@ Imran Tauqeer - PTU actuating module
 Jack Thompson - LED & timer module      
 Jia Xu Chee - sequence module, minutes     
 Jiapeng Liu - LIDAR module    
-Prithik Saini - PTU actuating module   
+Prithik Saini - PTU actuating module, python game module   
 
 ## Overview
 ![image](https://github.com/jtho4403/Escape-Room/blob/main/image/flowchart.drawio.png)   
@@ -40,6 +40,12 @@ Modular testing can be done in serial_module folder. Since this stage can be don
 
 ## Stage 3 - Find the code
 Done by David Boian, Imran Tauqeer and Prithik Saini.    
+### High level explanation
+
+### Testing
+
+## Stage 4 - Pop the ballon
+Done by Prithik Saini.    
 ### High level explanation
 
 ### Testing
