@@ -9,6 +9,7 @@ volatile int substage_state; //0 for fail, 1 for pass
 volatile int count;
 volatile int next_stage;
 volatile int nest = 0;
+volatile int timer_expired = 0; // Timer expiration flag
 
 void CheckSequence(uint8_t *input){
 	char seq[7];
@@ -65,6 +66,10 @@ void Stage2(){
 
 		//add timer polling condition when integrating
 		while(next_stage == 0 && substage_state == 1){
+            if (timer_expired) {
+                timer_expired = 0; // Reset timer expiration flag
+                break; // Exit the loop if timer expired
+            }
 		}
 
 		if(substage_state == 0){
@@ -148,8 +153,8 @@ void Display_LED(){
 
 void init_timer(){
 	__disable_irq();
-    TIM2->PSC = 8; // 1 ms per tick
-    TIM2->ARR = 20000000; // 30 seconds
+    TIM2->PSC = 7999; // 1 ms per tick
+    TIM2->ARR = 30000; // 30 seconds
     TIM2->DIER |= TIM_DIER_UIE;
     NVIC_EnableIRQ(TIM2_IRQn);
     TIM2->CR1 |= TIM_CR1_CEN;
@@ -165,5 +170,10 @@ void TIM2_IRQHandler() {
         TIM2->CNT &= ~TIM_CNT_CNT_Msk;//reset timer
         uint8_t message[32] = "Time's up, restarting stage 2\n";
         SerialOutputString(message, &USART1_PORT);
+
+        // Set the timer expiration flag
+        timer_expired = 1;
     }
 }
+
+

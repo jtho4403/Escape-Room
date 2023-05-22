@@ -1,9 +1,0 @@
-core_cm4.h:1688:22:__NVIC_EnableIRQ	2
-serial.c:105:6:SerialInitialise	3
-serial.c:144:6:EnableSerialInterrupt	1
-serial.c:164:6:SerialOutputChar	2
-serial.c:171:6:SerialOutputString	3
-serial.c:186:6:SerialInputSequence	4
-serial.c:223:6:read_joystick_x	3
-serial.c:243:6:read_joystick_y	3
-serial.c:263:6:USART1_IRQHandler	1
