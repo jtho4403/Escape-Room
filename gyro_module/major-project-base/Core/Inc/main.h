@@ -31,7 +31,8 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+// call back function for IQR
+void PTU_callback_function();
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

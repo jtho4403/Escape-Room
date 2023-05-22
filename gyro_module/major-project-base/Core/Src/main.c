@@ -28,6 +28,8 @@
 
 #include "math.h"
 
+#include "timer.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,6 +48,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
+I2C_HandleTypeDef hi2c2;
 
 SPI_HandleTypeDef hspi1;
 
@@ -66,6 +69,7 @@ static void MX_SPI1_Init(void);
 static void MX_USB_PCD_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM1_Init(void);
+static void MX_I2C2_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -104,7 +108,7 @@ uint16_t diff = 0;
 uint16_t rise_time = 0;
 uint16_t last_period = 0;
 
-int32_t x = 0;
+float x = 0;
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
@@ -122,7 +126,14 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 		last_capture = IC_Val1;
 	}
 }
+volatile uint8_t string_to_send[500] = "This is a string !\r\n";
+volatile uint8_t test_string[64] = "h!\r\n";
 
+
+//static volatile float dx = 0;
+//volatile float dt = 0.01;
+//static volatile float ds;
+//volatile uint16_t dv;
 
 /* USER CODE END 0 */
 
@@ -134,14 +145,13 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
-	uint8_t string_to_send[64] = "This is a string !\r\n";
-
 	enable_clocks();
 	initialise_board();
 
 	LedRegister *led_register = ((uint8_t*)&(GPIOE->ODR)) + 1;
 
 	SerialInitialise(BAUD_115200, &USART1_PORT, 0x00);
+
 
 	HAL_StatusTypeDef return_value = 0x00;
 
@@ -168,12 +178,12 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  // Initialize I2C communications as I2C1
   MX_I2C1_Init();
   MX_SPI1_Init();
   MX_USB_PCD_Init();
   //MX_TIM2_Init();
   MX_TIM1_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
 
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1); // PAN
@@ -190,10 +200,14 @@ int main(void)
 	// you can get unexpected results. To remove this, set ARPE so that the
 	// ARR settings are not activated until the next cycle.
 
+
+	// Tell the NVIC module that timer2 interrupts should be handled
+	// NVIC_EnableIRQ(TIM2_IRQn);
+
 	// literallty set the PTU registers using I2C
 	// Stews code to initalise HAL_TYPE_STRUCT used for I2C communications
 	// he is exrecting a certain stream of infromation and sets it up like so
-	initialise_ptu_i2c(&hi2c1);
+	initialise_ptu_i2c(&hi2c2);
 
   /* USER CODE END 2 */
 
@@ -203,13 +217,26 @@ int main(void)
 
 	// reset lidar board
 	uint8_t reset_value = 0x00;
-	return_value = HAL_I2C_Mem_Write(&hi2c1, LIDAR_WR, 0x00, 1, &reset_value, 1, 10);
+	return_value = HAL_I2C_Mem_Write(&hi2c2, LIDAR_WR, 0x00, 1, &reset_value, 1, 10);
 
 	uint8_t PWM_direction_clockwise = 1;
 
 	// delay for initialisation of the lidar
 	HAL_Delay(100);
 
+	uint16_t time = 10; // 4 seconds = 4000ms // 10ms = 10
+	//Idea get a interrupt every 10ms
+	up_count_TIM3(time, PTU_callback_function);
+
+	float x_acc = 0.0;
+	float y_acc = 0.0;
+	float z_acc = 0.0;
+	float x_v = 0.0;
+	float y_v = 0.0;
+	float z_v = 0.0;
+	float x_angle = 0.0;
+	float y_angle = 0.0;
+	float z_angle = 0.0;
 	while (1)
 	{
 		if (PWM_direction_clockwise == 1) {
@@ -235,21 +262,21 @@ int main(void)
 
 
 		uint8_t xMSB = 0x00;
-		HAL_I2C_Mem_Read(&hi2c1,gyro_rd, 0x29, 1, &xMSB, 1, 10);
+		HAL_I2C_Mem_Read(&hi2c2,gyro_rd, 0x29, 1, &xMSB, 1, 10);
 		uint8_t xLSB = 0x00;
-		HAL_I2C_Mem_Read(&hi2c1,gyro_rd, 0x28, 1, &xLSB, 1, 10);
+		HAL_I2C_Mem_Read(&hi2c2,gyro_rd, 0x28, 1, &xLSB, 1, 10);
 		int16_t yaw_rate = ((xMSB << 8) | xLSB);
 
 		uint8_t yMSB = 0x00;
-		HAL_I2C_Mem_Read(&hi2c1,gyro_rd, 0x2B, 1, &yMSB, 1, 10);
+		HAL_I2C_Mem_Read(&hi2c2,gyro_rd, 0x2B, 1, &yMSB, 1, 10);
 		uint8_t yLSB = 0x00;
-		HAL_I2C_Mem_Read(&hi2c1,gyro_rd, 0x2A, 1, &yLSB, 1, 10);
+		HAL_I2C_Mem_Read(&hi2c2,gyro_rd, 0x2A, 1, &yLSB, 1, 10);
 		int16_t pitch_rate = ((yMSB << 8) | yLSB);
 
 		uint8_t zMSB = 0x00;
-		HAL_I2C_Mem_Read(&hi2c1,gyro_rd, 0x2D, 1, &zMSB, 1, 10);
+		HAL_I2C_Mem_Read(&hi2c2,gyro_rd, 0x2D, 1, &zMSB, 1, 10);
 		uint8_t zLSB = 0x00;
-		HAL_I2C_Mem_Read(&hi2c1,gyro_rd, 0x2C, 1, &zLSB, 1, 10);
+		HAL_I2C_Mem_Read(&hi2c2,gyro_rd, 0x2C, 1, &zLSB, 1, 10);
 		int16_t roll_rate = ((zMSB << 8) | zLSB);
 
 		if (pitch_rate < 0)
@@ -264,7 +291,7 @@ int main(void)
 
 
 		uint8_t lidar_value = 0x03;
-		return_value = HAL_I2C_Mem_Write(&hi2c1, LIDAR_WR, 0x00, 1, &lidar_value, 1, 100);
+		return_value = HAL_I2C_Mem_Write(&hi2c2, LIDAR_WR, 0x00, 1, &lidar_value, 1, 100);
 
 		lidar_value = 0xff;
 
@@ -274,12 +301,12 @@ int main(void)
 		volatile uint16_t lidar_distance = 0xff;
 
 		uint16_t timeout;
-
+// some WERID ERROS happen here
 		while ((lidar_value & 0x01) != 0x00) {
-			return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x01, 1, &lidar_value, 1, 100);
+			return_value = HAL_I2C_Mem_Read(&hi2c2, LIDAR_RD, 0x01, 1, &lidar_value, 1, 100);
 
-			return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x0f, 1, &lidar_MSBa, 1, 100);
-			return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x10, 1, &lidar_LSBa, 1, 100);
+			return_value = HAL_I2C_Mem_Read(&hi2c2, LIDAR_RD, 0x0f, 1, &lidar_MSBa, 1, 100);
+			return_value = HAL_I2C_Mem_Read(&hi2c2, LIDAR_RD, 0x10, 1, &lidar_LSBa, 1, 100);
 
 			lidar_distance = ((lidar_MSBa << 8) | lidar_LSBa);
 			timeout += 1;
@@ -301,27 +328,114 @@ int main(void)
 			last_period = 5000;
 		if (lidar_distance > 4000)
 			lidar_distance = 5500;
+		// Read the magnetometer
+
+		uint8_t mag_setting = 0b11111100;
+		return_value = HAL_I2C_Mem_Write(&hi2c2, magnet_wr, 0x02, 1, &mag_setting, 1, 10);
+
+		uint8_t mag_data_buf[6];
+		return_value = HAL_I2C_Mem_Read(&hi2c2, magnet_rd, 0x03, 1, mag_data_buf, 6, 10);
+		int16_t x_mag = ((mag_data_buf[0] << 8) | mag_data_buf[1]);
+		int16_t z_mag = ((mag_data_buf[2] << 8) | mag_data_buf[3]);
+		int16_t y_mag = ((mag_data_buf[4] << 8) | mag_data_buf[5]);
+		//return_value = HAL_I2C_Mem_Read(&hi2c1, magnet_rd, 0x03, 1, &mag_data_buf[0], 1, 10);
+		//return_value = HAL_I2C_Mem_Read(&hi2c1, magnet_rd, 0x04, 1, &mag_data_buf[1], 1, 10);
+		//return_value = HAL_I2C_Mem_Read(&hi2c1, magnet_rd, 0x05, 1, &mag_data_buf[2], 1, 10);
+		//return_value = HAL_I2C_Mem_Read(&hi2c1, magnet_rd, 0x06, 1, &mag_data_buf[3], 1, 10);
+		// = HAL_I2C_Mem_Read(&hi2c1, magnet_rd, 0x07, 1, &mag_data_buf[4], 1, 10);
+
+		// I'm so confused it seems stw things roll is z yaw is x pitch is y??
 
 		// Read acceleration values from ADXL345 registers
 		uint8_t buffer[6];
-		HAL_I2C_Mem_Read(&hi2c1, accel_rd, 0x32, 1, buffer, 6, 10);
+		HAL_I2C_Mem_Read(&hi2c2, accel_rd, 0x32, 1, buffer, 6, 10);
 		int16_t x_acceleration = ((buffer[1] << 8) | buffer[0]);
 		int16_t y_acceleration = ((buffer[3] << 8) | buffer[2]);
 		int16_t z_acceleration = ((buffer[5] << 8) | buffer[4]);
 
-		int32_t input = y_acceleration*y_acceleration + z_acceleration*z_acceleration;
 
-		int32_t ax = (int32_t)(x_acceleration/sqrt(input));
-		x = (x + (roll_rate-57)/10000);
-		sprintf(string_to_send, "%hu,%hu,%hd,%hd,%hd,%hd,%hd,%hd,%hd,%hd\r\n", last_period, lidar_distance*10, roll_rate, pitch_rate, yaw_rate, x_acceleration, y_acceleration, z_acceleration, x, ax);
+		// I think these calcs are wrong but wait and see
+		int32_t x_input = y_acceleration*y_acceleration + z_acceleration*z_acceleration;
+		int32_t y_input = x_acceleration*x_acceleration + z_acceleration*z_acceleration;
+		int32_t z_input = x_acceleration*x_acceleration + y_acceleration*y_acceleration;
+		float ax_roll = (180/3.14)*atan(y_acceleration/sqrt(y_input));
+		float ax_pitch = (180/3.14)*atan(x_acceleration/sqrt(x_input));
+		float ax_yaw = (180/3.14)*atan(z_acceleration/sqrt(z_input));
+		float fYg = (roll_rate+86)*0.00875;
 
-		SerialOutputString(string_to_send, &USART1_PORT);
+		//float ay_roll = atan(y/sqrt(y_input));
+		//x = 0.95*(x + (roll_rate-57)*4/1000) + 0.05*ax_pitch;
+		//dv = roll_rate;
+		//sprintf(string_to_send, "%hu,%hu,%hd,%hd,%hd,%hd,%hd,%hd,%lf,%lf,%hd,%hd,%hd\r\n", last_period, lidar_distance*10, roll_rate, pitch_rate, yaw_rate, x_acceleration, y_acceleration, z_acceleration, x, ax_pitch, x_mag, z_mag, y_mag);
+		//sprintf(string_to_send, "%lf,%lf,%lf,%hd,%hd,%hd\r\n", x_acceleration*0.0039, y_acceleration*0.0039, z_acceleration*0.0039, x_mag, z_mag, y_mag);
 
+		// When gyro facing up
+		// Notes on roll pitch and yaw
+		// pitch appears to be along the y axis
+		// roll_rate is from the z axis
+		// yaw_rate is along the x axis
+
+
+		//float fXg = (roll_rate+86)*0.00875;
+		// Do some math to get distance
+
+		float ALPHA = 0.1;
+		//float xg;
+		//float dpsx = fXg * ALPHA + (xg * (1.0-ALPHA));
+		//xg = dpsx;
+		//angleX = 0.95*(angleX + dpsx*0.1) + 0.05*ax_roll;
+
+		// impliment a low pass filter on naked results
+		//float roll;
+		//roll = (roll_rate+86)*ALPHA + roll*(1-ALPHA);
+
+		//sprintf(string_to_send, "%lf,%hd,%lf,%hd,%lf,%lf,%lf\r\n", dpsx, roll_rate, roll, yaw_rate,x_acceleration*0.0039,ax_yaw,angleX);
+		// setup_transmission(string_to_send, &USART1_PORT);
+		//SerialOutputString(string_to_send, &USART1_PORT);
+		//usart1_tx_transmission(string_to_send);
+		// usart1_tx_push(string_to_send);
+
+		// Okay lets understand each value being presented and use today as the time to figure them out
+		/*
+		 * 1. find the offset of acceleration to stablise it
+		 * 2. see if can combine acceleration and velocity together to get some values for x y and z
+		 * 3.
+		 *  */
+		// filter out information using low pass filter
+		x_acc = ((float)x_acceleration+2.5) * 0.00390625 + (1.0-ALPHA)*x_acc;
+		y_acc = ((float)y_acceleration+1.5) * 0.00390625 + (1.0-ALPHA)*y_acc;
+		z_acc = ((float)z_acceleration+0.0987) * 0.00390625 + (1.0-ALPHA)*z_acc;
+		float a_roll = (180/3.14)*atan(y_acc/sqrt(x_acc*x_acc+z_acc*z_acc));
+		float a_pitch = (180/3.14)*atan(x_acc/sqrt(y_acc*y_acc+z_acc*z_acc));
+		float a_yaw = (180/3.14)*atan(z_acc/sqrt(y_acc*y_acc+x_acc*x_acc));
+		//sprintf(string_to_send, "%lf,%lf,%lf,%lf,%lf,%lf\r\n", x_acc, y_acc, z_acc, a_roll, a_pitch, a_yaw);
+		//sprintf(string_to_send, "%hd,%hd,%hd\r\n", x_acceleration, y_acceleration, z_acceleration);
+		// DO cals on all gryo parts..
+
+		x_v = (pitch_rate-74)*0.00875* ALPHA + x_v * (1.0-ALPHA);
+		y_v = (yaw_rate+86)*0.00875* ALPHA + y_v * (1.0-ALPHA);
+		z_v = (roll_rate-100)*0.00875* ALPHA + z_v * (1.0-ALPHA);
+		//sprintf(string_to_send, "%hd,%hd,%hd,%lf,%lf,%lf\r\n", roll_rate, pitch_rate, yaw_rate, x_v, y_v, z_v);
+
+
+		// Now do math to combines readings
+		x_angle = 0.95*(x_angle + x_v*0.09) + 0.05*a_roll;
+		y_angle = 0.95*(y_angle + y_v*0.09) + 0.05*a_pitch;
+		z_angle = 0.95*(z_angle + z_v*0.09) + 0.05*a_yaw;
+		//float angle = (y_angle + x_angle);
+		//float y = y_angle - x_angle;
+		//sprintf(string_to_send, "%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\r\n", x_v, y_v, z_v, x_angle, y_angle, z_angle, angle, y);
+
+		// Investigating magnetic rates
+		sprintf(string_to_send,"%hd,%hd,%hd\r\n",x_mag, z_mag, y_mag);
 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
 	}
+	// code the IQR handler here
+
+
   /* USER CODE END 3 */
 }
 
@@ -365,8 +479,9 @@ void SystemClock_Config(void)
     Error_Handler();
   }
   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB|RCC_PERIPHCLK_I2C1
-                              |RCC_PERIPHCLK_TIM1;
+                              |RCC_PERIPHCLK_I2C2|RCC_PERIPHCLK_TIM1;
   PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_HSI;
+  PeriphClkInit.I2c2ClockSelection = RCC_I2C2CLKSOURCE_HSI;
   PeriphClkInit.USBClockSelection = RCC_USBCLKSOURCE_PLL;
   PeriphClkInit.Tim1ClockSelection = RCC_TIM1CLK_HCLK;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
@@ -420,6 +535,54 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
+
+}
+
+/**
+  * @brief I2C2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_I2C2_Init(void)
+{
+
+  /* USER CODE BEGIN I2C2_Init 0 */
+
+  /* USER CODE END I2C2_Init 0 */
+
+  /* USER CODE BEGIN I2C2_Init 1 */
+
+  /* USER CODE END I2C2_Init 1 */
+  hi2c2.Instance = I2C2;
+  hi2c2.Init.Timing = 0x2000090E;
+  hi2c2.Init.OwnAddress1 = 0;
+  hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c2.Init.OwnAddress2 = 0;
+  hi2c2.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
+  hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Analogue filter
+  */
+  if (HAL_I2CEx_ConfigAnalogFilter(&hi2c2, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Digital filter
+  */
+  if (HAL_I2CEx_ConfigDigitalFilter(&hi2c2, 0) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN I2C2_Init 2 */
+
+  /* USER CODE END I2C2_Init 2 */
 
 }
 
@@ -656,7 +819,39 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void PTU_callback_function(){
+	static uint8_t count = 0;
+	if(count == 0){
+		//setup_transmission(string_to_send, &USART1_PORT);
+		count++;
+		return;
+	}
 
+	//dx = dx + (dv-57)*0.00875*dt;
+	//volatile uint16_t dv;
+	//sprintf(test_string, "%lf,\r\n");
+
+//
+//	if(count == 1){
+//		SerialOutputString(string_to_send, &USART1_PORT);
+//		count++;
+//		return;
+//	}
+
+//	LedRegister *led_register = ((uint8_t*)&(GPIOE->ODR)) + 1;
+//	led_register->led_groups.led_pair_1 ^= 0b10;
+	setup_transmission(string_to_send, &USART1_PORT);
+	//setup_transmission(test_string, &USART1_PORT);
+	// static uint8_t counter = 1;
+	// string_to_send[0] = counter++;
+	//SerialOutputString(string_to_send, &USART1_PORT);
+
+	// usart1_tx_push(string_to_send);
+	// when called enable interrupts
+	//enable_USART_interrupts(&USART1_PORT);
+	// uint8_t *test = "new wtf hty\r\n";
+
+}
 /* USER CODE END 4 */
 
 /**
