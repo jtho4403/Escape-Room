@@ -1,0 +1,7 @@
+"./Src/joystick.o"
+"./Src/joystick_HAL.o"
+"./Src/main.o"
+"./Src/ptu_actuation.o"
+"./Src/syscalls.o"
+"./Src/sysmem.o"
+"./Startup/startup_stm32f303vctx.o"
