@@ -67,9 +67,6 @@ static void MX_USB_PCD_Init(void);
 // enable the clocks for desired peripherals (GPIOA, C and E)
 void enable_clocks() {
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
-
-	// store a 1 in bit for the TIM2 enable flag
-	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
 }
 
 
@@ -116,6 +113,12 @@ int main(void)
   /* USER CODE BEGIN 2 */
   enable_clocks();
   initialise_board();
+
+
+
+  SerialInitialise(BAUD_115200, &USART2_PORT);
+  uint8_t message[32] = "Test\n";
+  SerialOutputString(message, &USART2_PORT);
 
   Stage2();
   /* USER CODE END 2 */
