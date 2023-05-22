@@ -9,6 +9,8 @@ volatile int substage_state; //0 for fail, 1 for pass
 volatile int count;
 volatile int next_stage;
 volatile int nest = 0;
+volatile int timer_expired = 0; // Timer expiration flag
+volatile int first_timer = 0;
 
 void CheckSequence(uint8_t *input){
 	char seq[7];
@@ -64,7 +66,7 @@ void Stage2(){
 		EnableSerialInterrupt(&USART1_PORT);
 
 		//add timer polling condition when integrating
-		while(next_stage == 0 && substage_state == 1){
+		while(next_stage == 0 && substage_state == 1 && timer_expired == 0){
 		}
 
 		if(substage_state == 0){
@@ -74,6 +76,12 @@ void Stage2(){
 			nest ++;
 			Stage2();
 			break;
+		}
+
+		else if (timer_expired != 0){
+			timer_expired = 0;
+			uint8_t message[32] = "Time's up, restarting stage 2\n";
+			SerialOutputString(message, &USART1_PORT);
 		}
 	}
 
@@ -137,7 +145,7 @@ void Display_LED(){
 		Current_LED(current_char);
 
 		//delay
-		for (int i = 0; i < 800000; ++i) {
+		for (int i = 0; i < 5000000; ++i) {
 			// Do nothing
 		}
 	}
@@ -149,12 +157,8 @@ void Display_LED(){
 
 void init_timer(){
 	__disable_irq();
-    TIM2->PSC = 8; // 1 ms per tick
-    TIM2->ARR = 20000; // 30 seconds
-
-    TIM2->SR &= ~TIM_SR_UIF;
-    TIM2->CR1 |= TIM_CR1_ARPE;
-
+    TIM2->PSC = 8000;
+    TIM2->ARR = 100000;
     TIM2->DIER |= TIM_DIER_UIE;
     TIM2->CR1 |= TIM_CR1_CEN;
     NVIC_EnableIRQ(TIM2_IRQn);
@@ -165,11 +169,19 @@ void init_timer(){
 }
 
 void TIM2_IRQHandler() {
-    if ((TIM2->SR & TIM_SR_UIF) != 0) {
+	if (first_timer == 0){
+		 TIM2->SR &= ~TIM_SR_UIF; 	//put down overflow flag
+		 first_timer = 1;
+
+	}
+	else if ((TIM2->SR & TIM_SR_UIF) != 0) {
         TIM2->SR &= ~TIM_SR_UIF; 	//put down overflow flag
         TIM2->CR1 &= ~TIM_CR1_CEN;	//disable timer
         TIM2->CNT &= ~TIM_CNT_CNT_Msk;//reset timer
-        uint8_t message[32] = "Time's up, restarting stage 2\n";
-        SerialOutputString(message, &USART1_PORT);
+
+        // Set the timer expiration flag
+        timer_expired = 1;
     }
 }
+
+

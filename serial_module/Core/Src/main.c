@@ -117,12 +117,6 @@ int main(void)
   enable_clocks();
   initialise_board();
 
-
-
-  SerialInitialise(BAUD_115200, &USART2_PORT);
-  uint8_t message[32] = "Test\n";
-  SerialOutputString(message, &USART2_PORT);
-
   Stage2();
   /* USER CODE END 2 */
 
