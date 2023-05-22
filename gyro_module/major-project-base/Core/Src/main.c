@@ -242,6 +242,7 @@ int main(void)
 	float r_rps = 0.0;
 	float global_roll = 0.0;
 	float global_pitch = 0.0;
+	float global_yaw = 0.0;
 	while (1)
 	{
 		if (PWM_direction_clockwise == 1) {
@@ -434,13 +435,15 @@ int main(void)
 		//sprintf(string_to_send, "%lf,%lf\r\n",angle*100, y*100);
 
 		// Investigating magnetic rates
-		// sprintf(string_to_send,"%hd,%hd,%hd\r\n",x_mag, z_mag, y_mag);
+		float mag_angle = atan(y_mag/x_mag);
 
+		sprintf(string_to_send,"%hd,%hd,%hd,%\r\n",x_mag, z_mag, y_mag);
+
+
+		// Global roll pitch can't get yaw
 		p_rps = ((pitch_rate-74)*0.00875*ALPHA)*(3.14/180) + p_rps * (1.0-ALPHA);
 		q_rps = ((yaw_rate+86)*0.00875*ALPHA)*(3.14/180) + q_rps * (1.0-ALPHA);
 		r_rps = ((roll_rate-100)*0.00875*ALPHA)*(3.14/180) + r_rps * (1.0-ALPHA);
-
-
 
 		// trial of global pitch, roll using accelerometer
 		float global_acc_roll = atanf(y_acc/z_acc);
@@ -452,8 +455,16 @@ int main(void)
 		global_roll = global_roll + 0.1*phi_dot;
 		global_pitch = global_pitch + 0.1*theta_dot;
 
+		// try this tomorrow!
+		// idea to get si
+		float si_dot = sinf(global_acc_roll)*q_rps/cosf(global_acc_pitch) + cosf(global_acc_roll)*r_rps/cosf(global_acc_pitch);
+		// So to find global yaw
+		global_yaw = global_yaw + 0.1*(si_dot);
+
 		//sprintf(string_to_send, "%lf,%lf,\r\n", global_acc_roll, global_acc_pitch);
-		sprintf(string_to_send, "%lf,%lf,%lf,%lf,%lf,%lf\r\n", global_acc_roll, global_acc_pitch, phi_dot, theta_dot, global_roll, global_pitch);
+		//sprintf(string_to_send, "%lf,%lf,%lf,%lf,%lf,%lf\r\n", global_acc_roll, global_acc_pitch, phi_dot, theta_dot, global_roll, global_pitch);
+
+		// Idea to get XYZ using magnetometer
 
 
     /* USER CODE END WHILE */
