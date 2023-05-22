@@ -224,7 +224,7 @@ int main(void)
 	// delay for initialisation of the lidar
 	HAL_Delay(100);
 
-	uint16_t time = 10; // 4 seconds = 4000ms // 10ms = 10
+	uint16_t time = 100; // 4 seconds = 4000ms // 10ms = 10
 	//Idea get a interrupt every 10ms
 	up_count_TIM3(time, PTU_callback_function);
 
@@ -237,6 +237,11 @@ int main(void)
 	float x_angle = 0.0;
 	float y_angle = 0.0;
 	float z_angle = 0.0;
+	float p_rps = 0.0;
+	float q_rps = 0.0;
+	float r_rps = 0.0;
+	float global_roll = 0.0;
+	float global_pitch = 0.0;
 	while (1)
 	{
 		if (PWM_direction_clockwise == 1) {
@@ -402,9 +407,9 @@ int main(void)
 		 * 3.
 		 *  */
 		// filter out information using low pass filter
-		x_acc = ((float)x_acceleration+2.5) * 0.00390625 + (1.0-ALPHA)*x_acc;
-		y_acc = ((float)y_acceleration+1.5) * 0.00390625 + (1.0-ALPHA)*y_acc;
-		z_acc = ((float)z_acceleration+0.0987) * 0.00390625 + (1.0-ALPHA)*z_acc;
+		x_acc = ((float)x_acceleration) * 0.00390625 + (1.0-ALPHA)*x_acc;
+		y_acc = ((float)y_acceleration) * 0.00390625 + (1.0-ALPHA)*y_acc;
+		z_acc = ((float)z_acceleration) * 0.00390625 + (1.0-ALPHA)*z_acc;
 		float a_roll = (180/3.14)*atan(y_acc/sqrt(x_acc*x_acc+z_acc*z_acc));
 		float a_pitch = (180/3.14)*atan(x_acc/sqrt(y_acc*y_acc+z_acc*z_acc));
 		float a_yaw = (180/3.14)*atan(z_acc/sqrt(y_acc*y_acc+x_acc*x_acc));
@@ -412,7 +417,7 @@ int main(void)
 		//sprintf(string_to_send, "%hd,%hd,%hd\r\n", x_acceleration, y_acceleration, z_acceleration);
 		// DO cals on all gryo parts..
 
-		x_v = (pitch_rate-74)*0.00875* ALPHA + x_v * (1.0-ALPHA);
+		x_v = ((pitch_rate-74)*0.00875* ALPHA + x_v * (1.0-ALPHA));
 		y_v = (yaw_rate+86)*0.00875* ALPHA + y_v * (1.0-ALPHA);
 		z_v = (roll_rate-100)*0.00875* ALPHA + z_v * (1.0-ALPHA);
 		//sprintf(string_to_send, "%hd,%hd,%hd,%lf,%lf,%lf\r\n", roll_rate, pitch_rate, yaw_rate, x_v, y_v, z_v);
@@ -422,12 +427,34 @@ int main(void)
 		x_angle = 0.95*(x_angle + x_v*0.09) + 0.05*a_roll;
 		y_angle = 0.95*(y_angle + y_v*0.09) + 0.05*a_pitch;
 		z_angle = 0.95*(z_angle + z_v*0.09) + 0.05*a_yaw;
-		//float angle = (y_angle + x_angle);
-		//float y = y_angle - x_angle;
-		//sprintf(string_to_send, "%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\r\n", x_v, y_v, z_v, x_angle, y_angle, z_angle, angle, y);
+		float angle = (y_angle + x_angle);
+		float y = y_angle - x_angle;
+		//sprintf(string_to_send, "%lf,%lf,%lf,%lf,%lf,%lf\r\n", x_v, y_v, z_v, x_angle, y_angle, z_angle);
+		//sprintf(string_to_send, "%lf,%lf,%lf\r\n", x_angle, y_angle, z_angle);
+		//sprintf(string_to_send, "%lf,%lf\r\n",angle*100, y*100);
 
 		// Investigating magnetic rates
-		sprintf(string_to_send,"%hd,%hd,%hd\r\n",x_mag, z_mag, y_mag);
+		// sprintf(string_to_send,"%hd,%hd,%hd\r\n",x_mag, z_mag, y_mag);
+
+		p_rps = ((pitch_rate-74)*0.00875*ALPHA)*(3.14/180) + p_rps * (1.0-ALPHA);
+		q_rps = ((yaw_rate+86)*0.00875*ALPHA)*(3.14/180) + q_rps * (1.0-ALPHA);
+		r_rps = ((roll_rate-100)*0.00875*ALPHA)*(3.14/180) + r_rps * (1.0-ALPHA);
+
+
+
+		// trial of global pitch, roll using accelerometer
+		float global_acc_roll = atanf(y_acc/z_acc);
+		float global_acc_pitch = atanf(x_acc/9.81);
+
+		float phi_dot = p_rps + tanf(global_acc_pitch)*(sinf(global_acc_roll)*q_rps + cosf(global_acc_roll)*r_rps);
+		float theta_dot = cosf(global_acc_roll)*q_rps - sinf(global_acc_roll)*r_rps;
+
+		global_roll = global_roll + 0.1*phi_dot;
+		global_pitch = global_pitch + 0.1*theta_dot;
+
+		//sprintf(string_to_send, "%lf,%lf,\r\n", global_acc_roll, global_acc_pitch);
+		sprintf(string_to_send, "%lf,%lf,%lf,%lf,%lf,%lf\r\n", global_acc_roll, global_acc_pitch, phi_dot, theta_dot, global_roll, global_pitch);
+
 
     /* USER CODE END WHILE */
 
