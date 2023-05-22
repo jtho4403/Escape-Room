@@ -463,7 +463,7 @@ int main(void)
 
 		//sprintf(string_to_send, "%lf,%lf,\r\n", global_acc_roll, global_acc_pitch);
 		//sprintf(string_to_send, "%lf,%lf,%lf,%lf,%lf,%lf\r\n", global_acc_roll, global_acc_pitch, phi_dot, theta_dot, global_roll, global_pitch);
-
+		sprintf(string_to_send, "%lf,%lf,%lf,%lf,%lf\r\n", global_acc_roll, global_acc_pitch, global_roll, global_pitch, global_yaw);
 		// Idea to get XYZ using magnetometer
 
 
