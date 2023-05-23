@@ -1,34 +1,33 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2023 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2023 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
+#include "ptu_definitions.h"
+#include "ptu_i2c.h"
 #include "serial.h"
-#include "sequence.h"
-#include "led.h"
-#include "timer.h"
-#include "stm32f303xc.h"
-#include <stdint.h>
-#include <time.h>
-#include <stdlib.h>
+
+#include "math.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -38,7 +37,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -50,6 +48,9 @@
 I2C_HandleTypeDef hi2c1;
 
 SPI_HandleTypeDef hspi1;
+
+TIM_HandleTypeDef htim1;
+TIM_HandleTypeDef htim2;
 
 PCD_HandleTypeDef hpcd_USB_FS;
 
@@ -63,24 +64,28 @@ static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USB_PCD_Init(void);
+static void MX_TIM2_Init(void);
+static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
 // enable the clocks for desired peripherals (GPIOA, C and E)
 void enable_clocks() {
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
-
-	// store a 1 in bit for the TIM2 enable flag
-	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
 }
 
-void initialise_led() {
-    uint16_t *led_output_registers = ((uint16_t *)&(GPIOE->MODER)) + 1;
-    *led_output_registers = 0x5555;
+
+// initialise the discovery board I/O (just outputs: inputs are selected by default)
+void initialise_board() {
+	// get a pointer to the second half word of the MODER register (for outputs pe8-15)
+	uint16_t *led_output_registers = ((uint16_t *)&(GPIOE->MODER)) + 1;
+	*led_output_registers = 0x5555;
 }
+
 
 typedef union {
 	uint8_t all_leds;
@@ -98,6 +103,23 @@ uint16_t diff = 0;
 
 uint16_t rise_time = 0;
 uint16_t last_period = 0;
+
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+	uint8_t buffer[32];
+	if (htim->Instance == TIM1 && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
+	{
+		uint16_t IC_Val1 = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1); // read the first value
+
+		if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8) == 1)
+			rise_time = IC_Val1;
+		else
+			last_period = IC_Val1 - rise_time;
+
+		diff = IC_Val1 - last_capture;
+		last_capture = IC_Val1;
+	}
+}
 
 
 typedef struct {
@@ -119,6 +141,7 @@ typedef struct {
 	uint8_t var6;
 } struct_2;
 
+
 /* USER CODE END 0 */
 
 /**
@@ -128,161 +151,146 @@ typedef struct {
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+
+	// look at the size difference between these structs,
+	//  they are because the 32 bit microcontroller
+	//  packs the data so the divisions are in groups
+	//  of 4bytes (4bytes=32bit)
+	uint8_t size_1 = sizeof(struct_1);
+	uint8_t size_2 = sizeof(struct_2);
+
+
+	uint8_t string_to_send[64] = "This is a string !\r\n";
+
 	enable_clocks();
-	initialise_led();
-	uint8_t string_to_send[64];
+	initialise_board();
 
+	LedRegister *led_register = ((uint8_t*)&(GPIOE->ODR)) + 1;
 
-	Stage2();
+	SerialInitialise(BAUD_115200, &USART1_PORT, 0x00);
 
+	HAL_StatusTypeDef return_value = 0x00;
 
-	while (1) {
-	        // Delay or perform other operations as needed
-		}
+	volatile uint16_t vertical_PWM = 1000;
+	volatile uint16_t horizontal_PWM = 1000;
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+	HAL_Init();
+	SystemClock_Config();
+	MX_GPIO_Init();
+	MX_I2C1_Init();
+    MX_SPI1_Init();
+    MX_USB_PCD_Init();
+    MX_TIM2_Init();
+    MX_TIM1_Init();
 
-  /* USER CODE BEGIN Init */
 
-  /* USER CODE END Init */
+	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
 
-  /* Configure the system clock */
-  SystemClock_Config();
+	HAL_TIM_IC_Start_IT(&htim1, TIM_CHANNEL_1);
 
-  /* USER CODE BEGIN SysInit */
+	// TIM 2 is setup with a prescaler that makes 1 count = 1 microsecond
+	// Even with HAL, you can still set the values yourself
+	TIM2->ARR = 20000; // 20000 = 20ms, which is the desired clock period for servos
+	TIM2->CR1 |= TIM_CR1_ARPE; // this makes the timing not change until the next pulse is finished
 
-  /* USER CODE END SysInit */
+	// note: for PWM if you continually change the clock period
+	// you can get unexpected results. To remove this, set ARPE so that the
+	// ARR settings are not activated until the next cycle.
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_I2C1_Init();
-  MX_SPI1_Init();
-  MX_USB_PCD_Init();
-  /* USER CODE BEGIN 2 */
-
-  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
-
-   HAL_TIM_IC_Start_IT(&htim1, TIM_CHANNEL_1);
-
-   // TIM 2 is setup with a prescaler that makes 1 count = 1 microsecond
-   // Even with HAL, you can still set the values yourself
-   TIM2->ARR = 20000; // 20000 = 20ms, which is the desired clock period for servos
-   TIM2->CR1 |= TIM_CR1_ARPE; // this makes the timing not change until the next pulse is finished
-
-   // note: for PWM if you continually change the clock period
-   // you can get unexpected results. To remove this, set ARPE so that the
-   // ARR settings are not activated until the next cycle.
-
-   initialise_ptu_i2c(&hi2c1);
+	initialise_ptu_i2c(&hi2c1);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    /* USER CODE END WHILE */
+	// reset lidar board
+	uint8_t reset_value = 0x00;
+	return_value = HAL_I2C_Mem_Write(&hi2c1, LIDAR_WR, 0x00, 1, &reset_value, 1, 10);
 
-    /* USER CODE BEGIN 3 */
+	uint8_t PWM_direction_clockwise = 1;
 
-  //Stage 1: LIDAR
+	// delay for initialisation of the lidar
+	HAL_Delay(100);
 
-   // reset lidar board
-   uint8_t reset_value = 0x00;
-   return_value = HAL_I2C_Mem_Write(&hi2c1, LIDAR_WR, 0x00, 1, &reset_value, 1, 10);
+	int count=0;
+	int distance=0;
+	int flag=0;
+	int actuality=0;
 
-   uint8_t PWM_direction_clockwise = 1;
+	while (flag != 1)
+	{
 
-   // delay for initialisation of the lidar
-   HAL_Delay(100);
+		uint8_t lidar_value = 0x03;
+		return_value = HAL_I2C_Mem_Write(&hi2c1, LIDAR_WR, 0x00, 1, &lidar_value, 1, 100);
 
-   int count=0;
-   int distance=0;
-   int flag=0;
-   int actuality=0;
+		lidar_value = 0xff;
 
-   while (flag != 1)
-   {
+		uint8_t lidar_MSBa = 0x00;
+		uint8_t lidar_LSBa = 0x00;
 
-	   uint8_t lidar_value = 0x03;
-	   return_value = HAL_I2C_Mem_Write(&hi2c1, LIDAR_WR, 0x00, 1, &lidar_value, 1, 100);
+		volatile uint16_t lidar_distance = 0xff;
 
-	   lidar_value = 0xff;
+		uint16_t timeout;
 
-	   uint8_t lidar_MSBa = 0x00;
-	   uint8_t lidar_LSBa = 0x00;
+		while ((lidar_value & 0x01) != 0x00) {
+			return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x01, 1, &lidar_value, 1, 100);
 
-	   volatile uint16_t lidar_distance = 0xff;
+			return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x0f, 1, &lidar_MSBa, 1, 100);
+			return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x10, 1, &lidar_LSBa, 1, 100);
 
-	   uint16_t timeout;
+			lidar_distance = ((lidar_MSBa << 8) | lidar_LSBa);
+			timeout += 1;
+			if (timeout > 0xff)
+				break;
+		}
 
-	   while ((lidar_value & 0x01) != 0x00) {
-		   return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x01, 1, &lidar_value, 1, 100);
+		if (last_period > 4000)
+			last_period = 5000;
+		if (lidar_distance > 4000)
+			lidar_distance = 5500;
+		for (int i = 0; i < 10; i++)
+		{
+		  HAL_Delay(1);
+		}
 
-		   return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x0f, 1, &lidar_MSBa, 1, 100);
-		   return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x10, 1, &lidar_LSBa, 1, 100);
+		distance = distance + lidar_distance;
+		//distance=600;
+		//count=10;
+		if (count==10)
+		{
+			actuality= distance / 10;
+			sprintf(string_to_send, "%hu\r\n", actuality);
+			SerialOutputString(string_to_send, &USART1_PORT);
+			HAL_GPIO_WritePin(GPIOD,Ardu_LED2_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOD,Ardu_LED3_Pin, GPIO_PIN_RESET);
+			if(actuality >= 30 && actuality <= 50)
+			{
+				HAL_GPIO_WritePin(GPIOD,Ardu_LED1_Pin, GPIO_PIN_SET);
+				flag=1;
+			}
+			else if(actuality < 25)
+			{
+				HAL_GPIO_WritePin(GPIOD,Ardu_LED2_Pin, GPIO_PIN_SET);
+			}
+			else if(actuality > 55)
+			{
+				HAL_GPIO_WritePin(GPIOD,Ardu_LED3_Pin, GPIO_PIN_SET);
+			}
+			count=0;
+			actuality=0;
+			distance=0;
+		}
+		count++;
+	}
+	while(1);
 
-		   lidar_distance = ((lidar_MSBa << 8) | lidar_LSBa);
-		   timeout += 1;
-		   if (timeout > 0xff)
-			   break;
-	   }
-
-	   if (last_period > 4000)
-		   last_period = 5000;
-	   if (lidar_distance > 4000)
-		   lidar_distance = 5500;
-	   for (int i = 0; i < 10; i++)
-	   {
-		   HAL_Delay(1);
-	   }
-
-	   distance = distance + lidar_distance;
-	   if (count==10)
-	   {
-		   actuality= distance / 10;
-		   sprintf(string_to_send, "%hu\r\n", actuality);
-		   SerialOutputString(string_to_send, &USART1_PORT);
-		   if(actuality >= 30 && actuality <= 50)
-		   {
-			   sprintf(string_to_send, "A\r\n");
-			   SerialOutputString(string_to_send, &USART1_PORT);
-			   flag=1;
-
-		   }
-		   else if(actuality < 30)
-		   {
-			   sprintf(string_to_send, "B\r\n");
-			   SerialOutputString(string_to_send, &USART1_PORT);
-		   }
-		   else if(actuality > 50)
-		   {
-			   sprintf(string_to_send, "C\r\n");
-			   SerialOutputString(string_to_send, &USART1_PORT);
-		   }
-		   count=0;
-		   actuality=0;
-		   distance=0;
-	   }
-	   count++;
-   }
-
-  //Stage 2: LED
-  Stage2();
-
-  //Stage 3: PTU
-  while (1)
-    {
-
-    }
-  /* USER CODE END 3 */
 }
-
 /**
   * @brief System Clock Configuration
   * @retval None
@@ -322,9 +330,11 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB|RCC_PERIPHCLK_I2C1;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB|RCC_PERIPHCLK_I2C1
+                              |RCC_PERIPHCLK_TIM1;
   PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_HSI;
   PeriphClkInit.USBClockSelection = RCC_USBCLKSOURCE_PLL;
+  PeriphClkInit.Tim1ClockSelection = RCC_TIM1CLK_HCLK;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();
@@ -420,6 +430,119 @@ static void MX_SPI1_Init(void)
 }
 
 /**
+  * @brief TIM1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM1_Init(void)
+{
+
+  /* USER CODE BEGIN TIM1_Init 0 */
+
+  /* USER CODE END TIM1_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_IC_InitTypeDef sConfigIC = {0};
+
+  /* USER CODE BEGIN TIM1_Init 1 */
+
+  /* USER CODE END TIM1_Init 1 */
+  htim1.Instance = TIM1;
+  htim1.Init.Prescaler = 47;
+  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim1.Init.Period = 65535;
+  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim1.Init.RepetitionCounter = 0;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_IC_Init(&htim1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_BOTHEDGE;
+  sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+  sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+  sConfigIC.ICFilter = 0;
+  if (HAL_TIM_IC_ConfigChannel(&htim1, &sConfigIC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM1_Init 2 */
+
+  /* USER CODE END TIM1_Init 2 */
+
+}
+
+/**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 47;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 20000;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 2000;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+  HAL_TIM_MspPostInit(&htim2);
+
+}
+
+/**
   * @brief USB Initialization Function
   * @param None
   * @retval None
@@ -458,8 +581,6 @@ static void MX_USB_PCD_Init(void)
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOE_CLK_ENABLE();
@@ -473,6 +594,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOE, CS_I2C_SPI_Pin|LD4_Pin|LD3_Pin|LD5_Pin
                           |LD7_Pin|LD9_Pin|LD10_Pin|LD8_Pin
                           |LD6_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOD, Ardu_LED1_Pin|Ardu_LED2_Pin|Ardu_LED3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : DRDY_Pin MEMS_INT3_Pin MEMS_INT4_Pin MEMS_INT1_Pin
                            MEMS_INT2_Pin */
@@ -499,16 +623,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PD5 PD6 */
-  GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_6;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  /*Configure GPIO pins : Ardu_LED1_Pin Ardu_LED2_Pin Ardu_LED3_Pin */
+  GPIO_InitStruct.Pin = Ardu_LED1_Pin|Ardu_LED2_Pin|Ardu_LED3_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-/* USER CODE BEGIN MX_GPIO_Init_2 */
-/* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
@@ -522,11 +643,11 @@ static void MX_GPIO_Init(void)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+	/* User can add his own implementation to report the HAL error return state */
+	__disable_irq();
+	while (1)
+	{
+	}
   /* USER CODE END Error_Handler_Debug */
 }
 
@@ -541,7 +662,7 @@ void Error_Handler(void)
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
+	/* User can add his own implementation to report the file name and line number,
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }
