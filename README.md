@@ -28,7 +28,7 @@ Arduino connects a 1.3-inch OLED screen to display the detection distance type (
 ### High level explanation
 ![image](https://github.com/jtho4403/Escape-Room/blob/main/image/Logic%20diagram%20of%20laser%20detection%20LIDAR.png)  
 ### Testing
-Connect all necessary equipment according to requirements and continuously change the distance between obstacles and LiDAR equipment for testing. When the distance is greater than 55, the OLED display screen displays "Too far". When the distance is less than 25, the OLED display screen displays "Too far". When the distance is within the range of 30 and 50, the OLED display screen displays "Ok"
+Connect all necessary equipment according to requirements and continuously change the distance between obstacles and LiDAR equipment for testing. When the distance is greater than 55, the OLED display screen displays "Too far". When the distance is less than 25, the OLED display screen displays "Too colse". When the distance is within the range of 30 and 50, the OLED display screen displays "Ok"
 
 
 ## Stage 2 - Repeat after me
