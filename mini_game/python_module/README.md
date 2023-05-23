@@ -8,3 +8,6 @@ port = serial.Serial('COM6', 115200)
 ```
 with the appropriate port name that corresponds to the serial connection between the microcontroller and your computer (can be viwed in Device Manager).
 The python script uses relative paths to run the game, therefore the location doesn't matter as long as current relativity is maintained.
+
+Issues were found during integration of this module along with the others due to taking up terminal priority, which is essential to other modules, therefore, only 
+final_build.py along with assets are required to be present locally. This file has be run in simultaneously with the STM32 code files. 
