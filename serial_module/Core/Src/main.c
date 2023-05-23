@@ -119,12 +119,14 @@ int main(void)
   enable_clocks();
   initialise_board();
 
+  //code for stage 4
   uint8_t buffer[64] = "RUN_PYTHON\r\n";
   SerialInitialise(BAUD_115200, &USART1_PORT);
   SerialOutputString(buffer, &USART1_PORT);
 
-
   Stage2();
+
+
 
 
 

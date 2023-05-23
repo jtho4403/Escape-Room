@@ -29,23 +29,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  12 .ARM.attributes 00000030  00000000  00000000  00020068  2**0
                   CONTENTS, READONLY
- 13 .debug_info   0000ec84  00000000  00000000  00020098  2**0
+ 13 .debug_info   0000ec13  00000000  00000000  00020098  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_abbrev 0000231b  00000000  00000000  0002ed1c  2**0
+ 14 .debug_abbrev 000022ee  00000000  00000000  0002ecab  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_aranges 00000be0  00000000  00000000  00031038  2**3
+ 15 .debug_aranges 00000bd8  00000000  00000000  00030fa0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_ranges 00000af0  00000000  00000000  00031c18  2**3
+ 16 .debug_ranges 00000ae8  00000000  00000000  00031b78  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_macro  0002ffee  00000000  00000000  00032708  2**0
+ 17 .debug_macro  0002ffee  00000000  00000000  00032660  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   0000f8b9  00000000  00000000  000626f6  2**0
+ 18 .debug_line   0000f889  00000000  00000000  0006264e  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000ae33b  00000000  00000000  00071faf  2**0
+ 19 .debug_str    000ae316  00000000  00000000  00071ed7  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .comment      00000050  00000000  00000000  001202ea  2**0
+ 20 .comment      00000050  00000000  00000000  001201ed  2**0
                   CONTENTS, READONLY
- 21 .debug_frame  000030d8  00000000  00000000  0012033c  2**2
+ 21 .debug_frame  000030b0  00000000  00000000  00120240  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -178,6 +178,7 @@ int main(void)
   initialise_board();
  800023a:	f7ff ffdb 	bl	80001f4 <initialise_board>
 
+  //code for stage 4
   uint8_t buffer[64] = "RUN_PYTHON\r\n";
  800023e:	4b0c      	ldr	r3, [pc, #48]	; (8000270 <main+0x58>)
  8000240:	463c      	mov	r4, r7
@@ -198,7 +199,6 @@ int main(void)
  8000260:	4904      	ldr	r1, [pc, #16]	; (8000274 <main+0x5c>)
  8000262:	4618      	mov	r0, r3
  8000264:	f000 fca7 	bl	8000bb6 <SerialOutputString>
-
 
   Stage2();
  8000268:	f000 fa4a 	bl	8000700 <Stage2>
@@ -1915,8 +1915,8 @@ void SerialInputSequence(SerialPort *serial_port) {
  8000ca0:	20000444 	.word	0x20000444
 
 08000ca4 <USART1_IRQHandler>:
-	//buffer++;
-	return;
+		rx_index++;
+	}
 }
 
 void USART1_IRQHandler(void)

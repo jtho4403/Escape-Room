@@ -260,19 +260,6 @@ void read_joystick_y(SerialPort *serial_port){
 	}
 }
 
-volatile static uint8_t *buffer;
-static uint8_t *start;
-static SerialPort *Saved_UART;
-
-void setup_transmission(volatile uint8_t* string, SerialPort *serial_port){
-	Saved_UART = serial_port;
-	buffer = string;
-	*(Saved_UART->ControlRegister1) |= USART_CR1_TXEIE;
-	*(Saved_UART->DataOutputRegister) = '\0';
-	//buffer++;
-	return;
-}
-
 void USART1_IRQHandler(void)
 {
 	TIM3->CR1 &= ~TIM_CR1_CEN; // Disable the timer
