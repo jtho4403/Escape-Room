@@ -157,31 +157,29 @@ void Display_LED(){
 
 void init_timer(){
 	__disable_irq();
-    TIM2->PSC = 8000;
-    TIM2->ARR = 100000;
-    TIM2->DIER |= TIM_DIER_UIE;
-    TIM2->CR1 |= TIM_CR1_CEN;
-    NVIC_EnableIRQ(TIM2_IRQn);
+    TIM3->PSC = 8000;
+    TIM3->ARR = 100000;
+    TIM3->DIER |= TIM_DIER_UIE;
+    TIM3->CR1 |= TIM_CR1_CEN;
+    NVIC_EnableIRQ(TIM3_IRQn);
 
     // Re-enable all interrupts (now that we are finished)
     __enable_irq();
 
 }
 
-void TIM2_IRQHandler() {
+void TIM3_IRQHandler() {
 	if (first_timer == 0){
-		 TIM2->SR &= ~TIM_SR_UIF; 	//put down overflow flag
+		 TIM3->SR &= ~TIM_SR_UIF; 	//put down overflow flag
 		 first_timer = 1;
 
 	}
-	else if ((TIM2->SR & TIM_SR_UIF) != 0) {
-        TIM2->SR &= ~TIM_SR_UIF; 	//put down overflow flag
-        TIM2->CR1 &= ~TIM_CR1_CEN;	//disable timer
-        TIM2->CNT &= ~TIM_CNT_CNT_Msk;//reset timer
+	else if ((TIM3->SR & TIM_SR_UIF) != 0) {
+        TIM3->SR &= ~TIM_SR_UIF; 	//put down overflow flag
+        TIM3->CR1 &= ~TIM_CR1_CEN;	//disable timer
+        TIM3->CNT &= ~TIM_CNT_CNT_Msk;//reset timer
 
         // Set the timer expiration flag
         timer_expired = 1;
     }
 }
-
-

@@ -263,8 +263,8 @@ void read_joystick_y(SerialPort *serial_port){
 
 void USART1_IRQHandler(void)
 {
-	 TIM2->SR &= ~TIM_SR_UIF; 	//put down overflow flag
-	 TIM2->CR1 &= ~TIM_CR1_CEN;	//disable timer
+	 TIM3->SR &= ~TIM_SR_UIF; 	//put down overflow flag
+	 TIM3->CR1 &= ~TIM_CR1_CEN;	//disable timer
 
 	SerialInputSequence(&USART1_PORT);
 }

@@ -67,6 +67,9 @@ static void MX_USB_PCD_Init(void);
 // enable the clocks for desired peripherals (GPIOA, C and E)
 void enable_clocks() {
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
+
+	// store a 1 in bit for the TIM2 enable flag
+	RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
 }
 
 
@@ -76,6 +79,8 @@ void initialise_board() {
 	uint16_t *led_output_registers = ((uint16_t *)&(GPIOE->MODER)) + 1;
 	*led_output_registers = 0x5555;
 }
+
+
 /* USER CODE END 0 */
 
 /**

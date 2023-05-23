@@ -76,6 +76,9 @@ static void MX_TIM1_Init(void);
 // enable the clocks for desired peripherals (GPIOA, C and E)
 void enable_clocks() {
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
+
+	// store a 1 in bit for the TIM3 enable flag
+	RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
 }
 
 
