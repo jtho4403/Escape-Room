@@ -6,4 +6,5 @@ serial.c:171:6:SerialOutputString	3
 serial.c:186:6:SerialInputSequence	4
 serial.c:223:6:read_joystick_x	3
 serial.c:243:6:read_joystick_y	3
-serial.c:263:6:USART1_IRQHandler	1
+serial.c:267:6:setup_transmission	1
+serial.c:276:6:USART1_IRQHandler	1

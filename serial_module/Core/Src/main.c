@@ -119,13 +119,15 @@ int main(void)
   enable_clocks();
   initialise_board();
 
+  uint8_t buffer[64] = "RUN_PYTHON\r\n";
+  SerialInitialise(BAUD_115200, &USART1_PORT);
+  SerialOutputString(buffer, &USART1_PORT);
 
-
-  SerialInitialise(BAUD_115200, &USART2_PORT);
-  uint8_t message[32] = "Test\n";
-  SerialOutputString(message, &USART2_PORT);
 
   Stage2();
+
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */

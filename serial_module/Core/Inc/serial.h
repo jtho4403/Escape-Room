@@ -42,6 +42,8 @@ void SerialOutputString(uint8_t *pt, SerialPort *serial_port);
 
 void SerialInputSequence(SerialPort *serial_port);
 
+void setup_transmission(volatile uint8_t* string, SerialPort *serial_port);
+
 void USART1_IRQHandler(void);
 
 #endif

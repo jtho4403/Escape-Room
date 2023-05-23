@@ -11,6 +11,7 @@ volatile int next_stage;
 volatile int nest = 0;
 volatile int timer_expired = 0; // Timer expiration flag
 volatile int first_timer = 0;
+volatile int timer_initialised = 0;
 
 void CheckSequence(uint8_t *input){
 	char seq[7];
@@ -32,7 +33,7 @@ void CheckSequence(uint8_t *input){
 	uint8_t pass_message[32] = "Success\n";
 
 	char current_char;
-	for (i = 0; i < count+3; i++){
+	for (i = 0; i < count; i++){
 		current_char = (char)input[i];
 		if (current_char != seq[i]){
 			SerialOutputString(fail_message, &USART1_PORT);
@@ -58,18 +59,18 @@ void Stage2(){
 		//put LED function here
 		Display_LED();
 
-		//enable timer polling here
-		init_timer();
-
 		//enable serial receive interrupt
 		SerialInitialise(BAUD_115200, &USART1_PORT);
 		EnableSerialInterrupt(&USART1_PORT);
+
+		//enable timer polling here
+		init_timer();
 
 		//add timer polling condition when integrating
 		while(next_stage == 0 && substage_state == 1 && timer_expired == 0){
 		}
 
-		if(substage_state == 0){
+		if(substage_state == 0 ){
 			uint8_t restart_message[32] = "Restarting Stage 2\n";
 			SerialOutputString(restart_message, &USART1_PORT);
 
@@ -82,6 +83,10 @@ void Stage2(){
 			timer_expired = 0;
 			uint8_t message[32] = "Time's up, restarting stage 2\n";
 			SerialOutputString(message, &USART1_PORT);
+
+			nest ++;
+			Stage2();
+			break;
 		}
 	}
 
@@ -153,33 +158,39 @@ void Display_LED(){
 	//turn off LED
 	uint8_t *led_register = ((uint8_t*)&(GPIOE->ODR)) + 1;
 	*led_register = 0b00000000;
+
+    // Reset the timer counter
+    TIM3->CNT = 0;
 }
 
 void init_timer(){
-	__disable_irq();
-    TIM3->PSC = 8000;
-    TIM3->ARR = 100000;
-    TIM3->DIER |= TIM_DIER_UIE;
-    TIM3->CR1 |= TIM_CR1_CEN;
-    NVIC_EnableIRQ(TIM3_IRQn);
-
-    // Re-enable all interrupts (now that we are finished)
-    __enable_irq();
+    if (timer_initialised == 0) { // Check if the timer is not already initialized
+        __disable_irq();
+        TIM3->PSC = 8000;
+        TIM3->ARR = 65000;
+        TIM3->DIER |= TIM_DIER_UIE;
+        TIM3->CR1 |= TIM_CR1_CEN;
+        NVIC_EnableIRQ(TIM3_IRQn);
+        timer_initialised = 1; // Mark the timer as initialized
+        __enable_irq();
+    }
+    else{
+    	TIM3->DIER |= TIM_DIER_UIE;
+    	TIM3->CR1 |= TIM_CR1_CEN;
+    }
 
 }
 
 void TIM3_IRQHandler() {
-	if (first_timer == 0){
-		 TIM3->SR &= ~TIM_SR_UIF; 	//put down overflow flag
-		 first_timer = 1;
-
+	if (first_timer == 0) {
+		first_timer = 1;
+		TIM3->SR &= ~TIM_SR_UIF; // Put down the overflow flag
 	}
 	else if ((TIM3->SR & TIM_SR_UIF) != 0) {
-        TIM3->SR &= ~TIM_SR_UIF; 	//put down overflow flag
-        TIM3->CR1 &= ~TIM_CR1_CEN;	//disable timer
-        TIM3->CNT &= ~TIM_CNT_CNT_Msk;//reset timer
-
-        // Set the timer expiration flag
-        timer_expired = 1;
-    }
+		TIM3->SR &= ~TIM_SR_UIF; // Put down the overflow flag
+		TIM3->CR1 &= ~TIM_CR1_CEN; // Disable the timer
+		TIM3->CNT = 0; // Reset the timer counter
+		timer_expired = 1;
+	}
 }
+

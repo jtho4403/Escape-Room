@@ -12,6 +12,7 @@ int main() {
 	enable_clocks();
 	SerialInitialise(BAUD_115200, &USART1_PORT, 0x00);
 
+
 	setup_transmission(buffer,  &USART1_PORT);
 
 	while(1){

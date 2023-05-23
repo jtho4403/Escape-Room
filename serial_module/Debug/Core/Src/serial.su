@@ -6,4 +6,5 @@
 ../Core/Src/serial.c:186:6:SerialInputSequence	24	static
 ../Core/Src/serial.c:223:6:read_joystick_x	24	static
 ../Core/Src/serial.c:243:6:read_joystick_y	24	static
-../Core/Src/serial.c:263:6:USART1_IRQHandler	8	static
+../Core/Src/serial.c:267:6:setup_transmission	16	static
+../Core/Src/serial.c:276:6:USART1_IRQHandler	8	static

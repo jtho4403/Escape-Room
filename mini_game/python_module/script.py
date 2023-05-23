@@ -4,7 +4,7 @@ import subprocess
 import os
 
 # configure the serial port parameters
-port = serial.Serial('COM6', 115200)
+port = serial.Serial('/dev/cu.usbmodem113103', 115200)
 
 # use relative file path to locate file
 root_dir = os.path.realpath(os.path.join(os.path.dirname(__file__)))
@@ -27,4 +27,3 @@ def script_thread():
 
 # start the script thread
 threading.Thread(target=script_thread).start()
-
