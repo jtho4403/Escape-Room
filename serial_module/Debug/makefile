@@ -60,8 +60,8 @@ all: main-build
 main-build: serial_module.elf secondary-outputs
 
 # Tool invocations
-serial_module.elf serial_module.map: $(OBJS) $(USER_OBJS) /Users/jackthompson/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "serial_module.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/jackthompson/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+serial_module.elf serial_module.map: $(OBJS) $(USER_OBJS) /Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "serial_module.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/jiaxuchee/Documents/GitHub/Escape-Room/serial_module/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="serial_module.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

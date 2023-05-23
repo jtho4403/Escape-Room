@@ -262,7 +262,8 @@ void read_joystick_y(SerialPort *serial_port){
 
 void USART1_IRQHandler(void)
 {
-	// disable timer
+	TIM3->CR1 &= ~TIM_CR1_CEN; // Disable the timer
+	TIM3->CNT = 0; // Reset the timer counter
 	SerialInputSequence(&USART1_PORT);
 }
 
