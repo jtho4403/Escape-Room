@@ -158,7 +158,7 @@ void Display_LED(){
 void init_timer(){
 	__disable_irq();
     TIM3->PSC = 8000;
-    TIM3->ARR = 100000;
+    TIM3->ARR = 65000;
     TIM3->DIER |= TIM_DIER_UIE;
     TIM3->CR1 |= TIM_CR1_CEN;
     NVIC_EnableIRQ(TIM3_IRQn);
