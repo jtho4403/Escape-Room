@@ -11,6 +11,9 @@ volatile int next_stage;
 volatile int nest = 0;
 volatile int timer_expired = 0; // Timer expiration flag
 volatile int first_timer = 0;
+volatile int second_timer = 0;
+volatile int third_timer = 0;
+volatile int fourth_timer = 0;
 
 void CheckSequence(uint8_t *input){
 	char seq[7];
@@ -177,6 +180,19 @@ void TIM3_IRQHandler() {
 		 first_timer = 1;
 
 	}
+	else if (second_timer == 0){
+		 TIM3->SR &= ~TIM_SR_UIF; 	//put down overflow flag
+		 second_timer = 1;
+	}
+	else if (third_timer == 0){
+		 TIM3->SR &= ~TIM_SR_UIF; 	//put down overflow flag
+		 third_timer = 1;
+	}
+	else if (fourth_timer == 0){
+		 TIM3->SR &= ~TIM_SR_UIF; 	//put down overflow flag
+		 fourth_timer = 1;
+	}
+
 	else if ((TIM3->SR & TIM_SR_UIF) != 0) {
 //        TIM3->SR &= ~TIM_SR_UIF; 	//put down overflow flag
 //        TIM3->CR1 &= ~TIM_CR1_CEN;	//disable timer
