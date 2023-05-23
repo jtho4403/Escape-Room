@@ -153,6 +153,9 @@ void Display_LED(){
 	//turn off LED
 	uint8_t *led_register = ((uint8_t*)&(GPIOE->ODR)) + 1;
 	*led_register = 0b00000000;
+
+    // Reset the timer counter
+    TIM3->CNT = 0;
 }
 
 void init_timer(){
@@ -175,13 +178,22 @@ void TIM3_IRQHandler() {
 
 	}
 	else if ((TIM3->SR & TIM_SR_UIF) != 0) {
-        TIM3->SR &= ~TIM_SR_UIF; 	//put down overflow flag
-        TIM3->CR1 &= ~TIM_CR1_CEN;	//disable timer
-        TIM3->CNT &= ~TIM_CNT_CNT_Msk;//reset timer
+//        TIM3->SR &= ~TIM_SR_UIF; 	//put down overflow flag
+//        TIM3->CR1 &= ~TIM_CR1_CEN;	//disable timer
+////        TIM3->CNT &= ~TIM_CNT_CNT_Msk;//reset timer
+//        TIM3->CNT = 0;             // Reset the timer counter
+//
+//        // Set the timer expiration flag
+//        timer_expired = 1;
+
+        TIM3->SR &= ~TIM_SR_UIF; // Put down the overflow flag
+        TIM3->CR1 &= ~TIM_CR1_CEN; // Disable the timer
+        TIM3->CNT = 0; // Reset the timer counter
 
         // Set the timer expiration flag
         timer_expired = 1;
     }
+
 }
 
 

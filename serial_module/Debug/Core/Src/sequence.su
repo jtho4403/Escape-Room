@@ -3,5 +3,5 @@
 ../Core/Src/sequence.c:51:6:Stage2	48	static
 ../Core/Src/sequence.c:98:6:Current_LED	24	static
 ../Core/Src/sequence.c:126:6:Display_LED	32	static
-../Core/Src/sequence.c:158:6:init_timer	8	static,ignoring_inline_asm
-../Core/Src/sequence.c:171:6:TIM3_IRQHandler	4	static
+../Core/Src/sequence.c:161:6:init_timer	8	static,ignoring_inline_asm
+../Core/Src/sequence.c:174:6:TIM3_IRQHandler	4	static
