@@ -1,7 +1,7 @@
 ../Drivers/CMSIS/Include/core_cm4.h:1688:22:__NVIC_EnableIRQ	16	static
 ../Core/Src/sequence.c:18:6:CheckSequence	96	static
 ../Core/Src/sequence.c:54:6:Stage2	48	static
-../Core/Src/sequence.c:101:6:Current_LED	24	static
-../Core/Src/sequence.c:129:6:Display_LED	32	static
-../Core/Src/sequence.c:164:6:init_timer	8	static,ignoring_inline_asm
-../Core/Src/sequence.c:177:6:TIM3_IRQHandler	4	static
+../Core/Src/sequence.c:102:6:Current_LED	24	static
+../Core/Src/sequence.c:130:6:Display_LED	32	static
+../Core/Src/sequence.c:165:6:init_timer	8	static,ignoring_inline_asm
+../Core/Src/sequence.c:181:6:TIM3_IRQHandler	4	static
