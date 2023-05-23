@@ -1,12 +1,7 @@
-
-
 import serial
-import subprocess
-import sys
 
 # configure the serial port parameters
-port = serial.Serial('/dev/cu.usbmodem113103', 115200)
-# /dev/cu.usbmodem113103
+port = serial.Serial('COM6', 115200) # /dev/cu.usbmodem113103
 
 def run_game():
 
@@ -19,12 +14,10 @@ def run_game():
     # configure game window
     WIN_WIDTH, WIN_HEIGHT = 900, 500
     FPS = 60
-    CODE_LOCK = "000"
     window = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
-    bullets_fired_font = pygame.font.SysFont('calibri', 40)
+    bullets_fired_font = pygame.font.SysFont('calibri', 35)
     instructions_font = pygame.font.SysFont('calibri', 20)
     bullets_missed_font = pygame.font.SysFont('calibri', 60)
-    code_lock_font = pygame.font.SysFont('calibri', 30)
     pygame.display.set_caption("Balloon shooting challenge")
 
     # other definitions
@@ -43,6 +36,7 @@ def run_game():
     cannon_img = pygame.transform.scale(pygame.image.load(os.path.join(root_dir, 'Assets', 'cannon.png')), (CANNON_WIDTH, CANNON_HEIGHT))
     background_img = pygame.transform.scale(pygame.image.load(os.path.join(root_dir, 'Assets', 'background.jpg')), (WIN_WIDTH, WIN_HEIGHT))
     explosion_img = pygame.transform.scale(pygame.image.load(os.path.join(root_dir, 'Assets', 'explosion.png')), (BALLOON_WIDTH, BALLOON_HEIGHT))
+    next_img = pygame.transform.scale(pygame.image.load(os.path.join(root_dir, 'Assets', 'stm32.png')), (WIN_WIDTH, WIN_HEIGHT))
     hit_sound = pygame.mixer.Sound(os.path.join(root_dir, 'Assets', 'Grenade.mp3'))
     fire_sound = pygame.mixer.Sound(os.path.join(root_dir, 'Assets', 'Silencer.mp3'))
 
@@ -89,19 +83,16 @@ def run_game():
             balloon_direction *= -1
         balloon.y += balloon_direction
 
-    # function to play during end of game
-    def end_game(missed_shots, balloon):
-        missed_text = bullets_missed_font.render("Missed shots: " + str(missed_shots), 1, BLACK)
-        window.blit(missed_text, (WIN_WIDTH//2 - missed_text.get_width()//2, WIN_HEIGHT//2 - missed_text.get_height()//2))
-        code_text = code_lock_font.render(CODE_LOCK, 1, BLACK)
-        # window.blit(code_text, (balloon.x//2 - code_text.get_width()//2, balloon.y//2 - code_text.get_height()//2))
-        window.blit(code_text, (balloon.x + 2, balloon.y + 8))
+    # function to play during end of play
+    def end_game(missed_shots):
+        window.blit(next_img, (0, 0))
+        missed_text = bullets_missed_font.render("Shots Missed: " + str(missed_shots), 1, BLACK)
+        window.blit(missed_text, (90, 100))
         pygame.display.update()
-        pygame.time.wait(5*1000)
+        pygame.time.wait(15*1000)
         pygame.quit()
 
     # main loop
-
     balloon = pygame.Rect(100, WIN_HEIGHT//2, BALLOON_WIDTH, BALLOON_HEIGHT)
     cannon = pygame.Rect(WIN_WIDTH - 100, WIN_HEIGHT - 100, CANNON_WIDTH, CANNON_HEIGHT)
     bullets = []
@@ -136,7 +127,7 @@ def run_game():
                 hit_sound.play()
                 window.blit(explosion_img, (balloon.x, balloon.y)) # render explosion at event location
                 run = False
-                end_game(len(missed_shots), balloon)
+                end_game(len(missed_shots))
 
         key_pressed = pygame.key.get_pressed()
         cannon_movement(key_pressed, cannon)
@@ -145,7 +136,6 @@ def run_game():
         draw_window(cannon, balloon, bullets, bullets_fired)
 
         dir_counter += 1
-
 
 
 # Main loop for terminal functionality
@@ -162,9 +152,9 @@ def main():
         # Print received data as terminal output
         print(data)
 
-        # Get user input from the terminal and send it to the microcontroller
         user_input = input()
         port.write(user_input.encode() + b'\n')
+        port.flush()
 
 
 if __name__ == "__main__":
