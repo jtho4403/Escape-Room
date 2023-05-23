@@ -7,9 +7,12 @@ pygame.init()
 # configure game window
 WIN_WIDTH, WIN_HEIGHT = 900, 500
 FPS = 60
+CODE_LOCK = "000"
 window = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 bullets_fired_font = pygame.font.SysFont('calibri', 40)
+instructions_font = pygame.font.SysFont('calibri', 20)
 bullets_missed_font = pygame.font.SysFont('calibri', 60)
+code_lock_font = pygame.font.SysFont('calibri', 30)
 pygame.display.set_caption("Balloon shooting challenge")
 
 # other definitions
@@ -26,6 +29,8 @@ BALLOON_HIT = pygame.USEREVENT + 1
 root_dir = os.path.realpath(os.path.join(os.path.dirname(__file__)))
 balloon_img = pygame.transform.scale(pygame.image.load(os.path.join(root_dir, 'Assets', 'balloon.png')), (BALLOON_WIDTH, BALLOON_HEIGHT))
 cannon_img = pygame.transform.scale(pygame.image.load(os.path.join(root_dir, 'Assets', 'cannon.png')), (CANNON_WIDTH, CANNON_HEIGHT))
+background_img = pygame.transform.scale(pygame.image.load(os.path.join(root_dir, 'Assets', 'background.jpg')), (WIN_WIDTH, WIN_HEIGHT))
+explosion_img = pygame.transform.scale(pygame.image.load(os.path.join(root_dir, 'Assets', 'explosion.png')), (BALLOON_WIDTH, BALLOON_HEIGHT))
 hit_sound = pygame.mixer.Sound(os.path.join(root_dir, 'Assets', 'Grenade.mp3'))
 fire_sound = pygame.mixer.Sound(os.path.join(root_dir, 'Assets', 'Silencer.mp3'))
 
@@ -34,10 +39,13 @@ def draw_window(cannon, balloon, bullets, bullets_fired):
     
     # static rendering
     window.fill(WHITE)
+    window.blit(background_img, (0, 0))
     window.blit(cannon_img, (cannon.x, cannon.y))
     window.blit(balloon_img, (balloon.x, balloon.y))
     bullets_fired_text = bullets_fired_font.render("Bullets fired: " + str(bullets_fired), 1, BLACK)
     window.blit(bullets_fired_text, (WIN_WIDTH//2 - bullets_fired_text.get_width()//2, 10))
+    instructions_text = instructions_font.render("Space - Fire, Arrows - Move", 1, BLACK)
+    window.blit(instructions_text, (WIN_WIDTH//2 - instructions_text.get_width()//2, 50))
 
     # dynamic rendering
     for bullet in bullets:
@@ -70,18 +78,21 @@ def balloon_movement(balloon, balloon_direction):
     balloon.y += balloon_direction
 
 # function to play during end of game
-def end_game(missed_shots):
-    end_text = bullets_missed_font.render("Missed shots: " + str(missed_shots), 1, BLACK)
-    window.blit(end_text, (WIN_WIDTH//2 - end_text.get_width()//2, WIN_HEIGHT//2 - end_text.get_height()//2))
+def end_game(missed_shots, balloon):
+    missed_text = bullets_missed_font.render("Missed shots: " + str(missed_shots), 1, BLACK)
+    window.blit(missed_text, (WIN_WIDTH//2 - missed_text.get_width()//2, WIN_HEIGHT//2 - missed_text.get_height()//2))
+    code_text = code_lock_font.render(CODE_LOCK, 1, BLACK)
+    # window.blit(code_text, (balloon.x//2 - code_text.get_width()//2, balloon.y//2 - code_text.get_height()//2))
+    window.blit(code_text, (balloon.x + 2, balloon.y + 8))
     pygame.display.update()
-    pygame.time.wait(3*1000)
+    pygame.time.wait(5*1000)
     pygame.quit()
 
 # main loop
 def main():
 
     balloon = pygame.Rect(100, WIN_HEIGHT//2, BALLOON_WIDTH, BALLOON_HEIGHT)
-    cannon = pygame.Rect(WIN_WIDTH - 100, WIN_HEIGHT-100, CANNON_WIDTH, CANNON_HEIGHT)
+    cannon = pygame.Rect(WIN_WIDTH - 100, WIN_HEIGHT - 100, CANNON_WIDTH, CANNON_HEIGHT)
     bullets = []
     missed_shots = []
     bullets_fired, dir_counter = 0, 0
@@ -92,7 +103,7 @@ def main():
     while run:
 
         # determine balloon's new direction
-        if dir_counter % 20 == 0: 
+        if dir_counter % 20 == 0: # limit abnormal movement
             balloon_direction = random.randint(-SPEED, SPEED)
 
         clock.tick(FPS) # limit frames for accuracy
@@ -112,8 +123,9 @@ def main():
             
             if event.type == BALLOON_HIT:
                 hit_sound.play()
+                window.blit(explosion_img, (balloon.x, balloon.y)) # render explosion at event location
                 run = False
-                end_game(len(missed_shots))
+                end_game(len(missed_shots), balloon)
 
         key_pressed = pygame.key.get_pressed()
         cannon_movement(key_pressed, cannon)
