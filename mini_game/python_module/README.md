@@ -1,6 +1,6 @@
 ## IMPORTANT INFORMATION
 
-Python libraries are essential for the working of this module. Install the PySerial library by running 'pip install pyserial' in your terminal. 
+Python libraries are essential for the working of this module. Install the PySerial library by running 'pip install pyserial' (Mac: pip3 install python) and 'pip install pygame' via terminal. 
 Make sure to replace 'COM6' in the Python script (line 7 in script.py):
 ```c
 # configure the serial port parameters
