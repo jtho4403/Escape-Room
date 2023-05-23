@@ -6,6 +6,7 @@ ACCELEROMETER_CFG_STRUCT accelerometer_cfg = {ADXL345_POWER_CTL, 0x08, ADXL345_D
 
 void initialise_ptu_i2c(I2C_HandleTypeDef *i2c) {
 
+
 	HAL_StatusTypeDef return_value = 0x00;
 
 	uint8_t reg_1 = 0b00001111;

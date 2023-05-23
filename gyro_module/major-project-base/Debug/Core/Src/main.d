@@ -32,8 +32,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_spi_ex.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h \
- ../Core/Inc/ptu_definitions.h ../Core/Inc/ptu_i2c.h ../Core/Inc/serial.h \
- ../Core/Inc/timer.h
+ ../Core/Inc/lsm303dlhc_module.h ../Core/Inc/ptu_definitions.h \
+ ../Core/Inc/ptu_i2c.h ../Core/Inc/serial.h ../Core/Inc/timer.h \
+ ../Core/Inc/lsm6dsl_module.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h:
 ../Core/Inc/stm32f3xx_hal_conf.h:
@@ -68,7 +69,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_spi_ex.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h:
+../Core/Inc/lsm303dlhc_module.h:
 ../Core/Inc/ptu_definitions.h:
 ../Core/Inc/ptu_i2c.h:
 ../Core/Inc/serial.h:
 ../Core/Inc/timer.h:
+../Core/Inc/lsm6dsl_module.h:

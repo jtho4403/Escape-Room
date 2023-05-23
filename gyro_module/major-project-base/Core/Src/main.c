@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "lsm303dlhc_module.h"
 #include "ptu_definitions.h"
 #include "ptu_i2c.h"
 #include "serial.h"
@@ -29,6 +29,7 @@
 #include "math.h"
 
 #include "timer.h"
+#include "lsm6dsl_module.h"
 
 /* USER CODE END Includes */
 
@@ -181,7 +182,7 @@ int main(void)
   MX_I2C1_Init();
   MX_SPI1_Init();
   MX_USB_PCD_Init();
-  //MX_TIM2_Init();
+  MX_TIM2_Init();
   MX_TIM1_Init();
   MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
@@ -208,6 +209,9 @@ int main(void)
 	// Stews code to initalise HAL_TYPE_STRUCT used for I2C communications
 	// he is exrecting a certain stream of infromation and sets it up like so
 	initialise_ptu_i2c(&hi2c2);
+
+	lsm303dlhc_initialise(&hi2c1);
+
 
   /* USER CODE END 2 */
 
@@ -437,7 +441,7 @@ int main(void)
 		// Investigating magnetic rates
 		float mag_angle = atan(y_mag/x_mag);
 
-		sprintf(string_to_send,"%hd,%hd,%hd,%\r\n",x_mag, z_mag, y_mag);
+		//sprintf(string_to_send,"%hd,%hd,%hd,%\r\n",x_mag, z_mag, y_mag);
 
 
 		// Global roll pitch can't get yaw
@@ -452,8 +456,8 @@ int main(void)
 		float phi_dot = p_rps + tanf(global_acc_pitch)*(sinf(global_acc_roll)*q_rps + cosf(global_acc_roll)*r_rps);
 		float theta_dot = cosf(global_acc_roll)*q_rps - sinf(global_acc_roll)*r_rps;
 
-		global_roll = global_roll + 0.1*phi_dot;
-		global_pitch = global_pitch + 0.1*theta_dot;
+		global_roll = 0.95*(global_roll + 0.1*phi_dot) + 0.05*global_acc_roll;
+		global_pitch = 0.95*(global_pitch + 0.1*theta_dot) + 0.05*global_acc_pitch;
 
 		// try this tomorrow!
 		// idea to get si
@@ -463,8 +467,25 @@ int main(void)
 
 		//sprintf(string_to_send, "%lf,%lf,\r\n", global_acc_roll, global_acc_pitch);
 		//sprintf(string_to_send, "%lf,%lf,%lf,%lf,%lf,%lf\r\n", global_acc_roll, global_acc_pitch, phi_dot, theta_dot, global_roll, global_pitch);
-		sprintf(string_to_send, "%lf,%lf,%lf,%lf,%lf\r\n", global_acc_roll, global_acc_pitch, global_roll, global_pitch, global_yaw);
+		//sprintf(string_to_send, "%lf,%lf,%lf,%lf,%lf\r\n", global_acc_roll, global_acc_pitch, global_roll, global_pitch, global_yaw);
 		// Idea to get XYZ using magnetometer
+
+		// getting the acc and gyro to work
+		int16_t accelData[3];
+		int16_t magData[3];
+		uint8_t acc_data[6];
+		//lsm6dsl_read_accel_data(accelData, &hi2c1);
+		//lsm6dsl_read_gyro_data(gyroData, &hi2c1);
+		lsm303dlhc_read_acc(accelData,&hi2c1);
+		//lsm303dlhc_read_mag(magData,&hi2c1);
+
+		//HAL_I2C_Mem_Read(&hi2c1, LSM303DLHC_I2C_ADDRESS, 0x28, 1, acc_data, 6, HAL_MAX_DELAY);
+		//HAL_I2C_Master_Receive(&hi2c1, LSM303DLHC_I2C_ADDRESS, accelData, 6, 1000);
+		accelData[0] = (int16_t)(acc_data[0] | (acc_data[1] << 8));
+		accelData[1] = (int16_t)(acc_data[2] | (acc_data[3] << 8));
+		accelData[2] = (int16_t)(acc_data[4] | (acc_data[5] << 8));
+		sprintf(string_to_send, "%hd,%hd,%hd\r\n", accelData[0], accelData[1],accelData[2]);
+
 
 
     /* USER CODE END WHILE */

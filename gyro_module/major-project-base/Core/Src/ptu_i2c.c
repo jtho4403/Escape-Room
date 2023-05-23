@@ -1,5 +1,4 @@
 #include "ptu_i2c.h"
-
 #include "ptu_definitions.h"
 
 ACCELEROMETER_CFG_STRUCT accelerometer_cfg = {ADXL345_POWER_CTL, 0x08, ADXL345_DATA_FORMAT, 0x08};
@@ -73,19 +72,10 @@ void initialise_ptu_i2c(I2C_HandleTypeDef *i2c) {
 
 
 
-
-
-
-
-
 	  //trying to read from the same registers where we wrote in
 	  HAL_I2C_Mem_Read(i2c,gyro_rd,0x20,1,&reg1a,1,10);
 	  HAL_I2C_Mem_Read(i2c,gyro_rd,0x21,1,&reg2a,1,10);
 	  ////////return_value = HAL_I2C_Mem_Read(&hi2c1,gyro_rd,0x23,1,&reg4a,1,10);
-
-
-
-
 
 
 	  /* Configure the low level interface ---------------------------------------*/

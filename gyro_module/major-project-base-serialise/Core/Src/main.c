@@ -236,26 +236,45 @@ int main(void)
 	while (1)
 	{
 
-		if (PWM_direction_clockwise == 1) {
-			vertical_PWM += 3;
-			horizontal_PWM += 3;
-		}
-		else {
-			vertical_PWM -= 3;
+	    // Read joystick X-axis value
+	    read_joystick_x(&USART3_PORT);
+	    int joystick_x = atoi(rx_buffer);
+
+	    // Read joystick Y-axis value
+	    read_joystick_y(&USART3_PORT);
+	    int joystick_y = atoi(rx_buffer);
+
+	    // Update PWM direction based on joystick values
+	    if (joystick_x > 524) {
+	        horizontal_PWM += 3;
+	        if (horizontal_PWM > 1900) {
+	        	horizontal_PWM = 1900;
+	        }
+	    } else {
 			horizontal_PWM -= 3;
-		}
+			if (horizontal_PWM < 1200) {
+				horizontal_PWM = 1200;
+			}
+	    }
 
-		if (vertical_PWM > 1900) {
-			vertical_PWM = 1900;
-			PWM_direction_clockwise = 0;
-		}
-		if (vertical_PWM < 1200) {
-			vertical_PWM = 1200;
-			PWM_direction_clockwise = 1;
-		}
+	    if (joystick_y > 524) {
+	        vertical_PWM += 3;
+			if (vertical_PWM > 1900) {
+				vertical_PWM = 1900;
+			}
+	    } else {
+			vertical_PWM -= 3;
+			if (vertical_PWM < 1200) {
+				vertical_PWM = 1200;
+			}
+	    }
 
-		TIM2->CCR1 = vertical_PWM;
-		TIM2->CCR2 = horizontal_PWM;
+	    // Update PWM outputs
+	    TIM2->CCR1 = vertical_PWM;
+	    TIM2->CCR2 = horizontal_PWM;
+
+	    HAL_Delay(100);
+	}
 
 		uint8_t xMSB = 0x00;
 		HAL_I2C_Mem_Read(&hi2c1,gyro_rd, 0x29, 1, &xMSB, 1, 10);

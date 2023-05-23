@@ -1,6 +1,12 @@
 #include "serial.h"
-
 #include "stm32f303xc.h"
+
+#define BUFFER_SIZE 64                   // Define buffer size
+#define CARRIAGE_RETURN '\r'			 // new line for Mac OS
+#define LINE_FEED '\n'					 // new line for UNIX
+
+volatile uint8_t rx_buffer[BUFFER_SIZE]; // Buffer for receiving data
+volatile uint8_t rx_index = 0;           // Buffer index for receiving data
 
 // NOTE: these are stored as pointers because they
 //       are const values so we can't store them directly
@@ -8,8 +14,8 @@
 struct _SerialPort {
 	volatile uint32_t *BaudRate;
 	volatile uint32_t *ControlRegister1;
-	volatile uint32_t *FlagClearRegister;
 	volatile uint32_t *StatusRegister;
+	volatile uint32_t *RequestRegister;
 	volatile uint16_t *DataOutputRegister;
 	volatile uint16_t *DataInputRegister;
 	volatile uint32_t *TimerEnableRegister;
@@ -40,8 +46,8 @@ enum {
 //   note: the complexity is hidden in the c file
 SerialPort USART1_PORT = {&(USART1->BRR),
 		&(USART1->CR1),
-		&(USART1->ICR),
 		&(USART1->ISR),
+		&(USART1->RQR),
 		&(USART1->TDR),
 		&(USART1->RDR),
 		&(RCC->APB2ENR),
@@ -54,12 +60,29 @@ SerialPort USART1_PORT = {&(USART1->BRR),
 		((uint8_t*)&(GPIOC->AFR[0])) + 2,
 		0x77};
 
+//PC 10 and PC11 for TX and RX
+SerialPort USART3_PORT = {&(USART3->BRR),
+		&(USART3->CR1),
+		&(USART3->ISR),
+		&(USART3->ICR), // Interrupt clear register
+		&(USART3->RQR),
+		&(USART3->TDR),
+		&(USART3->RDR),
+		&(RCC->APB1ENR),
+		RCC_APB1ENR_USART2EN,
+		SERIAL_GPIO_C,
+		&(GPIOC->MODER),
+		0xA00000,
+		&(GPIOC->OSPEEDR),
+		0xF00000,
+		((uint8_t*)&(GPIOC->AFR[1])) + 2,
+		0x77};
+
+
 
 // InitialiseSerial - Initialise the serial port
 // Input: baudRate is from an enumerated set
-void SerialInitialise(uint32_t baudRate, SerialPort *serial_port, void (*completion_function)(uint32_t)) {
-
-	serial_port->completion_function = completion_function;
+void SerialInitialise(uint32_t baudRate, SerialPort *serial_port) {
 
 	// enable clock power, system configuration clock and GPIOC
 	// common to all UARTs
@@ -89,32 +112,34 @@ void SerialInitialise(uint32_t baudRate, SerialPort *serial_port, void (*complet
 
 	// Baud rate calculation from datasheet
 	switch(baudRate){
-	case BAUD_9600:
-		// NEED TO FIX THIS !
-		*baud_rate_config = 0x46;  // 115200 at 8MHz
-		break;
-	case BAUD_19200:
-		// NEED TO FIX THIS !
-		*baud_rate_config = 0x46;  // 115200 at 8MHz
-		break;
-	case BAUD_38400:
-		// NEED TO FIX THIS !
-		*baud_rate_config = 0x46;  // 115200 at 8MHz
-		break;
-	case BAUD_57600:
-		// NEED TO FIX THIS !
-		*baud_rate_config = 0x46;  // 115200 at 8MHz
-		break;
 	case BAUD_115200:
 		*baud_rate_config = 0x46 * 0x06;  // 115200 at 8MHz
 		break;
 	}
 
-
 	// enable serial port for tx and rx
 	*(serial_port->ControlRegister1) |= USART_CR1_TE | USART_CR1_RE | USART_CR1_UE;
 }
 
+void EnableSerialInterrupt(SerialPort *serial_port) {
+	__disable_irq(); // Disable the interrupts while editing settings.
+
+	*(serial_port->ControlRegister1) |= USART_CR1_RXNEIE;
+
+    // Enable the system configuration controller (SYSCFG in RCC).
+	RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
+
+	// Configure EXTI line for USART1.
+	SYSCFG->EXTICR[1] &= ~SYSCFG_EXTICR2_EXTI5_Msk; // Clear EXTI5, remove previous settings.
+	SYSCFG->EXTICR[1] |= SYSCFG_EXTICR2_EXTI5_PA; // Set EXTI5 bits to PA for  (USART1)
+
+	// Enable EXTI5 interrupt (corresponding to USART1).
+	EXTI->IMR |= EXTI_IMR_MR5; // Enable interrupt on EXTI line 5 (corresponding to PA5/USART1).
+
+    NVIC_EnableIRQ(USART1_IRQn);
+
+    __enable_irq(); // Re-enable all interrupts now that we are finished editing settings.
+}
 
 void SerialOutputChar(uint8_t data, SerialPort *serial_port) {
 	while((*(serial_port->StatusRegister) & USART_ISR_TXE) == 0){
@@ -122,8 +147,6 @@ void SerialOutputChar(uint8_t data, SerialPort *serial_port) {
 
 	*(serial_port->DataOutputRegister) = data;
 }
-
-
 
 void SerialOutputString(uint8_t *pt, SerialPort *serial_port) {
 
@@ -139,95 +162,88 @@ void SerialOutputString(uint8_t *pt, SerialPort *serial_port) {
 }
 
 
-// returns 1 if valid char, 0 if timeout
-uint8_t SerialReceiveChar(SerialPort *serial_port, uint8_t *received_char)
+
+void SerialInputSequence(SerialPort *serial_port) {
+		if (rx_index < 32) {
+			uint8_t rx_data = *(serial_port->DataInputRegister);
+
+			// exit if new line is detected
+			if (rx_data == CARRIAGE_RETURN) {
+				// disable receive interrupt
+				*(serial_port->ControlRegister1) &= ~USART_CR1_RXNEIE;
+
+				CheckSequence(rx_buffer);
+
+				// reset index & buffer
+				rx_index = 0;
+				memset(rx_buffer, 0, sizeof(rx_buffer));
+			}
+			else if (rx_data == LINE_FEED){
+			}
+
+			else{
+				// store byte/ character in string buffer
+				rx_buffer[rx_index]= rx_data;
+				rx_index++;
+			}
+		}
+
+		else{
+			// disable receive interrupt
+			*(serial_port->ControlRegister1) &= ~USART_CR1_RXNEIE;
+
+			CheckSequence(rx_buffer);
+
+			// reset index & buffer
+			rx_index = 0;
+			memset(rx_buffer, 0, sizeof(rx_buffer));
+		}
+}
+
+void read_joystick_x(SerialPort *serial_port){
+	rx_index = 0;
+	memset(rx_buffer, 0, sizeof(rx_buffer));
+
+	uint8_t rx_data ;
+
+	//wait for input in serial
+	while ((*(serial_port->StatusRegister) & USART_ISR_RXNE) == 0){
+		rx_data = *(serial_port->DataInputRegister);
+
+		//terminate when receive \n
+		if (rx_data == LINE_FEED){
+			break;
+		}
+
+		rx_buffer[rx_index]= rx_data;
+		rx_index++;
+	}
+}
+
+void read_joystick_y(SerialPort *serial_port){
+	rx_index = 0;
+	memset(rx_buffer, 0, sizeof(rx_buffer));
+
+	uint8_t rx_data ;
+
+	//wait for input in serial
+	while ((*(serial_port->StatusRegister) & USART_ISR_RXNE) == 0){
+		rx_data = *(serial_port->DataInputRegister);
+
+		//terminate when receive \n
+		if (rx_data == LINE_FEED){
+			break;
+		}
+
+		rx_buffer[rx_index]= rx_data;
+		rx_index++;
+	}
+}
+
+void USART1_IRQHandler(void)
 {
-	uint8_t latest_character = 0;
-
-	uint16_t timeout = 0xffff;
-  while (1) {
-	  timeout--;
-	  if (timeout == 0)
-		  return 0;
-
-	if (*(serial_port->StatusRegister) & USART_ISR_ORE || *(serial_port->StatusRegister) & USART_ISR_FE) {
-		*(serial_port->FlagClearRegister) |= USART_ICR_ORECF | USART_ICR_FECF;
-	}
-
-	if (*(serial_port->StatusRegister) & USART_ISR_RXNE) { // Wait for RXNE flag to be set
-		break;
-	}
-  }
-  *received_char = *(serial_port->DataInputRegister);
-  return 1;
+	// disable timer
+	SerialInputSequence(&USART1_PORT);
 }
 
-
-void SerialOutputBuffer(uint8_t *buffer, uint16_t buffer_length, SerialPort *serial_port) {
-	uint32_t counter = 0;
-
-	while(counter <= buffer_length) {
-		SerialOutputChar(*buffer, serial_port);
-		counter++;
-		buffer++;
-	}
-
-//	if (serial_port->completion_function != 0x00)
-//		serial_port->completion_function(counter);
-}
-
-// Constants
-//#define SENTINEL_1 0xAA
-//#define SENTINEL_2 0x55
-
-#include "serialise.h"
-
-uint16_t SerialInputPacketHeader(char *buffer, SerialPort *serial_port)
-{
-  //uint8_t latest_characters[2] = {0};
-  // wait for sentinels
-   while (1) {
-	   buffer[0] = buffer[1];
-	   uint8_t success = SerialReceiveChar(serial_port, &buffer[1]);
-
-	   if (success == 0)
-		   return 0;
-
-	  if (buffer[0] == SENTINEL_1 && buffer[1] == SENTINEL_2) {
-			  break;
-	  }
-  }
-
-   uint16_t index = 2;
-
-  while (index < sizeof(Header))
-  {
-	  uint8_t receivedChar;
-	  uint8_t success = SerialReceiveChar(serial_port, &receivedChar);
-	  if (success == 0)
-		  return 0;
-
-      buffer[index++] = receivedChar;
-  }
-
-  return index;
-}
-
-
-uint16_t SerialInputDataPacket(char *buffer, int length, SerialPort *serial_port) {
-	uint16_t index = 0;
-
-  while (index < length)
-  {
-	  uint8_t receivedChar;
-	  uint8_t success = SerialReceiveChar(serial_port, &receivedChar);
-	  if (success == 0)
-		  return 0;
-
-	  buffer[index++] = receivedChar;
-  }
-
-  return index;
-
-}
 
