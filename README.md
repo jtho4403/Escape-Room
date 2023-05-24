@@ -50,7 +50,6 @@ Done by David Boian, Imran Tauqeer and Prithik Saini.
 -	Check if we are receiving data after sensors enabled.
 -	Perform math on raw data and observe response.
 -	
-![image](https://github.com/jtho4403/Escape-Room/assets/126032358/a20bec55-f8cb-4e6a-9fe4-b2362ae30063)
 
 
 ## Minigame stage - Pop the ballon
