@@ -211,11 +211,16 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	// reset lidar board
 
+	//LIDAR Stage: solve equation and move hand
 	LIDAR_Stage();
 
-	//Stage 2: repeat after me
+	//Minigame Stage: pop the balloon
+	uint8_t buffer[64] = "RUN_PYTHON\r\n";
+	SerialInitialise(BAUD_115200, &USART1_PORT);
+	SerialOutputString(buffer, &USART1_PORT);
+
+	//LED Stage: repeat after me
 	LED_Stage();
 
 }
