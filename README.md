@@ -52,3 +52,8 @@ Done by Jia Xu Chee and Jack Thompson.
 ![image](https://github.com/jtho4403/Escape-Room/blob/main/image/Stage2.drawio.png)   
 ### Testing
 Modular testing can be done in serial_module folder. Since this stage can be done solely in STM, the important parts of the code are in serial.c and sequence.c. To test the module, call the function LED_Stage() in main.c. The expected output of the stage is as the flowchart shown above, where the terminal will output "pass" when the player inputs correct sequence; "fail" for incorrect input; "Restarting this stage" when restarting the stage; and "You've passed this stage" when the plater inputs 4 consecutive correct sequence; "Time's up, restarting this stage" when no user input for 10s after the LED sequence.
+
+
+## References
+- Stewart Worrall MTRX2700-2023 GitHub Repository
+  https://github.com/stewart-worrall/MTRX2700-2023/tree/main
