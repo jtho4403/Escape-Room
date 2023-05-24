@@ -40,6 +40,18 @@ Done by David Boian, Imran Tauqeer and Prithik Saini.
 ![PTU_actuation_joystick](https://github.com/jtho4403/Escape-Room/assets/126032358/5d3aab53-091f-49cc-80fe-06a1df7ab796)
 
 ### Testing
+#### PTU Actuation:
+-	Check that each pin received when high.
+-	Observe servo response in response to high pin.
+-	Check pins enabled correctly by checking the data we received. 
+-	Check if servo responded to pin data.
+
+#### PTU Sensors:
+-	Check if we are receiving data after sensors enabled.
+-	Perform math on raw data and observe response.
+-	
+![image](https://github.com/jtho4403/Escape-Room/assets/126032358/a20bec55-f8cb-4e6a-9fe4-b2362ae30063)
+
 
 ## Minigame stage - Pop the ballon
 Done by Prithik Saini.    
