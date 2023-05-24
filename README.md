@@ -39,6 +39,9 @@ Done by David Boian, Imran Tauqeer and Prithik Saini.
 #### PTU Actuation/Joystick Logic
 ![PTU_actuation_joystick](https://github.com/jtho4403/Escape-Room/assets/126032358/5d3aab53-091f-49cc-80fe-06a1df7ab796)
 
+#### Joystick Module Connection Diagram
+![Joystick Module connect](https://github.com/jtho4403/Escape-Room/assets/126032358/f8652ceb-3f1e-4cd9-b2de-90e83912b548)
+
 ### Testing
 #### PTU Actuation:
 -	Check that each pin received when high.
