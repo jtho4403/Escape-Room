@@ -133,48 +133,7 @@ volatile uint8_t string_to_send[500] = "This is a string !\r\n";
 volatile uint8_t test_string[64] = "h!\r\n";
 volatile uint8_t rxBuffer[64];
 
-//// Function to read data from Arduino Uno via UART3
-//void readFromArduinoUno(void)
-//{
-//  // Buffer to store received data
-//  uint8_t rxBuffer[3];
-//
-//  // Configure UART3
-//  UART_HandleTypeDef huart3;
-//  huart3.Instance = USART3;
-//  huart3.Init.BaudRate = 115200;
-//  huart3.Init.WordLength = UART_WORDLENGTH_8B;
-//  huart3.Init.StopBits = UART_STOPBITS_1;
-//  huart3.Init.Parity = UART_PARITY_NONE;
-//  huart3.Init.Mode = UART_MODE_RX;
-//  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-//  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
-//
-//  // Enable UART3 clock
-//  __HAL_RCC_USART3_CLK_ENABLE();
-//
-//  // Configure GPIO pins
-//  GPIO_InitTypeDef GPIO_InitStruct;
-//  GPIO_InitStruct.Pin = GPIO_PIN_10 | GPIO_PIN_11;
-//  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-//  GPIO_InitStruct.Pull = GPIO_NOPULL;
-//  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-//  GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
-//  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-//
-//  if (HAL_UART_Init(&huart3) != HAL_OK)
-//  {
-//    // Initialization error handling
-//    // Add your error handling code here
-//  }
-//
-//
-//}
 
-//static volatile float dx = 0;
-//volatile float dt = 0.01;
-//static volatile float ds;
-//volatile uint16_t dv;
 
 /* USER CODE END 0 */
 
@@ -327,39 +286,39 @@ int main(void)
 //#define RIGHT_Pin GPIO_PIN_9
 //#define RIGHT_GPIO_Port GPIOC
 
-		  GPIO_PinState pinState1 = HAL_GPIO_ReadPin(LEFT_Pin, GPIO_PIN_13);
-		  if (pinState1 == GPIO_PIN_SET) {
-			  //horizontal_PWM -= 3;
-			  int c=5;
-		  } else {
-			  int l=5;
-
-		  }
-
-		 GPIO_PinState pinState2 = HAL_GPIO_ReadPin(RIGHT_Pin, GPIO_PIN_9);
-		  if (pinState2 == GPIO_PIN_SET) {
-			  //horizontal_PWM -= 3;
-			  int c=5;
-		  } else {
-			  int l=5;
-
-		  }
-		  GPIO_PinState pinState3 = HAL_GPIO_ReadPin(DOWN_Pin, GPIO_PIN_14);
-		  if (pinState3 == GPIO_PIN_SET) {
-			  //vertical_PWM -= 3;
-			  int c=5;
-		  } else {
-			  int l=5;
-
-		  }
-		  GPIO_PinState pinState4 = HAL_GPIO_ReadPin(UP_Pin ,GPIO_PIN_15);
-		  if (pinState4 == GPIO_PIN_SET) {
-			  //vertical_PWM += 3;
-			  int c=5;
-		  } else {
-			  int l=5;
-
-		  }
+//		  GPIO_PinState pinState1 = HAL_GPIO_ReadPin(LEFT_Pin, GPIO_PIN_13);
+//		  if (pinState1 == GPIO_PIN_SET) {
+//			  //horizontal_PWM -= 3;
+//			  int c=5;
+//		  } else {
+//			  int l=5;
+//
+//		  }
+//
+//		 GPIO_PinState pinState2 = HAL_GPIO_ReadPin(RIGHT_Pin, GPIO_PIN_9);
+//		  if (pinState2 == GPIO_PIN_SET) {
+//			  //horizontal_PWM -= 3;
+//			  int c=5;
+//		  } else {
+//			  int l=5;
+//
+//		  }
+//		  GPIO_PinState pinState3 = HAL_GPIO_ReadPin(DOWN_Pin, GPIO_PIN_14);
+//		  if (pinState3 == GPIO_PIN_SET) {
+//			  //vertical_PWM -= 3;
+//			  int c=5;
+//		  } else {
+//			  int l=5;
+//
+//		  }
+//		  GPIO_PinState pinState4 = HAL_GPIO_ReadPin(UP_Pin ,GPIO_PIN_15);
+//		  if (pinState4 == GPIO_PIN_SET) {
+//			  //vertical_PWM += 3;
+//			  int c=5;
+//		  } else {
+//			  int l=5;
+//
+//		  }
 
 		  //TIM2->CCR1 = vertical_PWM;
 		  //TIM2->CCR2 = horizontal_PWM;
