@@ -9,7 +9,7 @@
 
 void CheckSequence(uint8_t *input);
 
-void Stage2();
+void LED_Stage();
 
 void Current_LED(uint8_t current);
 

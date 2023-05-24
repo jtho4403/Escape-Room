@@ -49,7 +49,7 @@ void CheckSequence(uint8_t *input){
 	}
 }
 
-void Stage2(){
+void LED_Stage(){
 	substage_state = 1;
 	count = 1;
 
@@ -75,7 +75,7 @@ void Stage2(){
 			SerialOutputString(restart_message, &USART1_PORT);
 
 			nest ++;
-			Stage2();
+			LED_Stage();
 			break;
 		}
 
@@ -85,7 +85,7 @@ void Stage2(){
 			SerialOutputString(message, &USART1_PORT);
 
 			nest ++;
-			Stage2();
+			LED_Stage();
 			break;
 		}
 	}

@@ -28,6 +28,7 @@
 #include "serial.h"
 #include "sequence.h"
 #include "stm32f303xc.h"
+#include <stdio.h>
 
 #include "math.h"
 
@@ -165,17 +166,12 @@ int main(void)
 	uint8_t size_1 = sizeof(struct_1);
 	uint8_t size_2 = sizeof(struct_2);
 
-
-	uint8_t string_to_send[64] = "This is a string !\r\n";
-
 	enable_clocks();
 	initialise_board();
 
-	LedRegister *led_register = ((uint8_t*)&(GPIOE->ODR)) + 1;
-
-	SerialInitialise(BAUD_115200, &USART1_PORT);
-
-	HAL_StatusTypeDef return_value = 0x00;
+//	LedRegister *led_register = ((uint8_t*)&(GPIOE->ODR)) + 1;
+//
+//	SerialInitialise(BAUD_115200, &USART1_PORT);
 
 	volatile uint16_t vertical_PWM = 1000;
 	volatile uint16_t horizontal_PWM = 1000;
@@ -216,87 +212,11 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	// reset lidar board
-	uint8_t reset_value = 0x00;
-	return_value = HAL_I2C_Mem_Write(&hi2c1, LIDAR_WR, 0x00, 1, &reset_value, 1, 10);
 
-	uint8_t PWM_direction_clockwise = 1;
-
-	// delay for initialisation of the lidar
-	HAL_Delay(100);
-
-	int count=0;
-	int distance=0;
-	int flag=0;
-	int actuality=0;
-
-	while (flag != 1)
-	{
-
-		uint8_t lidar_value = 0x03;
-		return_value = HAL_I2C_Mem_Write(&hi2c1, LIDAR_WR, 0x00, 1, &lidar_value, 1, 100);
-
-		lidar_value = 0xff;
-
-		uint8_t lidar_MSBa = 0x00;
-		uint8_t lidar_LSBa = 0x00;
-
-		volatile uint16_t lidar_distance = 0xff;
-
-		uint16_t timeout;
-
-		while ((lidar_value & 0x01) != 0x00) {
-			return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x01, 1, &lidar_value, 1, 100);
-
-			return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x0f, 1, &lidar_MSBa, 1, 100);
-			return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x10, 1, &lidar_LSBa, 1, 100);
-
-			lidar_distance = ((lidar_MSBa << 8) | lidar_LSBa);
-			timeout += 1;
-			if (timeout > 0xff)
-				break;
-		}
-
-		if (last_period > 4000)
-			last_period = 5000;
-		if (lidar_distance > 4000)
-			lidar_distance = 5500;
-		for (int i = 0; i < 10; i++)
-		{
-		  HAL_Delay(1);
-		}
-
-		distance = distance + lidar_distance;
-		//distance=600;
-		//count=10;
-		if (count==10)
-		{
-			actuality= distance / 10;
-			sprintf(string_to_send, "%hu\r\n", actuality);
-			SerialOutputString(string_to_send, &USART1_PORT);
-			HAL_GPIO_WritePin(GPIOD,Ardu_LED2_Pin, GPIO_PIN_RESET);
-			HAL_GPIO_WritePin(GPIOD,Ardu_LED3_Pin, GPIO_PIN_RESET);
-			if(actuality >= 30 && actuality <= 50)
-			{
-				HAL_GPIO_WritePin(GPIOD,Ardu_LED1_Pin, GPIO_PIN_SET);
-				flag=1;
-			}
-			else if(actuality < 25)
-			{
-				HAL_GPIO_WritePin(GPIOD,Ardu_LED2_Pin, GPIO_PIN_SET);
-			}
-			else if(actuality > 55)
-			{
-				HAL_GPIO_WritePin(GPIOD,Ardu_LED3_Pin, GPIO_PIN_SET);
-			}
-			count=0;
-			actuality=0;
-			distance=0;
-		}
-		count++;
-	}
+	LIDAR_Stage();
 
 	//Stage 2: repeat after me
-	Stage2();
+	LED_Stage();
 
 }
 /**
@@ -641,6 +561,90 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void LIDAR_Stage(){
+	HAL_StatusTypeDef return_value = 0x00;
+	uint8_t reset_value = 0x00;
+	return_value = HAL_I2C_Mem_Write(&hi2c1, LIDAR_WR, 0x00, 1, &reset_value, 1, 10);
+
+	uint8_t PWM_direction_clockwise = 1;
+
+	// delay for initialisation of the lidar
+	HAL_Delay(100);
+
+	int count=0;
+	int distance=0;
+	int flag=0;
+	int actuality=0;
+
+	uint8_t string_to_send[64] = "This is a string !\r\n";
+
+	while (flag != 1)
+	{
+		uint8_t lidar_value = 0x03;
+		return_value = HAL_I2C_Mem_Write(&hi2c1, LIDAR_WR, 0x00, 1, &lidar_value, 1, 100);
+
+		lidar_value = 0xff;
+
+		uint8_t lidar_MSBa = 0x00;
+		uint8_t lidar_LSBa = 0x00;
+
+		volatile uint16_t lidar_distance = 0xff;
+
+		uint16_t timeout;
+
+		while ((lidar_value & 0x01) != 0x00) {
+			return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x01, 1, &lidar_value, 1, 100);
+
+			return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x0f, 1, &lidar_MSBa, 1, 100);
+			return_value = HAL_I2C_Mem_Read(&hi2c1, LIDAR_RD, 0x10, 1, &lidar_LSBa, 1, 100);
+
+			lidar_distance = ((lidar_MSBa << 8) | lidar_LSBa);
+			timeout += 1;
+			if (timeout > 0xff)
+				break;
+		}
+
+		if (last_period > 4000)
+			last_period = 5000;
+		if (lidar_distance > 4000)
+			lidar_distance = 5500;
+		for (int i = 0; i < 10; i++)
+		{
+			HAL_Delay(1);
+		}
+
+		distance = distance + lidar_distance;
+		//distance=600;
+		//count=10;
+		if (count==10)
+		{
+			actuality= distance / 10;
+			sprintf(string_to_send, "%hu\r\n", actuality);
+			SerialOutputString(string_to_send, &USART1_PORT);
+			HAL_GPIO_WritePin(GPIOD,Ardu_LED2_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOD,Ardu_LED3_Pin, GPIO_PIN_RESET);
+			if(actuality >= 30 && actuality <= 50)
+			{
+				HAL_GPIO_WritePin(GPIOD,Ardu_LED1_Pin, GPIO_PIN_SET);
+				flag=1;
+			}
+			else if(actuality < 25)
+			{
+				HAL_GPIO_WritePin(GPIOD,Ardu_LED2_Pin, GPIO_PIN_SET);
+			}
+			else if(actuality > 55)
+			{
+				HAL_GPIO_WritePin(GPIOD,Ardu_LED3_Pin, GPIO_PIN_SET);
+			}
+			count=0;
+			actuality=0;
+			distance=0;
+		}
+		count++;
+	}
+
+}
+
 
 /* USER CODE END 4 */
 
