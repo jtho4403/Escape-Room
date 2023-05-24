@@ -39,8 +39,10 @@ Done by David Boian, Imran Tauqeer and Prithik Saini.
 ## Minigame stage - Pop the ballon
 Done by Prithik Saini.    
 ### High level explanation
+The python script runs simultaneously with the STM32 code, when "RUN_PYTHON\r\n" is sent to the PC terminal via USART1, the python game would start running. Where the player has to use keyboard keys to pop the ballon with the gun. When the balloon is popped, the python game will show instruction for the next stage and exits.
 
 ### Testing
+Modular testing can be done in the Game folder. Several python library are required to run the python code. To test it, first run the python script, then run the STM32 code, the python game should automatically appear on the computer screen. When the balloon is popped, the game screen will show the instruction for next stage.
 
 ## LED Stage - Repeat after me
 Done by Jia Xu Chee and Jack Thompson.    
