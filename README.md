@@ -33,6 +33,8 @@ Connect all necessary equipment according to requirements and continuously chang
 ## PTU Stage
 Done by David Boian, Imran Tauqeer and Prithik Saini.    
 ### High level explanation
+#### PTU Math Logic
+![PTU_math_logic](https://github.com/jtho4403/Escape-Room/assets/126032358/1ad7d6cf-a006-494d-bb6a-20d42d42f3c0)
 
 ### Testing
 
