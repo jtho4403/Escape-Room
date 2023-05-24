@@ -49,7 +49,7 @@ void CheckSequence(uint8_t *input){
 	}
 }
 
-void Stage2(){
+void LED_Stage(){
 	substage_state = 1;
 	count = 1;
 
@@ -71,29 +71,30 @@ void Stage2(){
 		}
 
 		if(substage_state == 0 ){
-			uint8_t restart_message[32] = "Restarting Stage 2\n";
+			uint8_t restart_message[32] = "Restarting this stage\n";
 			SerialOutputString(restart_message, &USART1_PORT);
 
 			nest ++;
-			Stage2();
+			LED_Stage();
 			break;
 		}
 
 		else if (timer_expired != 0){
 			timer_expired = 0;
-			uint8_t message[32] = "Time's up, restarting stage 2\n";
+			uint8_t message[32] = "Time's up, restarting this stage\n";
 			SerialOutputString(message, &USART1_PORT);
 
 			nest ++;
-			Stage2();
+			LED_Stage();
 			break;
 		}
 	}
 
 	if (nest == 0){
-		uint8_t progress_message[32] = "You've passed Stage 2\n";
+		uint8_t progress_message[32] = "You've passed this stage\n";
+		uint8_t passcode_message[32] = "The padlock code is 000\n";
 		SerialOutputString(progress_message, &USART1_PORT);
-		//call next stage
+		SerialOutputString(passcode_message, &USART1_PORT);
 	}
 	else{
 		nest --;

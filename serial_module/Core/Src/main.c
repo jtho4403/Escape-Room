@@ -124,11 +124,7 @@ int main(void)
   SerialInitialise(BAUD_115200, &USART1_PORT);
   SerialOutputString(buffer, &USART1_PORT);
 
-  Stage2();
-
-
-
-
+  LED_Stage();
 
   /* USER CODE END 2 */
 
