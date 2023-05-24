@@ -53,12 +53,16 @@ Done by David Boian, Imran Tauqeer and Prithik Saini.
 
 
 ## Minigame stage - Pop the ballon
-Done by Prithik Saini.    
+Done by Prithik Saini. 
+
+### Module's Logic
+![mini game logic](https://github.com/jtho4403/Escape-Room/blob/main/image/mini_game_logic.jpg)
+
 ### High level explanation
-The python script runs simultaneously with the STM32 code, when "RUN_PYTHON\r\n" is sent to the PC terminal via USART1, the python game would start running. Where the player has to use keyboard keys to pop the ballon with the gun. When the balloon is popped, the python game will show instruction for the next stage and exits.
+The python script runs simultaneously with the STM32 code. When the passing condition: "RUN_PYTHON\r\n" is sent to the PC terminal via USART1, the game play. The user will have to hit the floating balloon using the keyboard inputs. It follows with displaying a set of instructions for the next stage before closing.
 
 ### Testing
-Modular testing can be done in the Game folder. Several python library are required to run the python code. To test it, first run the python script, then run the STM32 code, the python game should automatically appear on the computer screen. When the balloon is popped, the game screen will show the instruction for next stage.
+Modular testing can be done in the Game folder. Several python libraries are required (can be found in the files) to run this module in particular. The game is run separately to make sure the required libraries are avaliable to run on the system. The STM32 code is also run to test the passing case "RUN_PYTHON" is output to the terminal. Finally, the scrpit is run simultaneously with the STM code to make sure the module works as intended.
 
 ## LED Stage - Repeat after me
 Done by Jia Xu Chee and Jack Thompson.    
