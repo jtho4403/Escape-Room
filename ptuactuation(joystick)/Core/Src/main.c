@@ -228,10 +228,10 @@ int main(void)
 
 
 	while (1) {
-		GPIO_PinState pinState1 = (HAL_GPIO_ReadPin(left_Pin, GPIO_PIN_12) == GPIO_PIN_SET);
-		GPIO_PinState pinState2 = (HAL_GPIO_ReadPin(right_Pin, GPIO_PIN_13) == GPIO_PIN_SET);
-		GPIO_PinState pinState3 = (HAL_GPIO_ReadPin(up_Pin, GPIO_PIN_14) == GPIO_PIN_SET);
-		GPIO_PinState pinState4 = (HAL_GPIO_ReadPin(down_Pin, GPIO_PIN_15) == GPIO_PIN_SET);
+		GPIO_PinState pinState1 = HAL_GPIO_ReadPin(left_Pin, GPIO_PIN_12);
+		GPIO_PinState pinState2 = HAL_GPIO_ReadPin(right_Pin, GPIO_PIN_13);
+		GPIO_PinState pinState3 = HAL_GPIO_ReadPin(up_Pin, GPIO_PIN_14);
+		GPIO_PinState pinState4 = HAL_GPIO_ReadPin(down_Pin, GPIO_PIN_15);
 		// Adjust PTU PWM values based on pin states
 		if (pinState1 == GPIO_PIN_SET) {
 		horizontal_PWM = 1900;  // Move PTU left
