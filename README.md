@@ -36,6 +36,9 @@ Done by David Boian, Imran Tauqeer and Prithik Saini.
 #### PTU Math Logic
 ![PTU_math_logic](https://github.com/jtho4403/Escape-Room/assets/126032358/1ad7d6cf-a006-494d-bb6a-20d42d42f3c0)
 
+#### PTU Actuation/Joystick Logic
+![PTU_actuation_joystick](https://github.com/jtho4403/Escape-Room/assets/126032358/5d3aab53-091f-49cc-80fe-06a1df7ab796)
+
 ### Testing
 
 ## Minigame stage - Pop the ballon
