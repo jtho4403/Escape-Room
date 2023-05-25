@@ -266,29 +266,22 @@ int main(void)
 		if (count==10)
 		{
 			actuality= distance / 10;
+			//sprintf(string_to_send, "%hu\r\n", actuality);
+			//SerialOutputString(string_to_send, &USART1_PORT);
 			HAL_GPIO_WritePin(GPIOD,Ardu_LED2_Pin, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOD,Ardu_LED3_Pin, GPIO_PIN_RESET);
 			if(actuality >= 30 && actuality <= 50)
 			{
 				HAL_GPIO_WritePin(GPIOD,Ardu_LED1_Pin, GPIO_PIN_SET);
-				//
-				uint8_t ok_message[32] = "Correct\n";
-				SerialOutputString(ok_message, &USART1_PORT);
 				flag=1;
 			}
 			else if(actuality < 25)
 			{
 				HAL_GPIO_WritePin(GPIOD,Ardu_LED2_Pin, GPIO_PIN_SET);
-				//
-				uint8_t under_message[32] = "Too Close\n";
-				SerialOutputString(under_message, &USART1_PORT);
 			}
 			else if(actuality > 55)
 			{
 				HAL_GPIO_WritePin(GPIOD,Ardu_LED3_Pin, GPIO_PIN_SET);
-				//
-				uint8_t overr_message[32] = "Too Far\n";
-				SerialOutputString(over_message, &USART1_PORT);
 			}
 			count=0;
 			actuality=0;
