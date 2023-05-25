@@ -1,0 +1,16 @@
+Escape Room Game Insturctions
+
+Phase 1
+1. Solve the equation on the box
+2. Stand in front of Lidar a distance away based on solved equations
+3. Display on LCD move to move to Phase 2
+
+Phase 2
+4. Pitch the PTU to values given in the equation to unlock pin 1
+5. Roll the PTU to values given in the equation to unlock pin 2
+6. Yaw the PTU to value given on LCD screen to unlock pin 3
+
+Phase 3
+7. Play Pop the balloon game => given hint on how to play next game
+8. Play repeat after me game => given hint on how to unlock door with PTU
+9. Move PTU 1st pitch to unlock pin 1 then roll to unlock pin 2 to unlock the door!
